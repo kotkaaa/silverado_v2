@@ -46,6 +46,23 @@ class CategoryQuery extends \yii\db\ActiveQuery
     }
 
     /**
+     * @param Category $category
+     * @return CategoryQuery
+     */
+    public function other(Category $category = null): CategoryQuery
+    {
+        return $this->andFilterWhere(['not', ['category.uuid' => $category ? $category->uuid : null]]);
+    }
+
+    /**
+     * @return CategoryQuery
+     */
+    public function root(): CategoryQuery
+    {
+        return $this->andWhere(['category.parent_uuid' => null]);
+    }
+
+    /**
      * @return CategoryQuery
      */
     public function ordered(): CategoryQuery

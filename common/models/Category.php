@@ -70,6 +70,7 @@ class Category extends \yii\db\ActiveRecord
             [['description', 'meta_description', 'meta_keywords'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['uuid', 'parent_uuid'], 'string', 'max' => 36],
+            [['parent_uuid'], 'default', 'value' => null],
             [['title', 'alias', 'icon', 'image', 'meta_title'], 'string', 'max' => 255],
             [['meta_robots'], 'string', 'max' => 32],
             [['position'], 'integer'],
@@ -79,7 +80,6 @@ class Category extends \yii\db\ActiveRecord
             [['active'], 'in', 'range' => self::activeStates(true)],
             [['alias'], 'unique'],
             [['uuid'], 'unique'],
-            [['parent_uuid'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['parent_uuid' => 'uuid']],
             [['upload_image', 'upload_icon'], 'file', 'skipOnEmpty' => true, 'extensions' => ['jpg', 'jpeg', 'png', 'gif', 'svg'], 'checkExtensionByMimeType' => true],
         ];
     }
@@ -90,19 +90,19 @@ class Category extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            [
+            'uuid' => [
                 'class' => UuidBehavior::class,
                 'version' => Uuid::V4,
                 'defaultAttribute' => 'uuid',
             ],
-            [
+            'sluggable' => [
                 'class' => SluggableBehavior::class,
                 'attribute' => 'title',
                 'slugAttribute' => 'alias',
                 'ensureUnique' => true,
                 'immutable' => true
             ],
-            [
+            'timestamp' => [
                 'class' => TimestampBehavior::class,
                 'attributes' => [
                     ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
@@ -110,7 +110,7 @@ class Category extends \yii\db\ActiveRecord
                 ],
                 'value' => new Expression('now()'),
             ],
-            [
+            'saveRelations' => [
                 'class' => SaveRelationsBehavior::class,
                 'relations' => [
                     'parent',

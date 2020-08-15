@@ -55,6 +55,7 @@ class CategoryController extends AdminController
 
         return $this->render('create', [
             'model' => $model,
+            'categoryTree' => Category::find()->root()->ordered()->all()
         ]);
     }
 
@@ -75,6 +76,7 @@ class CategoryController extends AdminController
 
         return $this->render('update', [
             'model' => $model,
+            'categoryTree' => Category::find()->root()->ordered()->all()
         ]);
     }
 

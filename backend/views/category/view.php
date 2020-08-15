@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'uuid',
             'parent_uuid',
             'title',
-            'description:ntext',
+            'description:raw',
             'alias',
             'icon',
             'image',

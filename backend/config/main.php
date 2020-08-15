@@ -50,5 +50,19 @@ return [
             ],
         ],
     ],
+    'controllerMap' => [
+        'elfinder' => [
+            'class' => 'mihaildev\elfinder\PathController',
+            'access' => ['@', '?'], //глобальный доступ к фаил менеджеру @ - для авторизорованных , ? - для гостей , чтоб открыть всем ['@', '?']
+            'disabledCommands' => ['netmount'], //отключение ненужных команд https://github.com/Studio-42/elFinder/wiki/Client-configuration-options#commands
+            'root' => [
+                'driver' => 'LocalFileSystem',
+                'baseUrl' => 'https://app.playchange.me',
+                'basePath' => '@frontend/web',
+                'path' => '/uploads',
+                'name' => 'Uploads',
+            ],
+        ],
+    ],
     'params' => $params,
 ];
