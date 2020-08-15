@@ -1,6 +1,7 @@
 <?php
 return [
     'name' => 'Silverado jewelry boutique',
+    'language' => 'ru-RU',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
