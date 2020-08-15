@@ -34,6 +34,9 @@ phpunit.phar
 # vagrant runtime
 /.vagrant
 
+# node modules
+/node_modules
+
 # ignore generated files
 /frontend/web/index.php
 /frontend/web/index-test.php
@@ -41,3 +44,6 @@ phpunit.phar
 /backend/web/index.php
 /backend/web/index-test.php
 /backend/web/robots.txt
+
+# ignore uploaded files
+/frontend/web/uploads/*
