@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use common\models\Product;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\ProductSearch */
@@ -23,31 +24,47 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'tableOptions' => [
+            'class' => 'table table-bordered'
+        ],
+        'rowOptions' => function(Product $model) {
+            if (!$model->active) {
+                return ['class' => 'danger'];
+            }
+        },
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'uuid',
-            'sku',
-            'category_uuid',
+            [
+                'attribute' => 'position',
+                'label' => '#'
+            ],
             'title',
-            'description:ntext',
-            //'short:ntext',
-            //'price',
-            //'discount',
-            //'viewed',
-            //'purchased',
-            //'rating',
-            //'position',
-            //'active:boolean',
-            //'alias',
-            //'meta_title',
-            //'meta_description:ntext',
-            //'meta_keywords:ntext',
-            //'meta_robots',
-            //'created_at',
-            //'updated_at',
+            'sku',
+            [
+                'attribute' => 'category_title',
+                'label' => 'Category',
+                'value' => 'category.title'
+            ],
+            'price',
+            'active:boolean',
+            'created_at',
+            'updated_at',
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{toggle} {view} {update} {delete}',
+                'buttons' => [
+                    'toggle' => function($url,Product $model) {
+                        if (!$model->active) {
+                            return Html::a('<span class="glyphicon glyphicon-play"></span>', ['toggle', 'id' => $model->uuid], [
+                                'title' => 'Enable',
+                            ]);
+                        }
 
-            ['class' => 'yii\grid\ActionColumn'],
+                        return Html::a('<span class="glyphicon glyphicon-pause"></span>', ['toggle', 'id' => $model->uuid], [
+                            'title' => 'Disable',
+                        ]);
+                    }
+                ]
+            ],
         ],
     ]); ?>
 

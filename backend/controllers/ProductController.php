@@ -98,6 +98,22 @@ class ProductController extends AdminController
     }
 
     /**
+     * @param $id
+     * @throws NotFoundHttpException
+     */
+    public function actionToggle($id)
+    {
+        $model = $this->findModel($id);
+        $model->active = $model->active ? Product::ACTIVE_STATE_FALSE : Product::ACTIVE_STATE_TRUE;
+
+        if ($model->save()) {
+            \Yii::$app->session->setFlash('success', 'Новый статус публикации сохранен.');
+        }
+
+        return $this->redirect(\Yii::$app->request->referrer)->send();
+    }
+
+    /**
      * Finds the Product model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id

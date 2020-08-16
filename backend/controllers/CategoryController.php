@@ -107,7 +107,10 @@ class CategoryController extends AdminController
         ]);
     }
 
-
+    /**
+     * @param $id
+     * @throws NotFoundHttpException
+     */
     public function actionToggle($id)
     {
         $model = $this->findModel($id);
