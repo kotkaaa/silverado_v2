@@ -28,7 +28,6 @@ class AdminController extends \yii\web\Controller
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['create', 'view', 'update', 'delete'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],

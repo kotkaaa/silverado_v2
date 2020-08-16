@@ -5,6 +5,7 @@ namespace backend\controllers;
 use backend\models\CategorySearch;
 use common\models\Category;
 use Yii;
+use yii\helpers\Html;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -12,18 +13,44 @@ use yii\web\NotFoundHttpException;
  */
 class CategoryController extends AdminController
 {
+    /** @var CategorySearch */
+    public $searchModel;
+
+    /** @var Category */
+    public $parentModel;
+
+    /** @var string */
+    public $parentUrlKey;
+
+    /**
+     * CategoryController constructor.
+     * @param $id
+     * @param $module
+     * @param array $config
+     */
+    public function __construct($id, $module, $config = [])
+    {
+        $this->searchModel = new CategorySearch();
+        $this->searchModel->load(\Yii::$app->request->queryParams);
+
+        $this->parentModel = Category::findOne($this->searchModel->parent_uuid)->orNull() ?? new Category();
+        $this->parentUrlKey = Html::getInputName(new CategorySearch(), 'parent_uuid');
+
+        parent::__construct($id, $module, $config);
+    }
+
     /**
      * Lists all Category models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new CategorySearch();
-        $dataProvider = $searchModel->search(\Yii::$app->request->queryParams);
+        $dataProvider = $this->searchModel->search(\Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
+            'searchModel' => $this->searchModel,
             'dataProvider' => $dataProvider,
+            'parentModel' => $this->parentModel
         ]);
     }
 
@@ -71,13 +98,26 @@ class CategoryController extends AdminController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->uuid]);
+            return $this->redirect(['view', 'id' => $model->uuid])->send();
         }
 
         return $this->render('update', [
             'model' => $model,
             'categoryTree' => Category::find()->root()->ordered()->all()
         ]);
+    }
+
+
+    public function actionToggle($id)
+    {
+        $model = $this->findModel($id);
+        $model->active = $model->active ? Category::ACTIVE_STATE_FALSE : Category::ACTIVE_STATE_TRUE;
+
+        if ($model->save()) {
+            \Yii::$app->session->setFlash('success', 'Новый статус публикации сохранен.');
+        }
+
+        return $this->redirect(\Yii::$app->request->referrer)->send();
     }
 
     /**
@@ -91,7 +131,7 @@ class CategoryController extends AdminController
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(\Yii::$app->request->referrer)->send();
     }
 
     /**
@@ -107,6 +147,8 @@ class CategoryController extends AdminController
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        \Yii::$app->session->setFlash('error', 'The requested page does not exist.');
+
+        return $this->redirect(['index'])->send();
     }
 }

@@ -73,6 +73,10 @@ use yii\web\JsExpression;
 
     <?= $form->field($model, 'active')->checkbox() ?>
 
+    <?= $form->field($model, 'separator')->checkbox() ?>
+
+    <?= $form->field($model, 'redirect')->textInput(['maxlength' => true]) ?>
+
     <hr>
 
     <h3>META data</h3>

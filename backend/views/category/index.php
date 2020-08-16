@@ -1,14 +1,28 @@
 <?php
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use common\models\Category;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\CategorySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $parentModel \common\models\Category */
 
 $this->title = 'Categories';
-$this->params['breadcrumbs'][] = $this->title;
+
+$this->params['breadcrumbs'][] = [
+    'url' => Url::to(['/category/index']),
+    'label' => $this->title
+];
+
+if ($parentModel->uuid) {
+    $this->params['breadcrumbs'][] = [
+        'url' => Url::to(['/category/index', Html::getInputName($searchModel, 'parent_uuid') => $parentModel->uuid]),
+        'label' => $parentModel->title
+    ];
+}
 ?>
 <div class="category-index">
 
@@ -23,25 +37,31 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'tableOptions' => [
+            'class' => 'table table-bordered'
+        ],
+        'rowOptions' => function(Category $model) {
+            if (!$model->active) {
+                return ['class' => 'danger'];
+            }
+            if ($model->separator) {
+                return ['class' => 'active'];
+            }
+        },
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             'title',
             [
-                'attribute' => 'parent_title',
-                'label' => 'Parent',
-                'value' => 'parent.title'
-            ],
-            [
                 'attribute' => 'has_children',
-                'format' => 'boolean',
+                'format' => 'raw',
                 'label' => 'Children',
-                'value' => function (\common\models\Category $model): ?string {
+                'value' => function (Category $model) use ($searchModel) {
                     if ($model->children) {
-                        return Html::a('<span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;' . count($model->children), ['/support/admin', Html::getInputName($model, 'parent_uuid') => $model->uuid]);
+                        return Html::a('<span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;' . count($model->children), ['index', Html::getInputName($searchModel, 'parent_uuid') => $model->uuid]);
                     }
 
-                    return count($model->children) ? count($model->children) : null;
+                    return null;
                 }
             ],
             'active:boolean',
@@ -49,7 +69,23 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_at',
             'updated_at',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{toggle} {view} {update} {delete}',
+                'buttons' => [
+                    'toggle' => function($url, Category $model) {
+                        if (!$model->active) {
+                            return Html::a('<span class="glyphicon glyphicon-play"></span>', ['toggle', 'id' => $model->uuid], [
+                                'title' => 'Enable',
+                            ]);
+                        }
+
+                        return Html::a('<span class="glyphicon glyphicon-pause"></span>', ['toggle', 'id' => $model->uuid], [
+                            'title' => 'Disable',
+                        ]);
+                    }
+                ]
+            ],
         ],
     ]); ?>
 

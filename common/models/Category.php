@@ -4,6 +4,7 @@ namespace common\models;
 
 use aracoool\uuid\Uuid;
 use aracoool\uuid\UuidBehavior;
+use common\behaviors\CategoryBehavior;
 use common\classes\Optional\OptionalActiveRecordTrait;
 use common\modules\File\behaviours\FileBehaviour;
 use common\modules\File\storages\FieldStorage;
@@ -13,6 +14,7 @@ use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
+use yii\helpers\Url;
 use yii\web\UploadedFile;
 
 /**
@@ -25,6 +27,8 @@ use yii\web\UploadedFile;
  * @property string $alias
  * @property int $position
  * @property bool $active
+ * @property bool $separator
+ * @property string|null $redirect
  * @property string|null $icon
  * @property string|null $image
  * @property string|null $meta_title
@@ -71,13 +75,14 @@ class Category extends \yii\db\ActiveRecord
             [['created_at', 'updated_at'], 'safe'],
             [['uuid', 'parent_uuid'], 'string', 'max' => 36],
             [['parent_uuid'], 'default', 'value' => null],
-            [['title', 'alias', 'icon', 'image', 'meta_title'], 'string', 'max' => 255],
+            [['title', 'alias', 'icon', 'image', 'meta_title', 'redirect'], 'string', 'max' => 255],
             [['meta_robots'], 'string', 'max' => 32],
             [['position'], 'integer'],
             [['position'], 'default', 'value' => 1],
-            [['active'], 'boolean'],
+            [['active', 'separator'], 'boolean'],
             [['active'], 'default', 'value' => true],
-            [['active'], 'in', 'range' => self::activeStates(true)],
+            [['separator'], 'default', 'value' => false],
+            [['active', 'separator'], 'in', 'range' => self::activeStates(true)],
             [['alias'], 'unique'],
             [['uuid'], 'unique'],
             [['upload_image', 'upload_icon'], 'file', 'skipOnEmpty' => true, 'extensions' => ['jpg', 'jpeg', 'png', 'gif', 'svg'], 'checkExtensionByMimeType' => true],
@@ -125,7 +130,7 @@ class Category extends \yii\db\ActiveRecord
                 'multiple' => false,
                 'storages' => [
                     LocalStorage::class => [
-                        'path' => \yii\helpers\Url::to('@uploads/category')
+                        'path' => Url::to('@uploads/category')
                     ],
                     FieldStorage::class => [
                         'field' => 'icon'
@@ -138,13 +143,17 @@ class Category extends \yii\db\ActiveRecord
                 'multiple' => false,
                 'storages' => [
                     LocalStorage::class => [
-                        'path' => \yii\helpers\Url::to('@uploads/category')
+                        'path' => Url::to('@uploads/category')
                     ],
                     FieldStorage::class => [
                         'field' => 'image'
                     ]
                 ]
             ],
+            'category' => [
+                'class' => CategoryBehavior::class,
+                'uploadPath' => Url::to('@uploads/category')
+            ]
         ];
     }
 
@@ -161,6 +170,7 @@ class Category extends \yii\db\ActiveRecord
             'alias' => 'Alias',
             'position' => 'Position',
             'active' => 'Active',
+            'separator' => 'Separator',
             'icon' => 'Icon',
             'image' => 'Image',
             'meta_title' => 'Meta Title',

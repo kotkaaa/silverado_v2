@@ -65,28 +65,32 @@ class CategorySearch extends Category
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'position' => $this->position,
-            'active' => $this->active,
+            'category.created_at' => $this->created_at,
+            'category.updated_at' => $this->updated_at,
+            'category.position' => $this->position,
+            'category.active' => $this->active,
         ]);
 
-        $query->andFilterWhere(['ilike', 'uuid', $this->uuid])
-            ->andFilterWhere(['ilike', 'parent_uuid', $this->parent_uuid])
-            ->andFilterWhere(['ilike', 'title', $this->title])
-            ->andFilterWhere(['ilike', 'description', $this->description])
-            ->andFilterWhere(['ilike', 'alias', $this->alias])
-            ->andFilterWhere(['ilike', 'icon', $this->icon])
-            ->andFilterWhere(['ilike', 'image', $this->image])
-            ->andFilterWhere(['ilike', 'meta_title', $this->meta_title])
-            ->andFilterWhere(['ilike', 'meta_description', $this->meta_description])
-            ->andFilterWhere(['ilike', 'meta_keywords', $this->meta_keywords])
-            ->andFilterWhere(['ilike', 'meta_robots', $this->meta_robots])
+        $query->andFilterWhere(['ilike', 'category.uuid', $this->uuid])
+            ->andFilterWhere(['ilike', 'category.parent_uuid', $this->parent_uuid])
+            ->andFilterWhere(['ilike', 'category.title', $this->title])
+            ->andFilterWhere(['ilike', 'category.description', $this->description])
+            ->andFilterWhere(['ilike', 'category.alias', $this->alias])
+            ->andFilterWhere(['ilike', 'category.icon', $this->icon])
+            ->andFilterWhere(['ilike', 'category.image', $this->image])
+            ->andFilterWhere(['ilike', 'category.meta_title', $this->meta_title])
+            ->andFilterWhere(['ilike', 'category.meta_description', $this->meta_description])
+            ->andFilterWhere(['ilike', 'category.meta_keywords', $this->meta_keywords])
+            ->andFilterWhere(['ilike', 'category.meta_robots', $this->meta_robots])
             ->joinWith('parent parent', false)
             ->andFilterWhere(['ilike', 'parent.title', $this->parent_title]);
 
         if ($this->has_children) {
             $query->innerJoinWith('children children', false);
+        }
+
+        if (!$this->parent_uuid) {
+            $query->root();
         }
 
         return $dataProvider;

@@ -44,6 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_at',
             'position',
             'active:boolean',
+            'separator:boolean',
         ],
     ]) ?>
 
