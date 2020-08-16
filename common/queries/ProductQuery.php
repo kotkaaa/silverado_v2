@@ -21,8 +21,7 @@ class ProductQuery extends \yii\db\ActiveQuery
     public function init()
     {
         parent::init();
-        $this->alias('product')
-            ->andWhere(['product.deleted_at' => null]);
+        $this->alias('product');
     }
 
     /**

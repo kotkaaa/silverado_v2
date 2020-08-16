@@ -17,7 +17,7 @@ class ProductSearch extends Product
     public function rules()
     {
         return [
-            [['uuid', 'sku', 'category_uuid', 'title', 'description', 'short', 'alias', 'meta_title', 'meta_description', 'meta_keywords', 'meta_robots', 'created_at', 'updated_at', 'deleted_at'], 'safe'],
+            [['uuid', 'sku', 'category_uuid', 'title', 'description', 'short', 'alias', 'meta_title', 'meta_description', 'meta_keywords', 'meta_robots', 'created_at', 'updated_at'], 'safe'],
             [['price'], 'number'],
             [['discount', 'viewed', 'purchased', 'rating', 'position'], 'integer'],
             [['active'], 'boolean'],
@@ -69,7 +69,6 @@ class ProductSearch extends Product
             'active' => $this->active,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'deleted_at' => $this->deleted_at,
         ]);
 
         $query->andFilterWhere(['ilike', 'uuid', $this->uuid])

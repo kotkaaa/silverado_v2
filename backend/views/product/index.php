@@ -46,7 +46,6 @@ $this->params['breadcrumbs'][] = $this->title;
             //'meta_robots',
             //'created_at',
             //'updated_at',
-            //'deleted_at',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
