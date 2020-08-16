@@ -35,7 +35,6 @@ use yii2tech\ar\softdelete\SoftDeleteBehavior;
  * @property string|null $meta_robots
  * @property string|null $created_at
  * @property string|null $updated_at
- * @property string|null $deleted_at
  *
  * @property Category $category
  */
@@ -69,7 +68,7 @@ class Product extends \yii\db\ActiveRecord
             [['discount', 'viewed', 'purchased', 'rating', 'position'], 'integer'],
             [['discount', 'viewed', 'purchased', 'rating'], 'default', 'value' => null],
             [['position'], 'default', 'value' => 1],
-            [['created_at', 'updated_at', 'deleted_at'], 'safe'],
+            [['created_at', 'updated_at'], 'safe'],
             [['uuid', 'category_uuid'], 'string', 'max' => 36],
             [['sku'], 'string', 'max' => 32],
             [['active'], 'boolean'],
@@ -143,7 +142,6 @@ class Product extends \yii\db\ActiveRecord
             'meta_robots' => 'Meta Robots',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'deleted_at' => 'Deleted At',
         ];
     }
 
