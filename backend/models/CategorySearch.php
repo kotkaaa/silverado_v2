@@ -24,7 +24,7 @@ class CategorySearch extends Category
     {
         return [
             [['uuid', 'parent_uuid', 'title', 'description', 'alias', 'icon', 'image', 'meta_title', 'meta_description', 'meta_keywords', 'meta_robots', 'created_at', 'updated_at', 'parent_title'], 'safe'],
-            [['position'], 'integer'],
+//            [['position'], 'integer'],
             [['active', 'has_children'], 'boolean'],
         ];
     }
@@ -53,6 +53,39 @@ class CategorySearch extends Category
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> [
+                'attributes' => [
+                    'created_at' => [
+                        'asc' => [
+                            'created_at' => SORT_ASC
+                        ],
+                        'desc' => [
+                            'created_at' => SORT_DESC
+                        ],
+                    ],
+                    'updated_at' => [
+                        'asc' => [
+                            'updated_at' => SORT_ASC
+                        ],
+                        'desc' => [
+                            'updated_at' => SORT_DESC
+                        ],
+                    ],
+                    'title' => [
+                        'asc' => [
+                            'title' => SORT_ASC
+                        ],
+                        'desc' => [
+                            'title' => SORT_DESC
+                        ],
+                    ],
+                    'active',
+                    'position',
+                ],
+                'defaultOrder' => [
+                    'position' => SORT_ASC
+                ],
+            ],
         ]);
 
         $this->load($params);
@@ -86,7 +119,8 @@ class CategorySearch extends Category
             ->andFilterWhere(['ilike', 'parent.title', $this->parent_title]);
 
         if ($this->has_children) {
-            $query->innerJoinWith('children children', false);
+            $query->innerJoinWith('children children', false)
+                ->groupBy('category.uuid');
         }
 
         if (!$this->parent_uuid) {

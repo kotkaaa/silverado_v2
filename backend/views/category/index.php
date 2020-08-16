@@ -49,13 +49,16 @@ if ($parentModel->uuid) {
             }
         },
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
+            [
+                'attribute' => 'position',
+                'label' => '#'
+            ],
             'title',
             [
                 'attribute' => 'has_children',
                 'format' => 'raw',
                 'label' => 'Children',
+                'filter' => array_combine([true, false], ['Да', 'Нет']),
                 'value' => function (Category $model) use ($searchModel) {
                     if ($model->children) {
                         return Html::a('<span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;' . count($model->children), ['index', Html::getInputName($searchModel, 'parent_uuid') => $model->uuid]);
@@ -64,10 +67,9 @@ if ($parentModel->uuid) {
                     return null;
                 }
             ],
-            'active:boolean',
-            'position',
             'created_at',
             'updated_at',
+            'active:boolean',
 
             [
                 'class' => 'yii\grid\ActionColumn',
