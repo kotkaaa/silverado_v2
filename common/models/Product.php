@@ -4,13 +4,22 @@ namespace common\models;
 
 use aracoool\uuid\Uuid;
 use aracoool\uuid\UuidBehavior;
+use common\behaviors\ProductBehavior;
 use common\classes\Optional\OptionalActiveRecordTrait;
+use common\helpers\FileUploadHelper;
+use common\modules\File\behaviours\AjaxFileBehaviour;
+use common\modules\File\storages\AjaxLocalStorage;
+use common\modules\File\storages\RelationStorage;
+use common\queries\ProductFilesQuery;
 use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\db\ActiveRecordInterface;
 use yii\db\Expression;
-use yii2tech\ar\softdelete\SoftDeleteBehavior;
+use yii\helpers\Url;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "product".
@@ -37,6 +46,8 @@ use yii2tech\ar\softdelete\SoftDeleteBehavior;
  * @property string|null $updated_at
  *
  * @property Category $category
+ * @property ProductFiles[] $productFiles
+ * @property Files[] $files
  */
 class Product extends \yii\db\ActiveRecord
 {
@@ -46,6 +57,12 @@ class Product extends \yii\db\ActiveRecord
     /** @var bool */
     public const ACTIVE_STATE_TRUE = true;
     public const ACTIVE_STATE_FALSE = false;
+
+    /** @var string */
+    public const EVENT_AFTER_FILE_UPLOAD = 'afterFileUpload';
+
+    /** @var UploadedFile[] */
+    public $upload;
 
     /**
      * {@inheritdoc}
@@ -111,7 +128,37 @@ class Product extends \yii\db\ActiveRecord
                 'class' => SaveRelationsBehavior::class,
                 'relations' => [
                     'category',
+                    'productFiles' => [
+                        'cascadeDelete' => true
+                    ],
                 ],
+            ],
+            'product' => [
+                'class' => ProductBehavior::class,
+                'uploadPath' => Url::to('@uploads/product'),
+                'thumbnails' => true,
+                'thumbnailsParams' => [
+                    'full' => [
+                        'w' => 960,
+                        'h' => 960
+                    ],
+                    'preview' => [
+                        'w' => 560,
+                        'h' => 560
+                    ],
+                    'middle' => [
+                        'w' => 280,
+                        'h' => 280
+                    ],
+                    'small' => [
+                        'w' => 110,
+                        'h' => 110
+                    ],
+                    'thumb' => [
+                        'w' => 90,
+                        'h' => 90
+                    ]
+                ]
             ]
         ];
     }
@@ -153,6 +200,22 @@ class Product extends \yii\db\ActiveRecord
     public function getCategory()
     {
         return $this->hasOne(Category::className(), ['uuid' => 'category_uuid']);
+    }
+
+    /**
+     * @return ProductFilesQuery
+     */
+    public function getProductFiles(): ProductFilesQuery
+    {
+        return $this->hasMany(ProductFiles::class, ['product_uuid' => 'uuid'])->ordered();
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getFiles(): ActiveQuery
+    {
+        return $this->hasMany(Files::class, ['uuid' => 'files_uuid'])->via('productFiles');
     }
 
     /**

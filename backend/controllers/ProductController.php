@@ -2,13 +2,14 @@
 
 namespace backend\controllers;
 
-use common\models\Category;
-use Yii;
-use common\models\Product;
 use backend\models\ProductSearch;
-use backend\controllers\AdminController;
+use common\models\Category;
+use common\models\Product;
+use common\models\ProductFiles;
+use Yii;
+use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * ProductController implements the CRUD actions for Product model.
@@ -129,5 +130,63 @@ class ProductController extends AdminController
         \Yii::$app->session->setFlash('error', 'The requested page does not exist.');
 
         return $this->redirect(['index'])->send();
+    }
+
+    /**
+     * @param $id
+     * @return string|null
+     * @throws NotFoundHttpException
+     */
+    public function actionFileUpload($id)
+    {
+        $model = $this->findModel($id);
+        $files = [];
+
+        $model->trigger(Product::EVENT_AFTER_FILE_UPLOAD);
+
+        foreach ($model->productFiles as $productFile) {
+            $files[] = [
+                'name' => $productFile->files->name,
+                'size' => $productFile->files->size,
+                'url' => implode('/', [\Yii::$app->params['frontUrl'], $productFile->files->url, $productFile->files->name]),
+                'thumbnailUrl' => implode('/', [\Yii::$app->params['frontUrl'], $productFile->files->url, 'thumb-' . $productFile->files->name]),
+                'deleteUrl' => Url::to(['/product/delete-uploaded-file', 'id' => $productFile->uuid]),
+                'deleteType' => 'POST',
+            ];
+        }
+
+        return Json::encode(['files' => $files]);
+    }
+
+    /**
+     * @param $id
+     * @return string
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
+    public function actionDeleteUploadedFile($id)
+    {
+        if (($file = ProductFiles::findOne($id)) == null) {
+            throw new NotFoundHttpException('Uploaded file does not exist.');
+        }
+
+        $model = $file->product->orNull();
+        $file->delete();
+
+        $files = [];
+
+        foreach ($model->productFiles as $productFile) {
+            $files[] = [
+                'name' => $productFile->files->name,
+                'size' => $productFile->files->size,
+                'url' => implode('/', [\Yii::$app->params['frontUrl'], $productFile->files->url, $productFile->files->name]),
+                'thumbnailUrl' => implode('/', [\Yii::$app->params['frontUrl'], $productFile->files->url, 'thumb-' . $productFile->files->name]),
+                'deleteUrl' => Url::to(['/product/delete-uploaded-file', 'id' => $productFile->uuid]),
+                'deleteType' => 'POST',
+            ];
+        }
+
+        return Json::encode(['files' => $files]);
     }
 }

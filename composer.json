@@ -35,9 +35,14 @@
         "mihaildev/yii2-elfinder": "*",
         "mihaildev/yii2-ckeditor": "dev-master",
         "kartik-v/yii2-date-range": "dev-master",
+        "yiisoft/yii2-imagine": "dev-master",
+        "yiisoft/yii2-redis": "dev-master",
         "yii2tech/csv-grid": "dev-master",
         "aneeshikmat/yii2-time-down-counter": "v1.0.0-stable",
-        "kartik-v/yii2-widget-typeahead": "dev-master"
+        "kartik-v/yii2-widget-typeahead": "dev-master",
+        "2amigos/yii2-file-upload-widget": "~1.0",
+        "kartik-v/yii2-mpdf": "dev-master",
+        "kartik-v/yii2-widget-depdrop": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

@@ -7,6 +7,7 @@ use common\modules\File\storages\interfaces\AfterSaveStorageInterface;
 use common\modules\File\storages\interfaces\AfterValidateStorageInterface;
 use common\modules\File\storages\interfaces\StorageInterface;
 use yii\base\Behavior;
+use yii\base\Event;
 use yii\db\ActiveRecord;
 use yii\web\UploadedFile;
 
@@ -57,9 +58,9 @@ class FileBehaviour extends Behavior
     }
 
     /**
-     *
+     * @param Event $event
      */
-    public function beforeValidate()
+    public function beforeValidate(Event $event): void
     {
 
         $files = $this->multiple ? UploadedFile::getInstances($this->owner, $this->field) : UploadedFile::getInstance($this->owner, $this->field);
@@ -73,9 +74,9 @@ class FileBehaviour extends Behavior
 
 
     /**
-     * @param $event
+     * @param Event $event
      */
-    public function processFiles($event)
+    public function processFiles(Event $event): void
     {
 
         if (!$this->owner->{$this->field}) {

@@ -1,11 +1,14 @@
 <?php
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use common\helpers\MetaHelper;
 use mihaildev\ckeditor\CKEditor;
 use mihaildev\elfinder\ElFinder;
 use yii\web\JsExpression;
+use common\models\Product;
+use dosamigos\fileupload\FileUploadUI;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Product */
@@ -16,13 +19,12 @@ use yii\web\JsExpression;
 <div class="product-form">
 
     <?php $form = ActiveForm::begin([
-        'validateOnSubmit' => true, // optional
+        'validateOnSubmit' => true,
         'options' => [
-            'onsubmit' => new \yii\web\JsExpression('function(form) {
+            'onsubmit' => new JsExpression('function(form) {
                 for(var instanceName in CKEDITOR.instances) { 
                     CKEDITOR.instances[instanceName].updateElement();
-                }
-                return true;
+                } return true;
             }'),
         ]
     ]) ?>
@@ -65,6 +67,32 @@ use yii\web\JsExpression;
 
     <?= $form->field($model, 'short')->textarea(['rows' => 6]) ?>
 
+<?php if($model->uuid): ?>
+    <hr>
+
+    <h3>Images</h3>
+
+    <?= FileUploadUI::widget([
+        'model' => $model,
+        'attribute' => 'upload',
+        'url' => Url::to(['file-upload', 'id' => $model->uuid]),
+        'load' => true,
+        'options' => [
+            'accept' => 'image/*',
+            'multiple' => 'multiple'
+        ],
+        'clientOptions' => [
+            'autoUpload' => true,
+            'singleFileUploads' => false,
+            'maxFileSize' => 10000000,
+            'dataType' => 'json'
+        ],
+        'clientEvents' => [
+//            'fileuploaddone' => 'FileUpload.done',
+//            'fileuploadfail' => 'FileUpload.stop',
+        ],
+    ]) ?>
+<?php endif;?>
     <hr>
 
     <h3>Price</h3>

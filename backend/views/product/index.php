@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{toggle} {view} {update} {delete}',
                 'buttons' => [
-                    'toggle' => function($url,Product $model) {
+                    'toggle' => function($url, Product $model) {
                         if (!$model->active) {
                             return Html::a('<span class="glyphicon glyphicon-play"></span>', ['toggle', 'id' => $model->uuid], [
                                 'title' => 'Enable',
