@@ -62,17 +62,17 @@ class OptionValueSearch extends OptionValue
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'price' => $this->price,
-            'position' => $this->position,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'option_value.price' => $this->price,
+            'option_value.position' => $this->position,
+            'option_value.created_at' => $this->created_at,
+            'option_value.updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['ilike', 'uuid', $this->uuid])
-            ->andFilterWhere(['ilike', 'option_uuid', $this->option_uuid])
-            ->andFilterWhere(['ilike', 'title', $this->title])
-            ->andFilterWhere(['ilike', 'alias', $this->alias])
-            ->andFilterWhere(['ilike', 'action', $this->action])
+        $query->andFilterWhere(['ilike', 'option_value.uuid', $this->uuid])
+            ->andFilterWhere(['ilike', 'option_value.option_uuid', $this->option_uuid])
+            ->andFilterWhere(['ilike', 'option_value.title', $this->title])
+            ->andFilterWhere(['ilike', 'option_value.alias', $this->alias])
+            ->andFilterWhere(['ilike', 'option_value.action', $this->action])
             ->joinWith('option', false)
             ->andFilterWhere(['ilike', 'option.title', $this->option_title]);
 
