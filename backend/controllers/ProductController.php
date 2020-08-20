@@ -146,6 +146,7 @@ class ProductController extends AdminController
         $files = [];
 
         $model->trigger(Product::EVENT_AFTER_FILE_UPLOAD);
+        $model->refresh();
 
         foreach ($model->productFiles as $productFile) {
             $files[] = [
@@ -174,8 +175,10 @@ class ProductController extends AdminController
             throw new NotFoundHttpException('Uploaded file does not exist.');
         }
 
+        /** @var Product $model */
         $model = $file->product->orNull();
         $file->delete();
+        $model->refresh();
 
         $files = [];
 
