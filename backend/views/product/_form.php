@@ -15,8 +15,6 @@ use dosamigos\fileupload\FileUploadUI;
 /* @var $categoryTree \common\models\Category[] */
 /* @var $options \common\models\Option[] */
 /* @var $form yii\widgets\ActiveForm */
-
-\dosamigos\fileupload\FileUploadUIAsset::register($this);
 ?>
 
 <div class="product-form">
