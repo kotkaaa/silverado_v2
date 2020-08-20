@@ -7,13 +7,16 @@ use common\helpers\MetaHelper;
 use mihaildev\ckeditor\CKEditor;
 use mihaildev\elfinder\ElFinder;
 use yii\web\JsExpression;
-use common\models\Product;
+use yii\helpers\ArrayHelper;
 use dosamigos\fileupload\FileUploadUI;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Product */
 /* @var $categoryTree \common\models\Category[] */
+/* @var $options \common\models\Option[] */
 /* @var $form yii\widgets\ActiveForm */
+
+\dosamigos\fileupload\FileUploadUIAsset::register($this);
 ?>
 
 <div class="product-form">
@@ -82,9 +85,9 @@ use dosamigos\fileupload\FileUploadUI;
             'multiple' => 'multiple'
         ],
         'clientOptions' => [
-            'autoUpload' => true,
+            'autoUpload' => false,
             'singleFileUploads' => false,
-            'maxFileSize' => 10000000,
+            'maxFileSize' => 30000000,
             'dataType' => 'json'
         ],
         'clientEvents' => [
@@ -100,6 +103,14 @@ use dosamigos\fileupload\FileUploadUI;
     <?= $form->field($model, 'price')->textInput() ?>
 
     <?= $form->field($model, 'discount')->textInput() ?>
+
+    <hr>
+
+    <h3>Options</h3>
+
+<?php foreach ($options as $option): ?>
+    <?= $form->field($model, '_options')->checkboxList(ArrayHelper::map($option->values, 'uuid', 'title'))->label($option->title) ?>
+<?php endforeach;?>
 
     <hr>
 

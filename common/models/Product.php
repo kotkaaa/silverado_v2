@@ -6,17 +6,15 @@ use aracoool\uuid\Uuid;
 use aracoool\uuid\UuidBehavior;
 use common\behaviors\ProductBehavior;
 use common\classes\Optional\OptionalActiveRecordTrait;
-use common\helpers\FileUploadHelper;
-use common\modules\File\behaviours\AjaxFileBehaviour;
-use common\modules\File\storages\AjaxLocalStorage;
-use common\modules\File\storages\RelationStorage;
+use common\queries\OptionQuery;
+use common\queries\OptionValueQuery;
 use common\queries\ProductFilesQuery;
+use common\queries\ProductOptionQuery;
 use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
-use yii\db\ActiveRecordInterface;
 use yii\db\Expression;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
@@ -48,6 +46,9 @@ use yii\web\UploadedFile;
  * @property Category $category
  * @property ProductFiles[] $productFiles
  * @property Files[] $files
+ * @property ProductOption[] $productOptions
+ * @property OptionValue[] $optionValues
+ * @property Option[] $options
  */
 class Product extends \yii\db\ActiveRecord
 {
@@ -63,6 +64,9 @@ class Product extends \yii\db\ActiveRecord
 
     /** @var UploadedFile[] */
     public $upload;
+
+    /** @var array */
+    public $_options;
 
     /**
      * {@inheritdoc}
@@ -85,7 +89,7 @@ class Product extends \yii\db\ActiveRecord
             [['discount', 'viewed', 'purchased', 'rating', 'position'], 'integer'],
             [['discount', 'viewed', 'purchased', 'rating'], 'default', 'value' => null],
             [['position'], 'default', 'value' => 1],
-            [['created_at', 'updated_at'], 'safe'],
+            [['created_at', 'updated_at', '_options'], 'safe'],
             [['uuid', 'category_uuid'], 'string', 'max' => 36],
             [['sku'], 'string', 'max' => 32],
             [['active'], 'boolean'],
@@ -128,6 +132,7 @@ class Product extends \yii\db\ActiveRecord
                 'class' => SaveRelationsBehavior::class,
                 'relations' => [
                     'category',
+                    'productOptions',
                     'productFiles' => [
                         'cascadeDelete' => true
                     ],
@@ -216,6 +221,30 @@ class Product extends \yii\db\ActiveRecord
     public function getFiles(): ActiveQuery
     {
         return $this->hasMany(Files::class, ['uuid' => 'files_uuid'])->via('productFiles');
+    }
+
+    /**
+     * @return ProductOptionQuery
+     */
+    public function getProductOptions(): ProductOptionQuery
+    {
+        return $this->hasMany(ProductOption::class, ['product_uuid' => 'uuid']);
+    }
+
+    /**
+     * @return OptionValueQuery
+     */
+    public function getOptionValues(): OptionValueQuery
+    {
+        return $this->hasMany(OptionValue::class, ['uuid' => 'value_uuid'])->via('productOptions');
+    }
+
+    /**
+     * @return OptionQuery
+     */
+    public function getOptions(): OptionQuery
+    {
+        return $this->hasMany(Option::class, ['uuid' => 'option_uuid'])->via('optionValues');
     }
 
     /**

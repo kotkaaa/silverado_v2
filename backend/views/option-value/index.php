@@ -26,15 +26,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'uuid',
-            'option_uuid',
             'title',
-            'alias',
+            [
+                'attribute' => 'option_title',
+                'label' => 'Option',
+                'value' => 'option.title'
+            ],
             'price',
-            //'action',
-            //'position',
-            //'created_at',
-            //'updated_at',
+            'action',
+            'position',
+            'created_at',
+            'updated_at',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

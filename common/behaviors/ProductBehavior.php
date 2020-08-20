@@ -4,9 +4,12 @@
 namespace common\behaviors;
 
 use common\models\Files;
+use common\models\OptionValue;
 use common\models\Product;
 use common\modules\File\exception\FileException;
 use yii\base\Event;
+use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
 use yii\helpers\Url;
 use yii\imagine\Image;
@@ -48,8 +51,35 @@ class ProductBehavior extends \yii\base\Behavior
     public function events(): array
     {
         return [
-            Product::EVENT_AFTER_FILE_UPLOAD => 'afterFileUpload'
+            Product::EVENT_AFTER_FILE_UPLOAD => 'afterFileUpload',
+            ActiveRecord::EVENT_AFTER_FIND => 'afterFind',
+            ActiveRecord::EVENT_AFTER_INSERT => 'afterSave',
+            ActiveRecord::EVENT_AFTER_UPDATE => 'afterSave',
         ];
+    }
+
+    /**
+     * @param Event $event
+     * @return void
+     */
+    public function afterFind(Event $event): void
+    {
+        $this->owner->_options = ArrayHelper::getColumn($this->owner->productOptions, 'value_uuid');
+    }
+
+    /**
+     * @param Event $event
+     * @return void
+     */
+    public function afterSave(Event $event): void
+    {
+        $this->owner->unlinkAll('productOptions', true);
+
+        foreach ($this->owner->_options as $uuid) {
+            if (($model = OptionValue::findOne($uuid)) !== null) {
+                $this->owner->link('optionValues', $model);
+            }
+        }
     }
 
     /**
@@ -89,7 +119,9 @@ class ProductBehavior extends \yii\base\Behavior
         }
     }
 
-
+    /**
+     * @param UploadedFile $file
+     */
     protected function generateThubnails(UploadedFile $file): void
     {
         foreach ($this->thumbnailsParams as $name => $params) {

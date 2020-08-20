@@ -50,6 +50,28 @@ class OptionValueSearch extends OptionValue
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'attributes' => [
+                    'uuid',
+                    'title',
+                    'option_title' => [
+                        'asc' => [
+                            'option.title' => SORT_ASC
+                        ],
+                        'desc' => [
+                            'option.title' => SORT_DESC
+                        ],
+                    ],
+                    'price',
+                    'action',
+                    'position',
+                    'created_at',
+                    'updated_at'
+                ],
+                'defaultOrder' => [
+                    'position' => SORT_ASC
+                ]
+            ]
         ]);
 
         $this->load($params);

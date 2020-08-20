@@ -15,21 +15,6 @@ use yii\filters\VerbFilter;
 class OptionController extends AdminController
 {
     /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
-
-    /**
      * Lists all Option models.
      * @return mixed
      */
@@ -123,5 +108,32 @@ class OptionController extends AdminController
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
+     * @param $term
+     * @return array|\yii\web\Response
+     */
+    public function actionSearch($term)
+    {
+        $searchModel = new OptionSearch(['title' => $term]);
+        $dataProvider = $searchModel->search([]);
+        $dataProvider->pagination = false;
+
+        if (\Yii::$app->request->isAjax) {
+
+            $out = ['results' => []];
+
+            foreach ($dataProvider->getModels() as $model) {
+                $out['results'][] = [
+                    'id' => $model->uuid,
+                    'text' => $model->title
+                ];
+            }
+
+            return $this->asJson($out);
+        }
+
+        return $dataProvider->getModels();
     }
 }

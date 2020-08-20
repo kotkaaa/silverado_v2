@@ -109,7 +109,7 @@ class Option extends \yii\db\ActiveRecord
      */
     public function getValues(): OptionValueQuery
     {
-        return $this->hasMany(OptionValue::class, ['option_uuid' => 'uuid']);
+        return $this->hasMany(OptionValue::class, ['option_uuid' => 'uuid'])->ordered();
     }
 
     /**

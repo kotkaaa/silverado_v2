@@ -23,17 +23,6 @@ class OptionValueQuery extends \yii\db\ActiveQuery
     }
 
     /**
-     * @param string|null $alias
-     * @return OptionValueQuery
-     */
-    public function alias(string $alias = null): OptionValueQuery
-    {
-        return $this->andFilterWhere([
-            'option_value.alias' => $alias
-        ]);
-    }
-
-    /**
      * @param string|array|null $action
      * @return OptionValueQuery
      */
@@ -41,6 +30,16 @@ class OptionValueQuery extends \yii\db\ActiveQuery
     {
         return $this->andFilterWhere([
             'option_value.action' => $action
+        ]);
+    }
+
+    /**
+     * @return OptionValueQuery
+     */
+    public function ordered(): OptionValueQuery
+    {
+        return $this->orderBy([
+            'option_value.position' => SORT_ASC
         ]);
     }
 

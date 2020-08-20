@@ -15,21 +15,6 @@ use yii\filters\VerbFilter;
 class OptionValueController extends AdminController
 {
     /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
-
-    /**
      * Lists all OptionValue models.
      * @return mixed
      */

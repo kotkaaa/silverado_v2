@@ -4,7 +4,8 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Product */
-/* @var \common\models\Category[] $categoryTree */
+/* @var $categoryTree \common\models\Category[] */
+/* @var $options \common\models\Option[] */
 
 $this->title = 'Create Product';
 $this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
@@ -16,7 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
-        'categoryTree' => $categoryTree
+        'categoryTree' => $categoryTree,
+        'options' => $options
     ]) ?>
 
 </div>
