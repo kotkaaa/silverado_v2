@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\ProductSearch;
+use common\models\Attribute;
 use common\models\Category;
 use common\models\Option;
 use common\models\Product;
@@ -61,7 +62,8 @@ class ProductController extends AdminController
         return $this->render('create', [
             'model' => $model,
             'categoryTree' => Category::find()->root()->ordered()->all(),
-            'options' => Option::find()->all()
+            'options' => Option::find()->all(),
+            'attributes' => Attribute::find()->all(),
         ]);
     }
 
@@ -83,7 +85,8 @@ class ProductController extends AdminController
         return $this->render('update', [
             'model' => $model,
             'categoryTree' => Category::find()->root()->ordered()->all(),
-            'options' => Option::find()->all()
+            'options' => Option::find()->all(),
+            'attributes' => Attribute::find()->all(),
         ]);
     }
 

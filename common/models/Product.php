@@ -6,8 +6,11 @@ use aracoool\uuid\Uuid;
 use aracoool\uuid\UuidBehavior;
 use common\behaviors\ProductBehavior;
 use common\classes\Optional\OptionalActiveRecordTrait;
+use common\queries\AttributeQuery;
+use common\queries\AttributeValueQuery;
 use common\queries\OptionQuery;
 use common\queries\OptionValueQuery;
+use common\queries\ProductAttributeQuery;
 use common\queries\ProductFilesQuery;
 use common\queries\ProductOptionQuery;
 use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
@@ -16,6 +19,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
 
@@ -49,6 +53,9 @@ use yii\web\UploadedFile;
  * @property ProductOption[] $productOptions
  * @property OptionValue[] $optionValues
  * @property Option[] $options
+ * @property ProductAttribute[] $productAttributes
+ * @property AttributeValue[] $attrbuteValues
+ * @property Attribute[] $attributeModels
  */
 class Product extends \yii\db\ActiveRecord
 {
@@ -67,6 +74,9 @@ class Product extends \yii\db\ActiveRecord
 
     /** @var array */
     public $_options;
+
+    /** @var array */
+    public $_attributes;
 
     /**
      * {@inheritdoc}
@@ -89,7 +99,7 @@ class Product extends \yii\db\ActiveRecord
             [['discount', 'viewed', 'purchased', 'rating', 'position'], 'integer'],
             [['discount', 'viewed', 'purchased', 'rating'], 'default', 'value' => null],
             [['position'], 'default', 'value' => 1],
-            [['created_at', 'updated_at', '_options'], 'safe'],
+            [['created_at', 'updated_at', '_options', '_attributes'], 'safe'],
             [['uuid', 'category_uuid'], 'string', 'max' => 36],
             [['sku'], 'string', 'max' => 32],
             [['active'], 'boolean'],
@@ -133,6 +143,9 @@ class Product extends \yii\db\ActiveRecord
                 'relations' => [
                     'category',
                     'productOptions',
+                    'productAttributes',
+                    'optionValues',
+                    'attributeValues',
                     'productFiles' => [
                         'cascadeDelete' => true
                     ],
@@ -245,6 +258,30 @@ class Product extends \yii\db\ActiveRecord
     public function getOptions(): OptionQuery
     {
         return $this->hasMany(Option::class, ['uuid' => 'option_uuid'])->via('optionValues');
+    }
+
+    /**
+     * @return ProductAttributeQuery
+     */
+    public function getProductAttributes(): ProductAttributeQuery
+    {
+        return $this->hasMany(ProductAttribute::class, ['product_uuid' => 'uuid']);
+    }
+
+    /**
+     * @return AttributeValueQuery
+     */
+    public function getAttributeValues(): AttributeValueQuery
+    {
+        return $this->hasMany(AttributeValue::class, ['uuid' => 'value_uuid'])->via('productAttributes');
+    }
+
+    /**
+     * @return AttributeQuery
+     */
+    public function getAttrbuteModels(): AttributeQuery
+    {
+        return $this->hasMany(Attribute::class, ['uuid' => 'attribute_uuid'])->via('attributeValues');
     }
 
     /**

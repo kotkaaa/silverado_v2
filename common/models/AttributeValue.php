@@ -11,32 +11,28 @@ use yii\db\ActiveRecord;
 use yii\db\Expression;
 
 /**
- * This is the model class for table "option_value".
+ * This is the model class for table "attribute_value".
  *
  * @property string $uuid
- * @property string $option_uuid
+ * @property string $attribute_uuid
  * @property string $title
  * @property string $alias
- * @property float|null $price
- * @property string|null $action
  * @property int|null $position
  * @property string|null $created_at
  * @property string|null $updated_at
  *
- * @property Option $option
+ * @property Attribute $attributeModel
+ * @property ProductAttribute[] $productAttributes
+ * @property Product[] $product
  */
-class OptionValue extends \yii\db\ActiveRecord
+class AttributeValue extends \yii\db\ActiveRecord
 {
-    /** @var string */
-    public const STRATEGY_ACTION_INCREASE = 'increase';
-    public const STRATEGY_ACTION_DECREASE = 'decrease';
-
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'option_value';
+        return 'attribute_value';
     }
 
     /**
@@ -45,19 +41,15 @@ class OptionValue extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['option_uuid', 'title'], 'required'],
-            [['price'], 'number'],
-            [['position'], 'default', 'value' => null],
+            [['attribute_uuid', 'title'], 'required'],
+            [['position'], 'default', 'value' => 1],
             [['position'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
-            [['uuid', 'option_uuid'], 'string', 'max' => 36],
+            [['uuid', 'attribute_uuid'], 'string', 'max' => 36],
             [['title', 'alias'], 'string', 'max' => 255],
-            [['action'], 'string', 'max' => 32],
-            [['action'], 'default', 'value' => null],
-            [['action'], 'in', 'range' => self::actionsList()],
             [['uuid', 'alias'], 'unique'],
-            [['option_uuid', 'title'], 'unique', 'targetAttribute' => ['option_uuid', 'title']],
-            [['option_uuid'], 'exist', 'skipOnError' => true, 'targetClass' => Option::className(), 'targetAttribute' => ['option_uuid' => 'uuid']],
+            [['attribute_uuid', 'title'], 'unique', 'targetAttribute' => ['attribute_uuid', 'title']],
+            [['attribute_uuid'], 'exist', 'skipOnError' => true, 'targetClass' => Attribute::className(), 'targetAttribute' => ['attribute_uuid' => 'uuid']],
         ];
     }
 
@@ -90,7 +82,8 @@ class OptionValue extends \yii\db\ActiveRecord
             'saveRelations' => [
                 'class' => SaveRelationsBehavior::class,
                 'relations' => [
-                    'option'
+                    'attributeModel',
+                    'productAttributes'
                 ],
             ],
         ];
@@ -103,11 +96,9 @@ class OptionValue extends \yii\db\ActiveRecord
     {
         return [
             'uuid' => 'Uuid',
-            'option_uuid' => 'Option Uuid',
+            'attribute_uuid' => 'Attribute Uuid',
             'title' => 'Title',
             'alias' => 'Alias',
-            'price' => 'Price',
-            'action' => 'Action',
             'position' => 'Position',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -115,39 +106,41 @@ class OptionValue extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Option]].
+     * Gets query for [[AttributeUu]].
      *
-     * @return \yii\db\ActiveQuery|\common\queries\OptionQuery
+     * @return \yii\db\ActiveQuery|\common\queries\AttributeQuery
      */
-    public function getOption()
+    public function getAttributeModel()
     {
-        return $this->hasOne(Option::className(), ['uuid' => 'option_uuid']);
+        return $this->hasOne(Attribute::className(), ['uuid' => 'attribute_uuid']);
+    }
+
+    /**
+     * Gets query for [[ProductAttributes]].
+     *
+     * @return \yii\db\ActiveQuery|\common\queries\ProductAttributeQuery
+     */
+    public function getProductAttributes()
+    {
+        return $this->hasMany(ProductAttribute::className(), ['value_uuid' => 'uuid']);
+    }
+
+    /**
+     * Gets query for [[ProductUus]].
+     *
+     * @return \yii\db\ActiveQuery|\common\queries\ProductQuery
+     */
+    public function getProducts()
+    {
+        return $this->hasMany(Product::className(), ['uuid' => 'product_uuid'])->via('productAttributes');
     }
 
     /**
      * {@inheritdoc}
-     * @return \common\queries\OptionValueQuery the active query used by this AR class.
+     * @return \common\queries\AttributeValueQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new \common\queries\OptionValueQuery(get_called_class());
-    }
-
-    /**
-     * @param bool $combine
-     * @return array
-     */
-    public static function actionsList($combine = false): array
-    {
-        $actions = [
-            self::STRATEGY_ACTION_INCREASE,
-            self::STRATEGY_ACTION_DECREASE
-        ];
-
-        if ($combine) {
-            return array_combine($actions, $actions);
-        }
-
-        return $actions;
+        return new \common\queries\AttributeValueQuery(get_called_class());
     }
 }

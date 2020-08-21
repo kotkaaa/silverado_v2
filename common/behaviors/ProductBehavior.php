@@ -3,6 +3,7 @@
 
 namespace common\behaviors;
 
+use common\models\AttributeValue;
 use common\models\Files;
 use common\models\OptionValue;
 use common\models\Product;
@@ -64,7 +65,8 @@ class ProductBehavior extends \yii\base\Behavior
      */
     public function afterFind(Event $event): void
     {
-        $this->owner->_options = ArrayHelper::getColumn($this->owner->productOptions, 'value_uuid');
+        $this->owner->_attributes = ArrayHelper::getColumn($this->owner->productAttributes, 'value_uuid') ?? [];
+        $this->owner->_options = ArrayHelper::getColumn($this->owner->productOptions, 'value_uuid') ?? [];
     }
 
     /**
@@ -74,10 +76,17 @@ class ProductBehavior extends \yii\base\Behavior
     public function afterSave(Event $event): void
     {
         $this->owner->unlinkAll('productOptions', true);
+        $this->owner->unlinkAll('productAttributes', true);
 
         foreach ($this->owner->_options as $uuid) {
             if (($model = OptionValue::findOne($uuid)) !== null) {
                 $this->owner->link('optionValues', $model);
+            }
+        }
+
+        foreach ($this->owner->_attributes as $uuid) {
+            if (($model = AttributeValue::findOne($uuid)) !== null) {
+                $this->owner->link('attributeValues', $model);
             }
         }
     }

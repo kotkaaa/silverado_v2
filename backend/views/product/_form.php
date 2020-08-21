@@ -14,6 +14,7 @@ use dosamigos\fileupload\FileUploadUI;
 /* @var $model common\models\Product */
 /* @var $categoryTree \common\models\Category[] */
 /* @var $options \common\models\Option[] */
+/* @var $attributes \common\models\Attribute[] */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -107,7 +108,17 @@ use dosamigos\fileupload\FileUploadUI;
     <h3>Options</h3>
 
 <?php foreach ($options as $option): ?>
-    <?= $form->field($model, '_options')->checkboxList(ArrayHelper::map($option->values, 'uuid', 'title'))->label($option->title) ?>
+    <?php if(empty($option->values)) continue; ?>
+    <?= $form->field($model, '_options')->checkboxList(ArrayHelper::map($option->values, 'uuid', 'title'), ['unselect' => null])->label($option->title) ?>
+<?php endforeach;?>
+
+    <hr>
+
+    <h3>Attributes</h3>
+
+<?php foreach ($attributes as $attribute): ?>
+    <?php if(empty($attribute->values)) continue; ?>
+    <?= $form->field($model, '_attributes')->checkboxList(ArrayHelper::map($attribute->values, 'uuid', 'title'), ['unselect' => null])->label($attribute->title) ?>
 <?php endforeach;?>
 
     <hr>
