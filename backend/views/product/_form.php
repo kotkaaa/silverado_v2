@@ -8,7 +8,8 @@ use mihaildev\ckeditor\CKEditor;
 use mihaildev\elfinder\ElFinder;
 use yii\web\JsExpression;
 use yii\helpers\ArrayHelper;
-use dosamigos\fileupload\FileUploadUI;
+use dosamigos\fileupload\FileUpload;
+use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Product */
@@ -16,6 +17,12 @@ use dosamigos\fileupload\FileUploadUI;
 /* @var $options \common\models\Option[] */
 /* @var $attributes \common\models\Attribute[] */
 /* @var $form yii\widgets\ActiveForm */
+
+$this->registerJs(<<<JS
+    FileUpload.init({
+        namespace: 'ProductFiles[]'
+    });
+JS, \yii\web\View::POS_READY);
 ?>
 
 <div class="product-form">
@@ -74,26 +81,67 @@ use dosamigos\fileupload\FileUploadUI;
 
     <h3>Images</h3>
 
-    <?= FileUploadUI::widget([
+    <?= FileUpload::widget([
         'model' => $model,
         'attribute' => 'upload',
         'url' => Url::to(['file-upload', 'id' => $model->uuid]),
-        'load' => true,
         'options' => [
             'accept' => 'image/*',
             'multiple' => 'multiple'
         ],
         'clientOptions' => [
-            'autoUpload' => false,
+            'autoUpload' => true,
             'singleFileUploads' => false,
-            'maxFileSize' => 30000000,
+            'maxFileSize' => 5000000,
             'dataType' => 'json'
         ],
         'clientEvents' => [
-//            'fileuploaddone' => 'FileUpload.done',
-//            'fileuploadfail' => 'FileUpload.stop',
+//            'fileuploaddone' => 'window.location.reload()',
+            'fileuploadstart' => 'FileUpload.start',
+            'fileuploaddone' => 'FileUpload.done',
+            'fileuploadfail' => 'FileUpload.stop',
         ],
     ]) ?>
+
+    <br><br>
+
+    <table role="presentation" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Preview</th>
+                <th>Name</th>
+                <th>Size (bytes)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="files" id="uploaded_files">
+<?php foreach ($model->productFiles as $productFile): ?>
+            <tr>
+                <td>
+                    <?php Modal::begin([
+                        'toggleButton' => [
+                            'tag' => 'a',
+                            'label' => Html::img(implode('/', [\Yii::$app->params['frontUrl'], $productFile->files->url, 'thumb-' . $productFile->files->name]), ['class' => 'img-thumbnail', 'width' => 80, 'height' => 80])
+                        ]
+                    ]) ?>
+                    <?= Html::img(implode('/', [\Yii::$app->params['frontUrl'], $productFile->files->url, $productFile->files->name]), ['class' => 'img-thumbnail']) ?>
+                    <?php Modal::end() ?>
+                </td>
+                <td>
+                    <?= $productFile->files->name ?>
+                    <?= Html::hiddenInput('ProductFiles[][uuid]', $productFile->uuid) ?>
+                </td>
+                <td>
+                    <?= $productFile->files->size ?>
+                </td>
+                <td>
+                    <?= Html::a('Delete', ['delete-uploaded-file', 'id' => $productFile->uuid], ['class' => 'btn btn-danger']) ?>
+                </td>
+            </tr>
+<?php endforeach;?>
+        </tbody>
+    </table>
+
 <?php endif;?>
     <hr>
 

@@ -79,6 +79,18 @@ class ProductController extends AdminController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            $files = \Yii::$app->request->post('ProductFiles', []);
+
+            for ($i = 0; $i < count($files); $i++) {
+                if (($productFile = ProductFiles::findOne($files[$i]['uuid'])) == null) {
+                    continue;
+                }
+
+                $productFile->position = $i;
+                $productFile->save(false);
+            }
+
             return $this->redirect(['view', 'id' => $model->uuid]);
         }
 
@@ -178,24 +190,8 @@ class ProductController extends AdminController
             throw new NotFoundHttpException('Uploaded file does not exist.');
         }
 
-        /** @var Product $model */
-        $model = $file->product->orNull();
         $file->delete();
-        $model->refresh();
 
-        $files = [];
-
-        foreach ($model->productFiles as $productFile) {
-            $files[] = [
-                'name' => $productFile->files->name,
-                'size' => $productFile->files->size,
-                'url' => implode('/', [\Yii::$app->params['frontUrl'], $productFile->files->url, $productFile->files->name]),
-                'thumbnailUrl' => implode('/', [\Yii::$app->params['frontUrl'], $productFile->files->url, 'thumb-' . $productFile->files->name]),
-                'deleteUrl' => Url::to(['/product/delete-uploaded-file', 'id' => $productFile->uuid]),
-                'deleteType' => 'POST',
-            ];
-        }
-
-        return Json::encode(['files' => $files]);
+        return $this->redirect(\Yii::$app->request->referrer)->send();
     }
 }
