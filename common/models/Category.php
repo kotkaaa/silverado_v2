@@ -6,6 +6,7 @@ use aracoool\uuid\Uuid;
 use aracoool\uuid\UuidBehavior;
 use common\behaviors\CategoryBehavior;
 use common\classes\Optional\OptionalActiveRecordTrait;
+use common\models\interfaces\PrettyUrlModelInterface;
 use common\modules\File\behaviours\FileBehaviour;
 use common\modules\File\storages\FieldStorage;
 use common\modules\File\storages\LocalStorage;
@@ -41,7 +42,7 @@ use yii\web\UploadedFile;
  * @property Category $parent
  * @property Category[] $children
  */
-class Category extends \yii\db\ActiveRecord
+class Category extends \yii\db\ActiveRecord implements PrettyUrlModelInterface
 {
 
     use OptionalActiveRecordTrait;

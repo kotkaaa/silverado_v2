@@ -9,6 +9,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
+use frontend\widgets\menu\MainMenuWidget;
 
 AppAsset::register($this);
 ?>
@@ -27,44 +28,45 @@ AppAsset::register($this);
 <?php $this->beginBody() ?>
 
 <div class="wrap">
-    <?php
-    NavBar::begin([
-        'brandLabel' => Yii::$app->name,
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
-        ],
-    ]);
-    $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
-    ];
-    if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
-    } else {
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
-            . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link logout']
-            )
-            . Html::endForm()
-            . '</li>';
-    }
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => $menuItems,
-    ]);
-    NavBar::end();
-    ?>
+    <?php NavBar::begin([
+            'brandLabel' => Yii::$app->name,
+            'brandUrl' => Yii::$app->homeUrl,
+            'options' => [
+                'class' => 'navbar-inverse navbar-fixed-top',
+            ],
+    ]) ?>
+
+    <?= MainMenuWidget::widget(['options' => ['class' => 'navbar-nav navbar-right']]) ?>
+
+    <?php NavBar::end() ?>
 
     <div class="container">
+
+        <?= \yii2mod\cart\widgets\CartGrid::widget([
+            'cartColumns' => [
+                'label',
+                'quantity',
+                'price',
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{delete}',
+                    'buttons' => [
+                        'delete' => function($url, \yii2mod\cart\models\CartItemInterface $model) {
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', ['/cart/remove/' . $model->alias], [
+                                'title' => 'Remove',
+                            ]);
+                        }
+                    ]
+                ]
+            ]
+        ]) ?>
+
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
+
         <?= Alert::widget() ?>
+
         <?= $content ?>
     </div>
 </div>

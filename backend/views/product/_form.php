@@ -18,11 +18,13 @@ use yii\bootstrap\Modal;
 /* @var $attributes \common\models\Attribute[] */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->registerJs(<<<JS
+$js = <<<JS
     FileUpload.init({
         namespace: 'ProductFiles[]'
     });
-JS, \yii\web\View::POS_READY);
+JS;
+
+$this->registerJs($js, \yii\web\View::POS_READY);
 ?>
 
 <div class="product-form">

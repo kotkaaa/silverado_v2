@@ -3,6 +3,7 @@
 namespace common\classes\AutoBind;
 
 use common\classes\Optional\Optional;
+use common\models\interfaces\PrettyUrlModelInterface;
 use yii\base\InlineAction;
 use yii\db\ActiveRecordInterface;
 use yii\web\NotFoundHttpException;
@@ -13,7 +14,6 @@ use yii\web\NotFoundHttpException;
  */
 trait BindActionParamsTrait
 {
-
     /**
      * @param $action
      * @param $params
@@ -24,7 +24,6 @@ trait BindActionParamsTrait
      */
     public function bindActionParams($action, $params)
     {
-
         $args = parent::bindActionParams($action, $params);
 
         if (!$action instanceof InlineAction) {
@@ -37,7 +36,16 @@ trait BindActionParamsTrait
 
             $value = \Yii::$app->request->get($param->getName());
 
-            if ($value && $param->getClass() && in_array(ActiveRecordInterface::class, $param->getClass()->getInterfaceNames())) {
+            if ($value && $param->getClass() && in_array(PrettyUrlModelInterface::class, $param->getClass()->getInterfaceNames())) {
+
+                $class = $param->getClass()->getName();
+                $model = $class::findOne(['alias' => $value]);
+
+                if ($model instanceof Optional) {
+                    $model = $model->orNull();
+                }
+
+            } elseif ($value && $param->getClass() && in_array(ActiveRecordInterface::class, $param->getClass()->getInterfaceNames())) {
 
                 $class = $param->getClass()->getName();
                 $model = $class::findOne($value);
@@ -46,16 +54,15 @@ trait BindActionParamsTrait
                     $model = $model->orNull();
                 }
 
-                if (!$model) {
-                    throw new NotFoundHttpException('Model with ' . $param->getName() . ' ' . strip_tags($value) . ' not found.');
-                }
+            } else continue;
 
-                $args[$index] = $model;
+            if (!$model) {
+                throw new NotFoundHttpException('Model with ' . $param->getName() . ' ' . strip_tags($value) . ' not found.');
             }
+
+            $args[$index] = $model;
         }
 
         return $args;
     }
-
-
 }

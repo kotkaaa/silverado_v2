@@ -40,9 +40,27 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+            'enableStrictParsing' => true,
             'rules' => [
+                // Home page
+                '/' => 'site/index',
+                // Category page
+                'category' => 'category/index',
+                'category/<category:[\d\w-]+>' => 'category/index',
+                // Product page
+                'product/<product:[\d\w-]+>' => 'product/index',
+                // Cart
+                'cart/add/<product:[\d\w-]+>' => 'cart/add',
+                'cart/remove/<product:[\d\w-]+>' => 'cart/remove',
             ],
         ],
+        'cart' => [
+            'class' => 'common\components\Cart',
+            // you can change default storage class as following:
+            'storageClass' => [
+                'class' => 'yii2mod\cart\storage\SessionStorage'
+            ]
+        ]
     ],
     'params' => $params,
 ];

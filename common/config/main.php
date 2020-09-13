@@ -8,6 +8,8 @@ return [
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
-
+        'formatter' => [
+            'currencyCode' => 'UAH'
+        ]
     ],
 ];

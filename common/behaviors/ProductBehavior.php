@@ -67,6 +67,10 @@ class ProductBehavior extends \yii\base\Behavior
     {
         $this->owner->_attributes = ArrayHelper::getColumn($this->owner->productAttributes, 'value_uuid') ?? [];
         $this->owner->_options = ArrayHelper::getColumn($this->owner->productOptions, 'value_uuid') ?? [];
+        $this->owner->_preview = $this->owner->files ? $this->owner->files[0] : new Files([
+            'url' => 'img',
+            'name' => 'noimage.jpg'
+        ]);
     }
 
     /**

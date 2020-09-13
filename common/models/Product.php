@@ -6,6 +6,7 @@ use aracoool\uuid\Uuid;
 use aracoool\uuid\UuidBehavior;
 use common\behaviors\ProductBehavior;
 use common\classes\Optional\OptionalActiveRecordTrait;
+use common\models\interfaces\PrettyUrlModelInterface;
 use common\queries\AttributeQuery;
 use common\queries\AttributeValueQuery;
 use common\queries\OptionQuery;
@@ -22,6 +23,7 @@ use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
+use yii2mod\cart\models\CartItemInterface;
 
 /**
  * This is the model class for table "product".
@@ -57,7 +59,7 @@ use yii\web\UploadedFile;
  * @property AttributeValue[] $attrbuteValues
  * @property Attribute[] $attributeModels
  */
-class Product extends \yii\db\ActiveRecord
+class Product extends \yii\db\ActiveRecord implements PrettyUrlModelInterface, CartItemInterface
 {
 
     use OptionalActiveRecordTrait;
@@ -77,6 +79,12 @@ class Product extends \yii\db\ActiveRecord
 
     /** @var array */
     public $_attributes;
+
+    /** @var Files */
+    public $_preview;
+
+    /** @var int */
+    public $quantity = 1;
 
     /**
      * {@inheritdoc}
@@ -279,9 +287,41 @@ class Product extends \yii\db\ActiveRecord
     /**
      * @return AttributeQuery
      */
-    public function getAttrbuteModels(): AttributeQuery
+    public function getAttributeModels(): AttributeQuery
     {
         return $this->hasMany(Attribute::class, ['uuid' => 'attribute_uuid'])->via('attributeValues');
+    }
+
+    /**
+     * @return float|int|null
+     */
+    public function getPrice(): int
+    {
+        return $this->price * $this->quantity;
+    }
+
+    /**
+     * @return int|string
+     */
+    public function getLabel()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return int|string
+     */
+    public function getUniqueId()
+    {
+        return $this->uuid;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
     }
 
     /**
