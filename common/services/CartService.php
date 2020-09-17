@@ -4,6 +4,7 @@
 namespace common\services;
 
 use common\exceptions\CartHttpException;
+use common\models\Product;
 use yii2mod\cart\models\CartItemInterface;
 
 /**
@@ -13,7 +14,7 @@ use yii2mod\cart\models\CartItemInterface;
 class CartService
 {
     /** @var \common\components\Cart */
-    private $cart;
+    public $cart;
 
     /**
      * CartService constructor.
@@ -24,30 +25,34 @@ class CartService
     }
 
     /**
-     * @param CartItemInterface $product
+     * @param Product $product
      * @return bool
      * @throws CartHttpException
      */
     public function add(CartItemInterface $product)
     {
+        if (!$product->validate()) {
+            return false;
+        }
+
         try {
             $this->cart->add($product);
         } catch (\Exception $exception) {
-            throw new CartHttpException($exception->getMessage());
+            throw new CartHttpException(500, $exception->getMessage());
         }
 
         return true;
     }
 
     /**
-     * @param CartItemInterface $product
+     * @param string $id
      * @return bool
      * @throws CartHttpException
      */
-    public function remove(CartItemInterface $product)
+    public function remove(string $id)
     {
         try {
-            $this->cart->remove($product->getUniqueId());
+            $this->cart->remove($id);
         } catch (\Exception $exception) {
             throw new CartHttpException($exception->getMessage());
         }

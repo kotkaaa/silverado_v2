@@ -45,14 +45,20 @@ AppAsset::register($this);
         <?= \yii2mod\cart\widgets\CartGrid::widget([
             'cartColumns' => [
                 'label',
-                'quantity',
                 'price',
+                'quantity',
+                [
+                    'label' => 'Total',
+                    'value' => function (\yii2mod\cart\models\CartItemInterface $model) {
+                        return $model->getPrice() * $model->quantity;
+                    }
+                ],
                 [
                     'class' => 'yii\grid\ActionColumn',
                     'template' => '{delete}',
                     'buttons' => [
                         'delete' => function($url, \yii2mod\cart\models\CartItemInterface $model) {
-                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', ['/cart/remove/' . $model->alias], [
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', ['/cart/remove', 'id' => $model->getUniqueId()], [
                                 'title' => 'Remove',
                             ]);
                         }

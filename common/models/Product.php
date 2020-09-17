@@ -20,7 +20,6 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
 use yii2mod\cart\models\CartItemInterface;
@@ -61,8 +60,10 @@ use yii2mod\cart\models\CartItemInterface;
  */
 class Product extends \yii\db\ActiveRecord implements PrettyUrlModelInterface, CartItemInterface
 {
-
     use OptionalActiveRecordTrait;
+
+    /** @var string */
+    public const SCENARIO_PURCHASE = 'purchase';
 
     /** @var bool */
     public const ACTIVE_STATE_TRUE = true;
@@ -76,6 +77,9 @@ class Product extends \yii\db\ActiveRecord implements PrettyUrlModelInterface, C
 
     /** @var array */
     public $_options;
+
+    /** @var array */
+    public $selectedOptions;
 
     /** @var array */
     public $_attributes;
@@ -107,7 +111,7 @@ class Product extends \yii\db\ActiveRecord implements PrettyUrlModelInterface, C
             [['discount', 'viewed', 'purchased', 'rating', 'position'], 'integer'],
             [['discount', 'viewed', 'purchased', 'rating'], 'default', 'value' => null],
             [['position'], 'default', 'value' => 1],
-            [['created_at', 'updated_at', '_options', '_attributes'], 'safe'],
+            [['created_at', 'updated_at', '_options', '_attributes', 'selectedOptions'], 'safe'],
             [['uuid', 'category_uuid'], 'string', 'max' => 36],
             [['sku'], 'string', 'max' => 32],
             [['active'], 'boolean'],
@@ -116,6 +120,7 @@ class Product extends \yii\db\ActiveRecord implements PrettyUrlModelInterface, C
             [['title', 'alias', 'meta_title'], 'string', 'max' => 255],
             [['meta_robots'], 'string', 'max' => 32],
             [['sku', 'uuid'], 'unique'],
+            [['selectedOptions'], 'required', 'on' => [self::SCENARIO_PURCHASE]],
             [['category_uuid'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_uuid' => 'uuid']],
         ];
     }
@@ -297,7 +302,7 @@ class Product extends \yii\db\ActiveRecord implements PrettyUrlModelInterface, C
      */
     public function getPrice(): int
     {
-        return $this->price * $this->quantity;
+        return $this->price;
     }
 
     /**
@@ -313,6 +318,10 @@ class Product extends \yii\db\ActiveRecord implements PrettyUrlModelInterface, C
      */
     public function getUniqueId()
     {
+        if ($this->selectedOptions) {
+            return md5($this->uuid . serialize($this->selectedOptions));
+        }
+
         return $this->uuid;
     }
 

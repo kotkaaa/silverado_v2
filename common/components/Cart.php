@@ -18,11 +18,9 @@ class Cart extends \yii2mod\cart\Cart
      */
     public function add(CartItemInterface $element, $save = true): \yii2mod\cart\Cart
     {
-        if ($this->exists($element)) {
-            $element->quantity += 1;
+        if ($this->exists($element->getUniqueId())) {
+            $element = $this->setQuantity($element->getUniqueId(), $this->getQuantity($element->getUniqueId()) + 1);
         }
-
-        $element->price = $element->price * $element->quantity;
 
         return parent::add($element, $save);
     }
@@ -58,11 +56,18 @@ class Cart extends \yii2mod\cart\Cart
         return $element->quantity;
     }
 
-
-    public function setQuantity($id, int $quantity): void
+    /**
+     * @param $id
+     * @param int $quantity
+     * @return CartItemInterface|null
+     */
+    public function setQuantity($id, int $quantity): ?CartItemInterface
     {
         if (($element = $this->getItem($id)) == null) {
-            return;
+            return null;
         }
+
+        $element->quantity = $quantity;
+        return $element;
     }
 }

@@ -32,11 +32,11 @@ $this->registerMetaTag(['name' => 'robots', 'content' => $model->meta_robots]);
 <?php $form = ActiveForm::begin(['action' => Url::to(['/cart/add/' . $model->alias]), 'method' => 'POST']) ?>
 
 <?php foreach ($model->options as $option): ?>
-    <?= $form->field($model, '_options')->radioList(ArrayHelper::map($model->optionValues, 'uuid', 'title'), ['unselect' => null])->label($option->title) ?>
+    <?= $form->field($model, "selectedOptions[{$option->uuid}][]")->radioList(ArrayHelper::map($model->optionValues, 'uuid', 'title'), ['unselect' => null])->label($option->title) ?>
 <?php endforeach;?>
 
 <p>
-    <?= Html::a('Купить', ['/cart/add/' . $model->alias], ['class' => 'btn btn-success']) ?>
+    <?= Html::submitButton('Купить', ['class' => 'btn btn-success']) ?>
 </p>
 
 <?php ActiveForm::end() ?>

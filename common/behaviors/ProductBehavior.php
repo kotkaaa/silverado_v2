@@ -65,12 +65,49 @@ class ProductBehavior extends \yii\base\Behavior
      */
     public function afterFind(Event $event): void
     {
-        $this->owner->_attributes = ArrayHelper::getColumn($this->owner->productAttributes, 'value_uuid') ?? [];
-        $this->owner->_options = ArrayHelper::getColumn($this->owner->productOptions, 'value_uuid') ?? [];
-        $this->owner->_preview = $this->owner->files ? $this->owner->files[0] : new Files([
-            'url' => 'img',
-            'name' => 'noimage.jpg'
-        ]);
+        $owner = $this->owner;
+
+        $this->owner->_attributes = \Yii::$app->cache->getOrSet(\Yii::$app->cache->buildKey($owner->uuid . '_attributes'), function () use ($owner) {
+            return ArrayHelper::getColumn($owner->productAttributes, 'value_uuid') ?? [];
+        }, 3600);
+
+        $this->owner->_options = \Yii::$app->cache->getOrSet(\Yii::$app->cache->buildKey($owner->uuid . '_options'), function () use ($owner) {
+            return ArrayHelper::getColumn($owner->productOptions, 'value_uuid') ?? [];
+        }, 3600);
+
+        $this->owner->selectedOptions = \Yii::$app->cache->getOrSet(\Yii::$app->cache->buildKey($owner->uuid . '_selectedOptions'), function () use ($owner) {
+
+            $selectedOptions = [];
+
+            foreach ($owner->options as $option) {
+
+                if (empty($option->values)) {
+                    continue;
+                }
+
+                $selectedOptions[$option->uuid] = [];
+
+                foreach ($option->values as $value) {
+                    if (!in_array($value->uuid, $this->owner->_options)) {
+                        continue;
+                    }
+
+                    $selectedOptions[$option->uuid][] = $value->uuid;
+                    break;
+                }
+            }
+
+            return $selectedOptions;
+        }, 3600);
+
+        $this->owner->_preview = \Yii::$app->cache->getOrSet(\Yii::$app->cache->buildKey($owner->uuid . '_preview'), function () use ($owner) {
+            return $owner->files ? $owner->files[0] : new Files([
+                'url' => 'img',
+                'name' => 'noimage.jpg'
+            ]);
+        }, 300);
+
+        unset($owner);
     }
 
     /**

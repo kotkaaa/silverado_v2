@@ -14,6 +14,7 @@ use aracoool\uuid\UuidBehavior;
  *
  * @property OptionValue $value
  * @property Product $product
+ * @property Option $option
  */
 class ProductOption extends \yii\db\ActiveRecord
 {
@@ -74,6 +75,16 @@ class ProductOption extends \yii\db\ActiveRecord
     public function getValue()
     {
         return $this->hasOne(OptionValue::className(), ['uuid' => 'value_uuid']);
+    }
+
+    /**
+     * Gets query for [[Option]].
+     *
+     * @return \yii\db\ActiveQuery|\common\queries\OptionQuery
+     */
+    public function getOption()
+    {
+        return $this->hasOne(Option::className(), ['uuid' => 'option_uuid'])->via('value');
     }
 
     /**

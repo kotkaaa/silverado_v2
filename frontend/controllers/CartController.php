@@ -38,6 +38,7 @@ class CartController extends \yii\web\Controller
     public function actionAdd(Product $product)
     {
         $product->load(\Yii::$app->request->post());
+        $product->scenario = Product::SCENARIO_PURCHASE;
 
         try {
             $this->cartService->add($product);
@@ -50,13 +51,13 @@ class CartController extends \yii\web\Controller
     }
 
     /**
-     * @param Product $product
+     * @param string $id
      * @return void
      */
-    public function actionRemove(Product $product)
+    public function actionRemove($id)
     {
         try {
-            $this->cartService->remove($product);
+            $this->cartService->remove($id);
             \Yii::$app->session->setFlash('success', 'Товар удален из корзины');
         } catch (\Exception $exception) {
             \Yii::$app->session->setFlash('error', $exception->getMessage());
