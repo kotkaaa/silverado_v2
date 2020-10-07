@@ -51,7 +51,9 @@ return [
                 'product/<product:[\d\w-]+>' => 'product/index',
                 // Cart
                 'cart/add/<product:[\d\w-]+>' => 'cart/add',
-                'cart/remove' => 'cart/remove',
+                'cart/success/<order:[\d]+>' => 'cart/success',
+                'cart/<action:(remove|clear|search-city|search-warehouse)>' => 'cart/<action>',
+                'cart' => 'cart/index',
             ],
         ],
         'cart' => [

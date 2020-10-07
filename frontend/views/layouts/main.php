@@ -42,6 +42,8 @@ AppAsset::register($this);
 
     <div class="container">
 
+<?php if (\Yii::$app->cart->getCount()): ?>
+
         <?= \yii2mod\cart\widgets\CartGrid::widget([
             'cartColumns' => [
                 'label',
@@ -66,6 +68,13 @@ AppAsset::register($this);
                 ]
             ]
         ]) ?>
+
+        <p>
+            <?= Html::a('Оформить заказ', ['/cart'], ['class' => 'btn btn-success btn-lg']) ?>
+            <?= Html::a('Очистить корзину', ['cart/clear'], ['class' => 'btn btn-default btn-lg']) ?>
+        </p>
+
+<?php endif;?>
 
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],

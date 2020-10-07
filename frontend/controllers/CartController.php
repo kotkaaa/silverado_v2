@@ -4,8 +4,11 @@
 namespace frontend\controllers;
 
 use common\classes\AutoBind\BindActionParamsTrait;
+use common\models\Order;
 use common\models\Product;
 use common\services\CartService;
+use common\services\PurchaseService;
+use frontend\models\OrderForm;
 
 /**
  * Class CartController
@@ -18,17 +21,62 @@ class CartController extends \yii\web\Controller
     /** @var CartService */
     public $cartService;
 
+    /** @var PurchaseService */
+    public $purchaseService;
+
     /**
      * CartController constructor.
      * @param $id
      * @param $module
      * @param CartService $cartService
+     * @param PurchaseService $purchaseService
      * @param array $config
      */
-    public function __construct($id, $module, CartService $cartService, $config = [])
+    public function __construct($id, $module, CartService $cartService, PurchaseService $purchaseService, $config = [])
     {
         $this->cartService = $cartService;
+        $this->purchaseService = $purchaseService;
+        $this->layout = 'cart';
         parent::__construct($id, $module, $config);
+    }
+
+    /**
+     * @return string|void
+     */
+    public function actionIndex()
+    {
+        if (!\Yii::$app->cart->getCount()) {
+            \Yii::$app->session->setFlash('error', 'Корзина пуста!');
+            return $this->redirect('/')->send();
+        }
+
+        $form = OrderForm::getInstance();
+
+        if ($form->load(\Yii::$app->request->post()) && ($order = $this->purchaseService->purchase($form)) !== null) {
+            \Yii::$app->session->setFlash('success', 'Заказ оформлен!');
+            return $this->redirect(['/cart/success/' . $order->id])->send();
+        }
+
+        return $this->render('index', [
+            'orderForm' => $form
+        ]);
+    }
+
+    /**
+     * @param Order $order
+     * @return string
+     */
+    public function actionSuccess(Order $order)
+    {
+        if (!\Yii::$app->cart->getCount()) {
+            return $this->redirect('/')->send();
+        }
+
+        $this->cartService->clear();
+
+        return $this->render('success', [
+            'model' => $order
+        ]);
     }
 
     /**
@@ -79,5 +127,43 @@ class CartController extends \yii\web\Controller
         }
 
         return $this->redirect(\Yii::$app->request->referrer)->send();
+    }
+
+    /**
+     * @param $term
+     * @return \yii\web\Response
+     */
+    public function actionSearchCity($term)
+    {
+        $out = ['results' => []];
+
+        foreach ($this->purchaseService->findCity($term) as $city) {
+            $out['results'][] = [
+                'id' => $city['DescriptionRu'],
+                'text' => $city['DescriptionRu'],
+                'ref' => $city['Ref']
+            ];
+        }
+
+        return $this->asJson($out);
+    }
+
+    /**
+     * @param $term
+     * @return \yii\web\Response
+     */
+    public function actionSearchWarehouse($term)
+    {
+        $out = ['results' => []];
+
+        foreach ($this->purchaseService->findWarehouse($term) as $warehouse) {
+            $out['results'][] = [
+                'id' => $warehouse['DescriptionRu'],
+                'text' => $warehouse['DescriptionRu'],
+                'ref' => $warehouse['Ref']
+            ];
+        }
+
+        return $this->asJson($out);
     }
 }

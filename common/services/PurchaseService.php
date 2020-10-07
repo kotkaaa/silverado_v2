@@ -3,8 +3,12 @@
 
 namespace common\services;
 
-use common\exceptions\CartHttpException;
+use common\components\delivery\api\NovaPoshtaApi;
 use common\models\Order;
+use common\models\OrderInfo;
+use common\models\OrderProduct;
+use common\models\Product;
+use yii\base\Model;
 
 /**
  * Class PurchaseService
@@ -12,72 +16,84 @@ use common\models\Order;
  */
 class PurchaseService extends \yii\base\Component
 {
-    /** @var string */
-    public const PAYMENT_METHOD_CASH = 'cash';
-    public const PAYMENT_METHOD_CARD = 'card';
-
-    /** @var string */
-    public const DELIVERY_METHOD_POST = 'post';
-    public const DELIVERY_METHOD_COURIER = 'courier';
-
-    /** @var CartService */
-    public $cartService;
+    /** @var NovaPoshtaApi */
+    private $delivery;
 
     /**
      * PurchaseService constructor.
-     * @param CartService $cartService
      * @param array $config
      */
-    public function __construct(CartService $cartService, $config = [])
+    public function __construct($config = [])
     {
-        $this->cartService = $cartService;
+        $this->delivery = \Yii::$app->delivery->api();
         parent::__construct($config);
     }
 
-
-    public function purchase()
+    /**
+     * @param Model $orderForm
+     * @return Order|null
+     */
+    public function purchase(Model $orderForm): ?Order
     {
-        if (!$this->cartService->cart->getCount()) {
-            throw new CartHttpException(404, 'Корзина пуста!');
+        if (!$orderForm->validate()) {
+            return null;
         }
 
-        $order = new Order();
+        $orderInfo = new OrderInfo();
+        $orderInfo->setAttributes($orderForm->getAttributes());
 
+        if ($orderInfo->validate() && (($order = new Order()) !== null && $order->save())) {
+
+            $order->link('orderInfo', $orderInfo);
+
+            foreach (\Yii::$app->cart->getItems() as $product) {
+                /** @var Product $product */
+                $orderProduct = new OrderProduct([
+                    'product_uuid' => $product->uuid
+                ]);
+                $orderProduct->setAttributes($product->getAttributes(null, ['uuid']));
+                $orderProduct->options = $product->selectedOptions;
+
+                $order->link('orderProducts', $orderProduct);
+            }
+
+            return $order;
+        }
+
+        return null;
     }
 
     /**
-     * @param bool $onlyKeys
-     * @return array
+     * @param string $term
+     * @return array|mixed
      */
-    public static function paymentList($onlyKeys = false): array
+    public function findCity($term = '')
     {
-        $list = [
-            self::PAYMENT_METHOD_CASH => 'Наличными',
-            self::PAYMENT_METHOD_CARD => 'Visa/MasterCard'
-        ];
+        $data = [];
 
-        if ($onlyKeys) {
-            return array_keys($list);
+        $response = $this->delivery->getCities(0, $term);
+
+        if (is_array($response) && $response['success'] === true) {
+            $data = $response['data'];
         }
 
-        return $list;
+        return $data;
     }
 
     /**
-     * @param bool $onlyKeys
-     * @return array
+     * @param string $term
+     * @return array|mixed
      */
-    public static function deliveryList($onlyKeys = false): array
+    public function findWarehouse($term = '')
     {
-        $list = [
-            self::DELIVERY_METHOD_POST => 'Почтовое отделение (Нова Пошта)',
-            self::DELIVERY_METHOD_COURIER => 'Курьером по адресу (Нова Пошта)'
-        ];
+        $data = [];
 
-        if ($onlyKeys) {
-            return array_keys($list);
+        $response = $this->delivery->getWarehouse($term);
+
+        if (is_array($response) && $response['success'] === true) {
+            $data = $response['data'];
         }
 
-        return $list;
+        return $data;
     }
 }

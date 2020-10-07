@@ -2,9 +2,12 @@
 
 namespace common\models;
 
+use aracoool\uuid\Uuid;
+use aracoool\uuid\UuidBehavior;
 use common\queries\OrderProductQuery;
 use common\queries\OrderQuery;
 use common\queries\ProductQuery;
+use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 
 /**
  * This is the model class for table "order_product".
@@ -47,7 +50,27 @@ class OrderProduct extends \yii\db\ActiveRecord
             [['sku'], 'string', 'max' => 10],
             [['uuid'], 'unique'],
             [['order_id'], 'exist', 'skipOnError' => true, 'targetClass' => Order::className(), 'targetAttribute' => ['order_id' => 'id']],
-            [['product_uuid'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product_uuid' => 'uuid']],
+            [['product_uuid'], 'exist', 'skipOnError' => false, 'targetClass' => Product::className(), 'targetAttribute' => ['product_uuid' => 'uuid']],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function behaviors()
+    {
+        return [
+            'uuid' => [
+                'class' => UuidBehavior::class,
+                'version' => Uuid::V4,
+                'defaultAttribute' => 'uuid',
+            ],
+            'saveRelations' => [
+                'class' => SaveRelationsBehavior::class,
+                'relations' => [
+                    'order'
+                ],
+            ]
         ];
     }
 

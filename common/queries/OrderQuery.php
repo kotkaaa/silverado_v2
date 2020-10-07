@@ -11,10 +11,23 @@ use common\models\Order;
  */
 class OrderQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
+    /**
+     * @inheritDoc
+     */
+    public function init()
     {
-        return $this->andWhere('[[status]]=1');
-    }*/
+        parent::init();
+        $this->andWhere(['order.deleted_at' => null]);
+    }
+
+    /**
+     * @param string|array|null $status
+     * @return OrderQuery
+     */
+    public function status($status = null): OrderQuery
+    {
+        return $this->andFilterWhere(['order.status' => $status]);
+    }
 
     /**
      * {@inheritdoc}

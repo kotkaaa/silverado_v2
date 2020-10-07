@@ -43,7 +43,8 @@
         "2amigos/yii2-file-upload-widget": "~1.0",
         "kartik-v/yii2-mpdf": "dev-master",
         "kartik-v/yii2-widget-depdrop": "dev-master",
-        "yii2mod/yii2-cart": "*"
+        "yii2mod/yii2-cart": "*",
+        "lis-dev/nova-poshta-api-2": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
