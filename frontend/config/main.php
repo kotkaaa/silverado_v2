@@ -9,7 +9,7 @@ $params = array_merge(
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'events'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'request' => [
@@ -37,6 +37,12 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        'events' => [
+            'class' => \common\modules\events\EventDispatcher::class,
+            'listeners' => [
+                \common\listeners\OrderListener::class => \common\services\OrderService::class
+            ]
+        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
@@ -62,7 +68,7 @@ return [
             'storageClass' => [
                 'class' => 'yii2mod\cart\storage\SessionStorage'
             ]
-        ]
+        ],
     ],
     'params' => $params,
 ];

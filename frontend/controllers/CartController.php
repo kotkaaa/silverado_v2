@@ -4,9 +4,11 @@
 namespace frontend\controllers;
 
 use common\classes\AutoBind\BindActionParamsTrait;
+use common\events\OrderEvent;
 use common\models\Order;
 use common\models\Product;
 use common\services\CartService;
+use common\services\OrderService;
 use common\services\PurchaseService;
 use frontend\models\OrderForm;
 
@@ -21,6 +23,9 @@ class CartController extends \yii\web\Controller
     /** @var CartService */
     public $cartService;
 
+    /** @var OrderService */
+    public $orderService;
+
     /** @var PurchaseService */
     public $purchaseService;
 
@@ -29,12 +34,14 @@ class CartController extends \yii\web\Controller
      * @param $id
      * @param $module
      * @param CartService $cartService
+     * @param OrderService $orderService
      * @param PurchaseService $purchaseService
      * @param array $config
      */
-    public function __construct($id, $module, CartService $cartService, PurchaseService $purchaseService, $config = [])
+    public function __construct($id, $module, CartService $cartService, OrderService $orderService, PurchaseService $purchaseService, $config = [])
     {
         $this->cartService = $cartService;
+        $this->orderService = $orderService;
         $this->purchaseService = $purchaseService;
         $this->layout = 'cart';
         parent::__construct($id, $module, $config);
@@ -53,6 +60,9 @@ class CartController extends \yii\web\Controller
         $form = OrderForm::getInstance();
 
         if ($form->load(\Yii::$app->request->post()) && ($order = $this->purchaseService->purchase($form)) !== null) {
+
+            $this->orderService->trigger(OrderService::EVENT_AFTER_CREATE, new OrderEvent($order));
+
             \Yii::$app->session->setFlash('success', 'Заказ оформлен!');
             return $this->redirect(['/cart/success/' . $order->id])->send();
         }

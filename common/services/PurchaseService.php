@@ -51,6 +51,7 @@ class PurchaseService extends \yii\base\Component
                 $orderProduct = new OrderProduct([
                     'product_uuid' => $product->uuid
                 ]);
+
                 $orderProduct->setAttributes($product->getAttributes(null, ['uuid']));
                 $orderProduct->options = $product->selectedOptions;
 
