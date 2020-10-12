@@ -4,7 +4,9 @@ namespace common\models;
 
 use aracoool\uuid\Uuid;
 use aracoool\uuid\UuidBehavior;
+use common\behaviors\FilterBehavior;
 use common\strategies\AttributeFilterStrategy;
+use common\strategies\FilterStrategyInterface;
 use common\strategies\OptionFilterStrategy;
 use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 use yii\behaviors\SluggableBehavior;
@@ -20,7 +22,7 @@ use yii\db\Expression;
  * @property string|null $option_uuid
  * @property string $title
  * @property string $alias
- * @property string $strategy
+ * @property string $strategy_class
  * @property int|null $position
  * @property string|null $created_at
  * @property string|null $updated_at
@@ -30,6 +32,9 @@ use yii\db\Expression;
  */
 class Filter extends \yii\db\ActiveRecord
 {
+    /** @var FilterStrategyInterface */
+    public $strategy;
+
     /**
      * {@inheritdoc}
      */
@@ -44,25 +49,25 @@ class Filter extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'strategy'], 'required'],
+            [['title', 'strategy_class'], 'required'],
             [['position'], 'default', 'value' => 1],
             [['position'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['uuid', 'attribute_uuid', 'option_uuid'], 'string', 'max' => 36],
             [['attribute_uuid', 'option_uuid'], 'default', 'value' => null],
-            [['title', 'alias', 'strategy'], 'string', 'max' => 255],
+            [['title', 'alias', 'strategy_class'], 'string', 'max' => 255],
             [['uuid', 'alias'], 'unique'],
-            [['attribute_uuid', 'strategy'], 'unique', 'targetAttribute' => ['attribute_uuid', 'strategy'], 'when' => function (Filter $model) {
+            [['attribute_uuid', 'strategy_class'], 'unique', 'targetAttribute' => ['attribute_uuid', 'strategy_class'], 'when' => function (Filter $model) {
                 return $model->strategy == AttributeFilterStrategy::class;
             }],
-            [['option_uuid', 'strategy'], 'unique', 'targetAttribute' => ['option_uuid', 'strategy'], 'when' => function (Filter $model) {
-                return $model->strategy == OptionFilterStrategy::class;
+            [['option_uuid', 'strategy_class'], 'unique', 'targetAttribute' => ['option_uuid', 'strategy_class'], 'when' => function (Filter $model) {
+                return $model->strategy_class == OptionFilterStrategy::class;
             }],
             [['attribute_uuid'], 'exist', 'skipOnError' => true, 'targetClass' => Attribute::className(), 'targetAttribute' => ['attribute_uuid' => 'uuid'], 'when' => function (Filter $model) {
-                return $model->strategy == AttributeFilterStrategy::class;
+                return $model->strategy_class == AttributeFilterStrategy::class;
             }],
             [['option_uuid'], 'exist', 'skipOnError' => true, 'targetClass' => Option::className(), 'targetAttribute' => ['option_uuid' => 'uuid'], 'when' => function (Filter $model) {
-                return $model->strategy == OptionFilterStrategy::class;
+                return $model->strategy_class == OptionFilterStrategy::class;
             }],
         ];
     }
@@ -100,6 +105,9 @@ class Filter extends \yii\db\ActiveRecord
                     'attributeModel',
                 ],
             ],
+            'filter' => [
+                'class' => FilterBehavior::class
+            ]
         ];
     }
 
@@ -114,7 +122,7 @@ class Filter extends \yii\db\ActiveRecord
             'option_uuid' => 'Option Uuid',
             'title' => 'Title',
             'alias' => 'Alias',
-            'strategy' => 'Strategy',
+            'strategy_class' => 'Strategy',
             'position' => 'Position',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

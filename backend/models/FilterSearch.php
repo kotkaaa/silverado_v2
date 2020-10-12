@@ -23,7 +23,7 @@ class FilterSearch extends Filter
     public function rules()
     {
         return [
-            [['uuid', 'attribute_uuid', 'option_uuid', 'title', 'strategy', 'created_at', 'updated_at', 'attribute_title', 'option_title'], 'safe'],
+            [['uuid', 'attribute_uuid', 'option_uuid', 'title', 'strategy_class', 'created_at', 'updated_at', 'attribute_title', 'option_title'], 'safe'],
             [['position'], 'integer'],
         ];
     }
@@ -57,7 +57,7 @@ class FilterSearch extends Filter
                     'uuid',
                     'title',
                     'alias',
-                    'strategy',
+                    'strategy_class',
                     'position',
                     'created_at',
                     'updated_at',
@@ -103,7 +103,7 @@ class FilterSearch extends Filter
             ->andFilterWhere(['ilike', 'filter.attribute_uuid', $this->attribute_uuid])
             ->andFilterWhere(['ilike', 'filter.option_uuid', $this->option_uuid])
             ->andFilterWhere(['ilike', 'filter.title', $this->title])
-            ->andFilterWhere(['ilike', 'filter.strategy', $this->strategy])
+            ->andFilterWhere(['ilike', 'filter.strategy_class', $this->strategy_class])
             ->joinWith('attributeModel attribute', false)
             ->andFilterWhere(['ilike', 'attribute.title', $this->attribute_title])
             ->joinWith('optionModel option', false)

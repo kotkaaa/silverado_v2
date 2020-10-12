@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'title',
             [
-                'attribute' => 'strategy',
+                'attribute' => 'strategy_class',
                 'filter' => Filter::strategyList(true)
             ],
             [

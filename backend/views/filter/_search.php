@@ -23,7 +23,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'title') ?>
 
-    <?= $form->field($model, 'strategy') ?>
+    <?= $form->field($model, 'strategy_class') ?>
 
     <?php // echo $form->field($model, 'position') ?>
 

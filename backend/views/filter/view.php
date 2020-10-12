@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'attribute_uuid',
             'option_uuid',
             'title',
-            'strategy',
+            'strategy_class',
             'position',
             'created_at',
             'updated_at',

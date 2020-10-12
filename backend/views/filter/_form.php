@@ -23,7 +23,7 @@ use yii\web\JsExpression;
         'ondblclick' => new JsExpression('function(){this.readonly = false;}')
     ]) ?>
 
-    <?= $form->field($model, 'strategy')->dropDownList(Filter::strategyList(true), ['prompt' => '-- Select --']) ?>
+    <?= $form->field($model, 'strategy_class')->dropDownList(Filter::strategyList(true), ['prompt' => '-- Select --']) ?>
 
     <?= $form->field($model, 'attribute_uuid')->widget(Select2::class, [
         'initValueText' => $model->attributeModel ? $model->attributeModel->title : null,

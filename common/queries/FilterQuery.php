@@ -19,6 +19,14 @@ class FilterQuery extends \yii\db\ActiveQuery
     }
 
     /**
+     * @return FilterQuery
+     */
+    public function ordered(): FilterQuery
+    {
+        return $this->orderBy(['filter.position' => SORT_ASC]);
+    }
+
+    /**
      * {@inheritdoc}
      * @return \common\models\Filter[]|array
      */

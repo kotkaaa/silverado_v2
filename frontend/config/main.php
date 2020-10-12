@@ -51,8 +51,14 @@ return [
                 // Home page
                 '/' => 'site/index',
                 // Category page
-                'category' => 'category/index',
+                'category/<category:[\d\w-]+>/q/<query:[a-zA-Z0-9_\-\,]+>/page-<page:\d+>' => 'category/index',
+                'category/<category:[\d\w-]+>/q/<query:[a-zA-Z0-9_\-\,]+>' => 'category/index',
+                'category/q/<query:[a-zA-Z0-9_\-\,]+>/page-<page:\d+>' => 'category/index',
+                'category/q/<query:[a-zA-Z0-9_\-\,]+>' => 'category/index',
+                'category/<category:[\d\w-]+>/page-<page:\d+>' => 'category/index',
                 'category/<category:[\d\w-]+>' => 'category/index',
+                'category/page-<page:\d+>' => 'category/index',
+                'category' => 'category/index',
                 // Product page
                 'product/<product:[\d\w-]+>' => 'product/index',
                 // Cart
