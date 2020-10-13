@@ -23,5 +23,8 @@ return [
             'login' => 'fcdkkillthemall',
             'password' => '2c4uk915'
         ],
+        'delivery' => [
+            'throwErrors' => true
+        ]
     ],
 ];
