@@ -22,9 +22,6 @@ return [
             'sender' => 'SILVERADO',
             'login' => 'fcdkkillthemall',
             'password' => '2c4uk915'
-        ],
-        'delivery' => [
-            'throwErrors' => true
         ]
     ],
 ];
