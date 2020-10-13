@@ -50,6 +50,9 @@ return [
             'rules' => [
                 // Home page
                 '/' => 'site/index',
+                //
+                'login' => 'site/login',
+                'signup' => 'site/signup',
                 // Category page
                 'category/<category:[\d\w-]+>/q/<query:[a-zA-Z0-9_\-\,]+>/page-<page:\d+>' => 'category/index',
                 'category/<category:[\d\w-]+>/q/<query:[a-zA-Z0-9_\-\,]+>' => 'category/index',
