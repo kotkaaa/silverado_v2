@@ -45,7 +45,8 @@
         "kartik-v/yii2-widget-depdrop": "dev-master",
         "yii2mod/yii2-cart": "*",
         "lis-dev/nova-poshta-api-2": "dev-master",
-        "integready/yii2-turbosms": "*"
+        "integready/yii2-turbosms": "*",
+        "phpoffice/phpspreadsheet": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

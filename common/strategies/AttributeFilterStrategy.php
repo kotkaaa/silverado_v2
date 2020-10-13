@@ -23,7 +23,7 @@ class AttributeFilterStrategy extends FilterStrategy implements FilterStrategyIn
                 ->category($this->category)
                 ->innerJoinWith('attributeValues values')
                 ->andFilterWhere(['values.alias' => $attributeValue->alias])
-                ->exists();
+                ->count();
 
             if (!$matches) {
                 continue;
@@ -38,8 +38,8 @@ class AttributeFilterStrategy extends FilterStrategy implements FilterStrategyIn
                 'checked' => in_array($attributeValue->alias, $this->selectedFilters)
             ]);
 
-            $value->count = $value->checked ? (clone $this->queryBuilder)->removeFilter($value->alias)->count()
-                : (clone $this->queryBuilder)->appendFilter($value->alias)->count();
+            $value->count = $value->checked ? (clone $this->queryBuilder)->removeAttributeFilter($value->alias)->count()
+                : (clone $this->queryBuilder)->appendAttributeFilter($value->alias)->count();
 
             $value->url = $value->checked ? (clone $this->urlBuilder)->removeAttribute($value->alias)->buildUrl()
                 : (clone $this->urlBuilder)->appendAttribute($value->alias)->buildUrl();

@@ -2,6 +2,7 @@
 
 namespace common\queries;
 
+use common\classes\Optional\OptionalActiveQueryTrait;
 use common\models\Option;
 
 /**
@@ -11,6 +12,8 @@ use common\models\Option;
  */
 class OptionValueQuery extends \yii\db\ActiveQuery
 {
+    use OptionalActiveQueryTrait;
+
     /**
      * @param Option|null $option
      * @return OptionValueQuery
@@ -50,14 +53,5 @@ class OptionValueQuery extends \yii\db\ActiveQuery
     public function all($db = null)
     {
         return parent::all($db);
-    }
-
-    /**
-     * {@inheritdoc}
-     * @return \common\models\OptionValue|array|null
-     */
-    public function one($db = null)
-    {
-        return parent::one($db);
     }
 }

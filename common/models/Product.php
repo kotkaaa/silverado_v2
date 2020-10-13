@@ -76,13 +76,13 @@ class Product extends \yii\db\ActiveRecord implements PrettyUrlModelInterface, C
     public $upload;
 
     /** @var array */
-    public $_options;
+    public $_options = [];
 
     /** @var array */
     public $selectedOptions;
 
     /** @var array */
-    public $_attributes;
+    public $_attributes = [];
 
     /** @var Files */
     public $_preview;

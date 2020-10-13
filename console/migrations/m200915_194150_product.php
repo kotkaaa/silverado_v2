@@ -11,7 +11,7 @@ class m200915_194150_product extends Migration
     {
         $this->createTable('{{%product}}',[
             'uuid'=> 'varchar(36) not null',
-            'sku'=> 'varchar(10) not null',
+            'sku'=> 'varchar(32) not null',
             'category_uuid'=> 'varchar(36)',
             'title'=> 'varchar(255) not null',
             'description'=> $this->text(),

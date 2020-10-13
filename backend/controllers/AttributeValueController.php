@@ -117,7 +117,7 @@ class AttributeValueController extends AdminController
      */
     protected function findModel($id)
     {
-        if (($model = AttributeValue::findOne($id)) !== null) {
+        if (($model = AttributeValue::findOne($id)->orNull()) !== null) {
             return $model;
         }
 

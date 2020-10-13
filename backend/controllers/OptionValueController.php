@@ -103,7 +103,7 @@ class OptionValueController extends AdminController
      */
     protected function findModel($id)
     {
-        if (($model = OptionValue::findOne($id)) !== null) {
+        if (($model = OptionValue::findOne($id)->orNull()) !== null) {
             return $model;
         }
 

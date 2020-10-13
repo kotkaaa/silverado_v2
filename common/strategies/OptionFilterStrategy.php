@@ -20,7 +20,7 @@ class OptionFilterStrategy extends FilterStrategy implements FilterStrategyInter
                 ->category($this->category)
                 ->innerJoinWith('optionValues values')
                 ->andFilterWhere(['values.alias' => $optionValue->alias])
-                ->exists();
+                ->count();
 
             if (!$matches) {
                 continue;
@@ -35,8 +35,8 @@ class OptionFilterStrategy extends FilterStrategy implements FilterStrategyInter
                 'checked' => in_array($optionValue->alias, $this->selectedFilters)
             ]);
 
-            $value->count = $value->checked ? (clone $this->queryBuilder)->removeFilter($value->alias)->count()
-                : (clone $this->queryBuilder)->appendFilter($value->alias)->count();
+            $value->count = $value->checked ? (clone $this->queryBuilder)->removeOptionFilter($value->alias)->count()
+                : (clone $this->queryBuilder)->appendOptionFilter($value->alias)->count();
 
             $value->url = $value->checked ? (clone $this->urlBuilder)->removeAttribute($value->alias)->buildUrl()
                 : (clone $this->urlBuilder)->appendAttribute($value->alias)->buildUrl();

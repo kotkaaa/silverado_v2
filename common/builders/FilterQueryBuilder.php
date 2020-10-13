@@ -22,10 +22,10 @@ class FilterQueryBuilder extends Model
     public $filters;
 
     /** @var array */
-    protected $attributeFilters;
+    protected $attributeFilters = [];
 
     /** @var array */
-    protected $optionFilters;
+    protected $optionFilters = [];
 
     /**
      * @inheritDoc
@@ -43,12 +43,12 @@ class FilterQueryBuilder extends Model
     {
         foreach ($this->filters as $alias)
         {
-            if (($attributeValue = AttributeValue::findOne(['alias' => $alias])) !== null) {
+            if (($attributeValue = AttributeValue::find()->andWhere(['alias' => $alias])->cache(300)->one()->orNull()) !== null) {
                 $this->attributeFilters[] = $alias;
                 continue;
             }
 
-            if (($optionValue = OptionValue::findOne(['alias' => $alias])) !== null) {
+            if (($optionValue = OptionValue::find()->andWhere(['alias' => $alias])->cache(300)->one()->orNull()) !== null) {
                 $this->optionFilters[] = $alias;
                 continue;
             }
@@ -78,6 +78,58 @@ class FilterQueryBuilder extends Model
         if (!in_array($filter, $this->filters)) {
             $this->filters[] = $filter;
             $this->restrictFilters();
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param $filter
+     * @return FilterQueryBuilder
+     */
+    public function appendOptionFilter($filter): FilterQueryBuilder
+    {
+        if (($key = array_search($filter, $this->optionFilters)) !== false) {
+            unset($this->optionFilters[$key]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param $filter
+     * @return FilterQueryBuilder
+     */
+    public function removeOptionFilter($filter): FilterQueryBuilder
+    {
+        if (!in_array($filter, $this->optionFilters)) {
+            $this->optionFilters[] = $filter;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param $filter
+     * @return FilterQueryBuilder
+     */
+    public function appendAttributeFilter($filter): FilterQueryBuilder
+    {
+        if (($key = array_search($filter, $this->attributeFilters)) !== false) {
+            unset($this->attributeFilters[$key]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param $filter
+     * @return FilterQueryBuilder
+     */
+    public function removeAttributeFilter($filter): FilterQueryBuilder
+    {
+        if (!in_array($filter, $this->attributeFilters)) {
+            $this->attributeFilters[] = $filter;
         }
 
         return $this;
@@ -156,7 +208,7 @@ class FilterQueryBuilder extends Model
 
         $dataProvider->setPagination(new Pagination([
             'totalCount' => $dataProvider->getTotalCount(),
-            'pageSize' => 1,
+            'pageSize' => 20,
             'forcePageParam' => false,
             'pageSizeParam' => false
         ]));

@@ -54,8 +54,7 @@ class CategoryController extends \yii\web\Controller
         return $this->render('index', [
             'model' => $category,
             'filters' => $categoryFilters,
-            'dataProvider' => $searchModel->search(),
-            'query' => $query
+            'dataProvider' => $searchModel->search()
         ]);
     }
 

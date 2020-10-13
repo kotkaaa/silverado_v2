@@ -2,6 +2,8 @@
 
 namespace common\queries;
 
+use common\classes\Optional\OptionalActiveQueryTrait;
+
 /**
  * This is the ActiveQuery class for [[\common\models\AttributeValue]].
  *
@@ -9,10 +11,7 @@ namespace common\queries;
  */
 class AttributeValueQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
-    {
-        return $this->andWhere('[[status]]=1');
-    }*/
+    use OptionalActiveQueryTrait;
 
     /**
      * {@inheritdoc}
@@ -21,14 +20,5 @@ class AttributeValueQuery extends \yii\db\ActiveQuery
     public function all($db = null)
     {
         return parent::all($db);
-    }
-
-    /**
-     * {@inheritdoc}
-     * @return \common\models\AttributeValue|array|null
-     */
-    public function one($db = null)
-    {
-        return parent::one($db);
     }
 }

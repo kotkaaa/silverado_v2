@@ -4,6 +4,7 @@ namespace common\models;
 
 use aracoool\uuid\Uuid;
 use aracoool\uuid\UuidBehavior;
+use common\classes\Optional\OptionalActiveRecordTrait;
 use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
@@ -27,6 +28,8 @@ use yii\db\Expression;
  */
 class AttributeValue extends \yii\db\ActiveRecord
 {
+    use OptionalActiveRecordTrait;
+
     /**
      * {@inheritdoc}
      */
