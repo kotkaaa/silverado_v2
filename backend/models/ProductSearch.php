@@ -98,12 +98,6 @@ class ProductSearch extends Product
 
         $this->load($params);
 
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
-
         // grid filtering conditions
         $query->andFilterWhere([
             'product.price' => $this->price,
