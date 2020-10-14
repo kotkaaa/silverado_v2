@@ -19,17 +19,17 @@ class FilterService
      * @param array $filters
      * @return \Generator
      */
-    public function getCategoryFilters(Category $category, Model $searchModel)
+    public function getCategoryFilters(Model $searchModel)
     {
         foreach (Filter::find()->ordered()->all() as $filter)
         {
             $filter->strategy = \Yii::configure($filter->strategy, [
-                'category' => $category,
+                'category' => $searchModel->category,
                 'selectedFilters' => $searchModel->filters,
                 'queryBuilder' => $searchModel,
                 'urlBuilder' => \Yii::createObject([
                     'class' => FilterUrlBuilder::class,
-                    'category' => $category,
+                    'category' => $searchModel->category,
                     'attributes' => $searchModel->filters
                 ])
             ]);

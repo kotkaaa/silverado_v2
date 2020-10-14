@@ -49,10 +49,10 @@ class CategoryController extends \yii\web\Controller
             'filters' => $this->filterService->parseQuery($query)
         ]);
 
-        $categoryFilters = $this->filterService->getCategoryFilters($category, $searchModel);
+        $categoryFilters = $this->filterService->getCategoryFilters($searchModel);
 
         return $this->render('index', [
-            'model' => $category,
+            'model' => $category ?? new Category(),
             'filters' => $categoryFilters,
             'dataProvider' => $searchModel->search()
         ]);
