@@ -41,7 +41,7 @@ class m200915_194249_order extends Migration
             'order_id'=> $this->integer(32)->notNull(),
             'product_uuid'=> 'varchar(36)',
             'title'=> 'varchar(255)',
-            'sku'=> 'varchar(10)',
+            'sku'=> 'varchar(32)',
             'price'=> $this->decimal(10, 2)->defaultValue('0.00'),
             'quantity'=> $this->integer(32),
             'options'=> "json",
