@@ -12,6 +12,7 @@ class m200915_194249_order extends Migration
     {
         $this->createTable('{{%order}}',[
             'id'=> $this->primaryKey(),
+            'status'=> 'varchar(32)',
             'created_at'=> $this->timestamp(),
             'updated_at'=> $this->timestamp(),
             'deleted_at'=> $this->timestamp(),
