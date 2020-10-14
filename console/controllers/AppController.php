@@ -54,6 +54,8 @@ class AppController extends \yii\console\Controller
                 ]);
             });
 
+            $model->alias = null;
+
             if (!$model->save()) {
                 echo 'Товар ' . $model->sku . ' не сохранен. Причина: ' . implode('; ', array_values($model->getErrorSummary(true))) . PHP_EOL;
                 continue;
