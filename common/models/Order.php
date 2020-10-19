@@ -15,6 +15,7 @@ use yii\db\Expression;
  *
  * @property int $id
  * @property string $status
+ * @property string $source
  * @property string|null $created_at
  * @property string|null $updated_at
  * @property string|null $deleted_at
@@ -29,6 +30,10 @@ class Order extends \yii\db\ActiveRecord
     public const STATUS_IN_PROGRESS = 'in_progress';
     public const STATUS_COMPLETED = 'completed';
     public const STATUS_CANCELLED = 'cancelled';
+
+    /** @var string */
+    public const SOURCE_SITE = 'site';
+    public const SOURCE_INSTAGRAM = 'instagram';
 
     /**
      * {@inheritdoc}
@@ -45,9 +50,12 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
-            [['status'], 'string'],
+            [['status', 'source'], 'string'],
+            [['status', 'source'], 'required'],
             [['status'], 'default', 'value' => self::STATUS_NEW],
+            [['source'], 'default', 'value' => self::SOURCE_SITE],
             [['status'], 'in', 'range' => self::statusList(true)],
+            [['source'], 'in', 'range' => self::sourceList(true)],
         ];
     }
 
@@ -127,6 +135,24 @@ class Order extends \yii\db\ActiveRecord
             self::STATUS_IN_PROGRESS => 'В работе',
             self::STATUS_COMPLETED => 'Выполнен',
             self::STATUS_CANCELLED => 'Отменен'
+        ];
+
+        if ($onlyKeys) {
+            return array_keys($list);
+        }
+
+        return $list;
+    }
+
+    /**
+     * @param bool $onlyKeys
+     * @return array
+     */
+    public static function sourceList($onlyKeys = false): array
+    {
+        $list = [
+            self::SOURCE_SITE => 'Сайт',
+            self::SOURCE_INSTAGRAM => 'Instagram'
         ];
 
         if ($onlyKeys) {

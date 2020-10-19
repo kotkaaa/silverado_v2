@@ -52,6 +52,7 @@ AppAsset::register($this);
                 ['label' => 'Values', 'url' => ['/attribute-value/index']]
             ]],
             ['label' => 'Filters', 'url' => ['/filter/index']],
+            ['label' => 'Orders', 'url' => ['/order/index']],
         ];
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')

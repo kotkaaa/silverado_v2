@@ -22,6 +22,7 @@ use yii\db\Expression;
  * @property string|null $user_phone
  * @property string|null $user_email
  * @property string|null $comment
+ * @property string|null $note
  * @property string|null $location
  * @property string|null $address
  * @property string|null $recepient_name
@@ -56,7 +57,7 @@ class OrderInfo extends \yii\db\ActiveRecord
             [['user_name', 'user_email', 'user_phone', 'payment_type', 'delivery_type', 'location', 'address'], 'required'],
             [['order_id'], 'default', 'value' => null],
             [['order_id'], 'integer'],
-            [['comment'], 'string'],
+            [['comment', 'note'], 'string'],
             [['uuid'], 'string', 'max' => 36],
             [['payment_type', 'delivery_type', 'user_phone', 'recepient_phone'], 'string', 'max' => 32],
             [['user_name', 'location', 'address', 'recepient_name'], 'string', 'max' => 255],
@@ -100,6 +101,7 @@ class OrderInfo extends \yii\db\ActiveRecord
             'user_phone' => 'User Phone',
             'user_email' => 'User Email',
             'comment' => 'Comment',
+            'note' => 'Note',
             'location' => 'Location',
             'address' => 'Address',
             'recepient_name' => 'Recepient Name',

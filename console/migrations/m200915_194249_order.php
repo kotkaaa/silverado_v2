@@ -13,11 +13,11 @@ class m200915_194249_order extends Migration
         $this->createTable('{{%order}}',[
             'id'=> $this->primaryKey(),
             'status'=> 'varchar(32)',
+            'source'=> 'varchar(32)',
             'created_at'=> $this->timestamp(),
             'updated_at'=> $this->timestamp(),
             'deleted_at'=> $this->timestamp(),
         ]);
-
 
         $this->createTable('{{%order_info}}',[
             'uuid'=> $this->string(36)->notNull(),
@@ -28,6 +28,7 @@ class m200915_194249_order extends Migration
             'user_phone'=> $this->string(32),
             'user_email'=> $this->string(64),
             'comment'=> $this->text(),
+            'note'=> $this->text(),
             'location'=> $this->string(255),
             'address'=> $this->string(255),
             'recepient_name'=> $this->string(255),

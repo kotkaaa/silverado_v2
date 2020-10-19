@@ -21,6 +21,15 @@ class OrderQuery extends \yii\db\ActiveQuery
     }
 
     /**
+     * @param string|array|null $source
+     * @return OrderQuery
+     */
+    public function source($source = null): OrderQuery
+    {
+        return $this->andFilterWhere(['order.source' => $source]);
+    }
+
+    /**
      * @param string|array|null $status
      * @return OrderQuery
      */
