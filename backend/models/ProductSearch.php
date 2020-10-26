@@ -89,6 +89,7 @@ class ProductSearch extends Product
                     'price',
                     'active',
                     'position',
+                    'uuid',
                 ],
                 'defaultOrder' => [
                     'position' => SORT_ASC,
