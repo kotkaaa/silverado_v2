@@ -36,7 +36,7 @@ class ProductFilesQuery extends \yii\db\ActiveQuery
     public function ordered(): ProductFilesQuery
     {
         return $this->orderBy([
-            'product_files.product_uuid' => SORT_ASC
+            'product_files.position' => SORT_ASC
         ]);
     }
 

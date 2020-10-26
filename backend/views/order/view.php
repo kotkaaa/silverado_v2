@@ -1,7 +1,10 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\ListView;
 use yii\widgets\DetailView;
+use common\models\Order;
+use common\models\OrderInfo;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Order */
@@ -33,9 +36,48 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_at',
             'updated_at',
             'deleted_at',
-            'status',
-            'source',
+            [
+                'attribute' => 'status',
+                'value' => Order::statusList()[$model->status]
+            ],
+            [
+                'attribute' => 'source',
+                'value' => Order::sourceList()[$model->source]
+            ],
         ],
     ]) ?>
 
+    <h3>Order Details</h3>
+
+    <?= DetailView::widget([
+        'model' => $model->orderInfo,
+        'attributes' => [
+            'user_name',
+            'user_phone',
+            [
+                'attribute' => 'user_email',
+                'format' => 'email'
+            ],
+            'comment',
+            [
+                'attribute' => 'payment_type',
+                'value' => OrderInfo::paymentList()[$model->orderInfo->payment_type]
+            ],
+            [
+                'attribute' => 'delivery_type',
+                'value' => OrderInfo::deliveryList()[$model->orderInfo->delivery_type]
+            ],
+            'location',
+            'address',
+            'note'
+        ],
+    ]) ?>
+
+    <h3>Products</h3>
+
+    <?= ListView::widget([
+        'dataProvider' => new \yii\data\ArrayDataProvider([
+            'allModels' => $model->orderProducts
+        ])
+    ]) ?>
 </div>
