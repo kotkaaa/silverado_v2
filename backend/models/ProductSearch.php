@@ -91,7 +91,8 @@ class ProductSearch extends Product
                     'position',
                 ],
                 'defaultOrder' => [
-                    'position' => SORT_ASC
+                    'position' => SORT_ASC,
+                    'uuid' => SORT_NATURAL
                 ],
             ],
         ]);
