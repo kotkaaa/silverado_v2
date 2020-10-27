@@ -20,6 +20,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
 use yii2mod\cart\models\CartItemInterface;
@@ -246,7 +247,9 @@ class Product extends \yii\db\ActiveRecord implements PrettyUrlModelInterface, C
      */
     public function getFiles(): ActiveQuery
     {
-        return $this->hasMany(Files::class, ['uuid' => 'files_uuid'])->via('productFiles');
+        return $this->hasMany(Files::class, ['uuid' => 'files_uuid'])
+            ->via('productFiles')
+            ->orderBy(new Expression('position(uuid::text in \'' . implode(',', ArrayHelper::getColumn($this->productFiles, 'files_uuid')) . '\')'));
     }
 
     /**

@@ -56,7 +56,7 @@ class ProductController extends AdminController
         $model = new Product();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->uuid]);
+            return $this->redirect(['view', 'id' => $model->uuid])->send();
         }
 
         return $this->render('create', [
@@ -83,7 +83,7 @@ class ProductController extends AdminController
             $files = \Yii::$app->request->post('ProductFiles', []);
 
             for ($i = 0; $i < count($files); $i++) {
-                if (($productFile = ProductFiles::findOne($files[$i]['uuid'])) == null) {
+                if (($productFile = ProductFiles::findOne($files[$i]['uuid'])) === null) {
                     continue;
                 }
 
@@ -91,7 +91,7 @@ class ProductController extends AdminController
                 $productFile->save(false);
             }
 
-            return $this->redirect(['view', 'id' => $model->uuid]);
+            return $this->redirect(['view', 'id' => $model->uuid])->send();
         }
 
         return $this->render('update', [
@@ -113,7 +113,7 @@ class ProductController extends AdminController
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['index'])->send();
     }
 
     /**

@@ -37,6 +37,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'position',
                 'label' => '#'
             ],
+            [
+                'label' => 'Preview',
+                'format' => 'raw',
+                'value' => function (Product $model) {
+                    return Html::img(\Yii::$app->params['frontUrl'] . '/' . $model->_preview->url . '/thumb-' . $model->_preview->name, ['class' => 'thumbnail']);
+                }
+            ],
             'title',
             'sku',
             [
