@@ -165,6 +165,7 @@ class ProductController extends AdminController
 
         foreach ($model->productFiles as $productFile) {
             $files[] = [
+                'uuid' => $productFile->uuid,
                 'name' => $productFile->files->name,
                 'size' => $productFile->files->size,
                 'url' => implode('/', [\Yii::$app->params['frontUrl'], $productFile->files->url, $productFile->files->name]),
