@@ -96,7 +96,6 @@ class CartController extends \yii\web\Controller
     public function actionAdd(Product $product)
     {
         $product->load(\Yii::$app->request->post());
-        $product->scenario = Product::SCENARIO_PURCHASE;
 
         try {
             $this->cartService->add($product);
