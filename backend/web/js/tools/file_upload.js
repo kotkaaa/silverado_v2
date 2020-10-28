@@ -60,6 +60,8 @@ var FileUpload = {
 
         $(preview).removeClass('refresh');
         $(preview).sortable();
+
+        FileUpload.stop(e);
     },
     progress: function(e, data) {
         var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -71,16 +73,25 @@ var FileUpload = {
     start: function(e) {
         var form = $(e.target.form),
             preview = document.getElementById("uploaded_files");
+
         form.addClass('loading');
+        form.find('.progress-bar')
+            .addClass('active')
+            .removeClass('hidden');
+
         if (!$(preview).hasClass('refresh')) {
-            $(preview).html('').addClass('refresh');
+            $(preview).html('')
+                .addClass('refresh');
         }
     },
     stop: function(e) {
         $(e.target.form).removeClass('loading');
+
         $(e.target.form)
             .find('.progress-bar')
             .css('width', 0)
-            .prop('aria-valuenow', 0);
+            .prop('aria-valuenow', 0)
+            .removeClass('active')
+            .addClass('hidden');
     }
 };

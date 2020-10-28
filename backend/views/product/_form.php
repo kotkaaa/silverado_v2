@@ -85,7 +85,7 @@ $this->registerJs($js, \yii\web\View::POS_READY);
 
     <?= FileUpload::widget([
         'model' => $model,
-        'attribute' => 'upload',
+        'attribute' => 'upload[]',
         'url' => Url::to(['file-upload', 'id' => $model->uuid]),
         'options' => [
             'accept' => 'image/*',
@@ -102,10 +102,16 @@ $this->registerJs($js, \yii\web\View::POS_READY);
             'fileuploadstart' => 'FileUpload.start',
             'fileuploaddone' => 'FileUpload.done',
             'fileuploadfail' => 'FileUpload.stop',
+            'fileuploadprogress' => 'FileUpload.progress',
         ],
     ]) ?>
 
     <br><br>
+
+    <div class="progress">
+        <div class="progress-bar progress-bar-info progress-bar-striped hidden" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+        </div>
+    </div>
 
     <table role="presentation" class="table table-striped">
         <thead>
