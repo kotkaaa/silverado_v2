@@ -121,7 +121,7 @@ class Product extends \yii\db\ActiveRecord implements PrettyUrlModelInterface, C
             [['title', 'alias', 'meta_title'], 'string', 'max' => 255],
             [['meta_robots'], 'string', 'max' => 32],
             [['sku', 'uuid'], 'unique'],
-            [['selectedOptions'], 'required', 'on' => [self::SCENARIO_PURCHASE]],
+//            [['selectedOptions'], 'required', 'on' => [self::SCENARIO_PURCHASE]],
             [['category_uuid'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_uuid' => 'uuid']],
         ];
     }
