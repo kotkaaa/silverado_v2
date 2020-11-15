@@ -16,16 +16,16 @@ var FileUpload = {
 
         var input = e.target,
             files = data.result.files,
-            preview = document.getElementById("uploaded_files");
+            preview = document.getElementById('uploaded_files');
 
         for (var i = 0; i < files.length; i++) {
 
-            var tr = document.createElement("tr"),
+            var tr = document.createElement('tr'),
                 td0 = document.createElement('td'),
                 td1 = document.createElement('td'),
                 td2 = document.createElement('td'),
                 td3 = document.createElement('td'),
-                img = document.createElement("img"),
+                img = document.createElement('object'),
                 fileUuid = document.createElement('input'),
                 filePosition = document.createElement('input'),
                 btn = document.createElement('a');
@@ -35,9 +35,10 @@ var FileUpload = {
             fileUuid.value = files[i].uuid;
 
             img.classList.add('img-thumbnail');
-            img.width = 90;
-            img.height = 90;
-            img.src = files[i].thumbnailUrl;
+            img.width = 128;
+            img.height = 128;
+            img.type = files[i].mime;
+            img.data = files[i].thumbnailUrl;
 
             btn.href = files[i].deleteUrl;
             btn.innerText = 'Delete';

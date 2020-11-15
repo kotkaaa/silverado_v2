@@ -102,6 +102,7 @@ class ProductBehavior extends \yii\base\Behavior
 
         $this->owner->_preview = \Yii::$app->cache->getOrSet(\Yii::$app->cache->buildKey($owner->uuid . '_preview'), function () use ($owner) {
             return $owner->files ? $owner->files[0] : new Files([
+                'path' => Url::to('@frontend/web/img'),
                 'url' => 'img',
                 'name' => 'noimage.jpg'
             ]);
@@ -174,6 +175,10 @@ class ProductBehavior extends \yii\base\Behavior
      */
     protected function generateThubnails(UploadedFile $file): void
     {
+        if (!preg_match('/^image+/i', $file->type)) {
+            return;
+        }
+
         foreach ($this->thumbnailsParams as $name => $params) {
             Image::thumbnail($this->uploadPath . DIRECTORY_SEPARATOR . $file->name, $params['w'], $params['h'])
                 ->save($this->uploadPath . DIRECTORY_SEPARATOR . $name . '-' . $file->name, ['quality' => 80]);

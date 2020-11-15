@@ -168,8 +168,9 @@ class ProductController extends AdminController
                 'uuid' => $productFile->uuid,
                 'name' => $productFile->files->name,
                 'size' => $productFile->files->size,
+                'mime' => $productFile->files->mime,
                 'url' => implode('/', [\Yii::$app->params['frontUrl'], $productFile->files->url, $productFile->files->name]),
-                'thumbnailUrl' => implode('/', [\Yii::$app->params['frontUrl'], $productFile->files->url, 'thumb-' . $productFile->files->name]),
+                'thumbnailUrl' => implode('/', [\Yii::$app->params['frontUrl'], $productFile->files->url, $productFile->files->name]),
                 'deleteUrl' => Url::to(['/product/delete-uploaded-file', 'id' => $productFile->uuid]),
                 'deleteType' => 'POST',
             ];

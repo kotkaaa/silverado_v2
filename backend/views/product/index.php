@@ -41,7 +41,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Preview',
                 'format' => 'raw',
                 'value' => function (Product $model) {
-                    return Html::img(\Yii::$app->params['frontUrl'] . '/' . $model->_preview->url . '/thumb-' . $model->_preview->name, ['class' => 'thumbnail']);
+                    if (preg_match('/^image+/i', $model->_preview->mime)) {
+                        return Html::img(\Yii::$app->params['frontUrl'] . '/' . $model->_preview->url . '/thumb-' . $model->_preview->name, ['class' => 'thumbnail']);
+                    }
+
+                    return Html::tag('object', '', ['data' => \Yii::$app->params['frontUrl'] . '/' . $model->_preview->url . '/' . $model->_preview->name, 'class' => 'thumbnail', 'width' => 90, 'height' => 90]);
                 }
             ],
             'title',

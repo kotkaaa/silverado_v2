@@ -16,12 +16,22 @@ $this->registerMetaTag(['name' => 'robots', 'content' => $model->meta_robots]);
 <h1><?= $model->title ?></h1>
 
 <p>
-    <?= Html::img('/uploads/product/preview-' . $model->_preview->name, ['class' => 'img-thumbnail']) ?>
+    <?php if (preg_match('/^image+/i', $model->_preview->mime)): ?>
+        <?= Html::img('/' . $model->_preview->url . '/preview-' . $model->_preview->name, ['class' => 'img-thumbnail']) ?>
+    <?php else:?>
+        <video controls crossorigin="anonymous" width="550" height="550">
+            <source src="<?= '/' . $model->_preview->url . '/' . $model->_preview->name ?>">
+        </video>
+    <?php endif;?>
 </p>
 
 <p>
 <?php foreach ($model->files as $i => $file): ?>
-    <?= Html::img('/uploads/product/thumb-' . $file->name, ['class' => !$i ? 'img-rounded' : 'img-thumbnail']) ?>
+    <?php if (preg_match('/^image+/i', $file->mime)): ?>
+        <?= Html::img('/' . $file->url . '/small-' . $file->name, ['class' => !$i ? 'img-rounded' : 'img-thumbnail']) ?>
+    <?php else:?>
+        <?= Html::img('/img/video-player.svg', ['class' => !$i ? 'img-rounded' : 'img-thumbnail', 'width' => 120, 'height' => 120]) ?>
+    <?php endif;?>
 <?php endforeach;?>
 </p>
 

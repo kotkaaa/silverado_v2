@@ -6,7 +6,12 @@ use yii\helpers\Html;
 ?>
 
 <div class="product-item">
-    <?= Html::img('/' . $model->_preview->url . '/middle-' . $model->_preview->name) ?><br>
+    <?php if (preg_match('/^image+/i', $model->_preview->mime)): ?>
+        <?= Html::img('/' . $model->_preview->url . '/middle-' . $model->_preview->name) ?>
+    <?php else:?>
+        <?= Html::tag('object', '', ['data' => '/' . $model->_preview->url . '/' . $model->_preview->name]) ?>
+    <?php endif;?>
+    <br>
     <p>
         <?= Html::a($model->title, '/product/' . $model->alias) ?>
     </p>

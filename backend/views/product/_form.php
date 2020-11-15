@@ -88,7 +88,6 @@ $this->registerJs($js, \yii\web\View::POS_READY);
         'attribute' => 'upload[]',
         'url' => Url::to(['file-upload', 'id' => $model->uuid]),
         'options' => [
-            'accept' => 'image/*',
             'multiple' => 'multiple'
         ],
         'clientOptions' => [
@@ -129,10 +128,10 @@ $this->registerJs($js, \yii\web\View::POS_READY);
                     <?php Modal::begin([
                         'toggleButton' => [
                             'tag' => 'a',
-                            'label' => Html::img(implode('/', [\Yii::$app->params['frontUrl'], $productFile->files->url, 'thumb-' . $productFile->files->name]), ['class' => 'img-thumbnail', 'width' => 80, 'height' => 80])
+                            'label' => Html::tag('object', '', ['data' => implode('/', [\Yii::$app->params['frontUrl'], $productFile->files->url, $productFile->files->name]), 'type' => $productFile->files->mime, 'class' => 'img-thumbnail', 'width' => 128, 'height' => 128])
                         ]
                     ]) ?>
-                    <?= Html::img(implode('/', [\Yii::$app->params['frontUrl'], $productFile->files->url, $productFile->files->name]), ['class' => 'img-thumbnail']) ?>
+                    <?= Html::tag('object', '', ['data' => implode('/', [\Yii::$app->params['frontUrl'], $productFile->files->url, $productFile->files->name]), 'type' => $productFile->files->mime, 'class' => 'img-thumbnail']) ?>
                     <?php Modal::end() ?>
                 </td>
                 <td>
