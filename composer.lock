@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5ac1a192b4be34ea9ec02e2240b0c929",
+    "content-hash": "d0985422976f0af14247970b2fdd6176",
     "packages": [
         {
             "name": "2amigos/yii2-file-upload-widget",
@@ -1093,7 +1093,7 @@
         },
         {
             "name": "kartik-v/yii2-field-range",
-            "version": "v1.3.5",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-field-range.git",
@@ -1109,6 +1109,7 @@
                 "kartik-v/yii2-helpers": ">=1.3.9",
                 "kartik-v/yii2-widget-activeform": ">=1.5.7"
             },
+            "default-branch": true,
             "type": "yii2-extension",
             "extra": {
                 "branch-alias": {
@@ -1451,21 +1452,22 @@
         },
         {
             "name": "kartik-v/yii2-widget-datetimepicker",
-            "version": "v1.4.9",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-datetimepicker.git",
-                "reference": "dadf042cf13cce84a877dff5f1e6893538f370cf"
+                "reference": "f64114bff520ea67f48e2a4e6372915968eb2c69"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datetimepicker/zipball/dadf042cf13cce84a877dff5f1e6893538f370cf",
-                "reference": "dadf042cf13cce84a877dff5f1e6893538f370cf",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datetimepicker/zipball/f64114bff520ea67f48e2a4e6372915968eb2c69",
+                "reference": "f64114bff520ea67f48e2a4e6372915968eb2c69",
                 "shasum": ""
             },
             "require": {
                 "kartik-v/yii2-krajee-base": ">=2.0.0"
             },
+            "default-branch": true,
             "type": "yii2-extension",
             "extra": {
                 "branch-alias": {
@@ -1505,7 +1507,7 @@
                 "issues": "https://github.com/kartik-v/yii2-widget-datetimepicker/issues",
                 "source": "https://github.com/kartik-v/yii2-widget-datetimepicker/tree/master"
             },
-            "time": "2019-05-29T12:28:51+00:00"
+            "time": "2020-09-11T13:24:42+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-depdrop",
@@ -1568,22 +1570,23 @@
         },
         {
             "name": "kartik-v/yii2-widget-rating",
-            "version": "v1.0.4",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-rating.git",
-                "reference": "651eaa5e6a3bd19471e2a907fb17c3fd92f383e7"
+                "reference": "91b92147d187674239bc644f809e02dee313eb81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-rating/zipball/651eaa5e6a3bd19471e2a907fb17c3fd92f383e7",
-                "reference": "651eaa5e6a3bd19471e2a907fb17c3fd92f383e7",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-rating/zipball/91b92147d187674239bc644f809e02dee313eb81",
+                "reference": "91b92147d187674239bc644f809e02dee313eb81",
                 "shasum": ""
             },
             "require": {
                 "kartik-v/bootstrap-star-rating": "~4.0",
                 "kartik-v/yii2-krajee-base": ">=1.9"
             },
+            "default-branch": true,
             "type": "yii2-extension",
             "extra": {
                 "branch-alias": {
@@ -1624,7 +1627,7 @@
                 "issues": "https://github.com/kartik-v/yii2-widget-rating/issues",
                 "source": "https://github.com/kartik-v/yii2-widget-rating/tree/master"
             },
-            "time": "2018-09-16T09:30:44+00:00"
+            "time": "2018-11-05T12:34:24+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-select2",
@@ -8580,8 +8583,11 @@
         "yiisoft/yii2-redis": 20,
         "yiisoft/yii2-queue": 20,
         "kartik-v/yii2-widget-datepicker": 20,
+        "kartik-v/yii2-widget-datetimepicker": 20,
+        "kartik-v/yii2-field-range": 20,
         "kartik-v/yii2-widget-activeform": 20,
         "kartik-v/yii2-widget-select2": 20,
+        "kartik-v/yii2-widget-rating": 20,
         "kartik-v/yii2-date-range": 20,
         "kartik-v/yii2-mpdf": 20,
         "kartik-v/yii2-widget-depdrop": 20,

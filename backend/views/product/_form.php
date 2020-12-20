@@ -1,15 +1,16 @@
 <?php
 
-use yii\helpers\Url;
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
 use common\helpers\MetaHelper;
+use dosamigos\fileupload\FileUpload;
+use kartik\select2\Select2;
 use mihaildev\ckeditor\CKEditor;
 use mihaildev\elfinder\ElFinder;
-use yii\web\JsExpression;
-use yii\helpers\ArrayHelper;
-use dosamigos\fileupload\FileUpload;
 use yii\bootstrap\Modal;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\web\JsExpression;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Product */
@@ -175,6 +176,34 @@ $this->registerJs($js, \yii\web\View::POS_READY);
     <?php if(empty($attribute->values)) continue; ?>
     <?= $form->field($model, '_attributes')->checkboxList(ArrayHelper::map($attribute->values, 'uuid', 'title'), ['unselect' => null])->label($attribute->title) ?>
 <?php endforeach;?>
+
+    <hr>
+
+    <h3>Equipment</h3>
+
+    <?= $form->field($model, '_set')->widget(Select2::class, [
+        'data' => ArrayHelper::map($model->set, 'uuid', 'title'),
+        'value' => ArrayHelper::map($model->set, 'uuid', 'title'),
+        'options' => [
+            'multiple' => true,
+            'placeholder' => '-- Select --',
+        ],
+        'pluginOptions' => [
+            'allowClear' => true,
+            'minimumInputLength' => 3,
+            'language' => [
+                'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+            ],
+            'ajax' => [
+                'url' => Url::to('/product/search'),
+                'dataType' => 'json',
+                'data' => new JsExpression('function(params) { return {term:params.term}; }')
+            ],
+            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+            'templateResult' => new JsExpression('function(result) { return result.text; }'),
+            'templateSelection' => new JsExpression('function (result) { return result.text; }'),
+        ],
+    ])->label(false) ?>
 
     <hr>
 

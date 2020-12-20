@@ -9,6 +9,7 @@ use common\models\Option;
 use common\models\Product;
 use common\models\ProductFiles;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
@@ -177,6 +178,40 @@ class ProductController extends AdminController
         }
 
         return Json::encode(['files' => $files]);
+    }
+
+    /**
+     * @param $term
+     * @return array|\yii\web\Response
+     */
+    public function actionSearch($term)
+    {
+        $searchModel = new ProductSearch(['title' => $term, 'sku' => $term]);
+        $dataProvider = $searchModel->search([]);
+        $dataProvider->pagination = false;
+
+        if (\Yii::$app->request->isAjax) {
+
+            $rows = ArrayHelper::map($dataProvider->getModels(), 'uuid', 'title', 'category.title');
+
+            $results = [];
+
+            foreach ($rows as $category => $products) {
+                $children = [];
+
+                foreach ($products as $uuid => $title) {
+                    $children[] = ['id' => $uuid, 'text' => $title];
+                }
+
+                $results[] = ['text' => $category, 'children' => $children];
+            }
+
+            return $this->asJson([
+                'results' => $results
+            ]);
+        }
+
+        return $dataProvider->getModels();
     }
 
     /**

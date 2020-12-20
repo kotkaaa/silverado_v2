@@ -14,6 +14,8 @@ use common\queries\OptionValueQuery;
 use common\queries\ProductAttributeQuery;
 use common\queries\ProductFilesQuery;
 use common\queries\ProductOptionQuery;
+use common\queries\ProductQuery;
+use common\queries\ProductSetQuery;
 use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
@@ -58,6 +60,9 @@ use yii2mod\cart\models\CartItemInterface;
  * @property ProductAttribute[] $productAttributes
  * @property AttributeValue[] $attrbuteValues
  * @property Attribute[] $attributeModels
+ * @property ProductSet[] $productSet
+ * @property Product[] $set
+ * @property Product $master
  */
 class Product extends \yii\db\ActiveRecord implements PrettyUrlModelInterface, CartItemInterface
 {
@@ -74,13 +79,16 @@ class Product extends \yii\db\ActiveRecord implements PrettyUrlModelInterface, C
     public $upload;
 
     /** @var array */
-    public $_options = [];
+    public $_options;
 
     /** @var array */
     public $selectedOptions;
 
     /** @var array */
-    public $_attributes = [];
+    public $_attributes;
+
+    /** @var array */
+    public $_set;
 
     /** @var Files */
     public $_preview;
@@ -109,7 +117,8 @@ class Product extends \yii\db\ActiveRecord implements PrettyUrlModelInterface, C
             [['discount', 'viewed', 'purchased', 'rating', 'position'], 'integer'],
             [['discount', 'viewed', 'purchased', 'rating'], 'default', 'value' => null],
             [['position'], 'default', 'value' => 1],
-            [['created_at', 'updated_at', '_options', '_attributes', 'selectedOptions'], 'safe'],
+            [['created_at', 'updated_at', '_options', '_attributes', '_set', 'selectedOptions'], 'safe'],
+            [['_options', '_attributes', '_set'], 'default', 'value' => []],
             [['uuid', 'category_uuid'], 'string', 'max' => 36],
             [['sku'], 'string', 'max' => 32],
             [['active'], 'boolean'],
@@ -156,6 +165,7 @@ class Product extends \yii\db\ActiveRecord implements PrettyUrlModelInterface, C
                     'productAttributes',
                     'optionValues',
                     'attributeValues',
+                    'productSet',
                     'productFiles' => [
                         'cascadeDelete' => true
                     ],
@@ -294,6 +304,30 @@ class Product extends \yii\db\ActiveRecord implements PrettyUrlModelInterface, C
     public function getAttributeModels(): AttributeQuery
     {
         return $this->hasMany(Attribute::class, ['uuid' => 'attribute_uuid'])->via('attributeValues');
+    }
+
+    /**
+     * @return ProductSetQuery
+     */
+    public function getProductSet(): ProductSetQuery
+    {
+        return $this->hasMany(ProductSet::class, ['master_uuid' => 'uuid']);
+    }
+
+    /**
+     * @return ProductQuery
+     */
+    public function getSet(): ProductQuery
+    {
+        return $this->hasMany(Product::class, ['uuid' => 'slave_uuid'])->via('productSet');
+    }
+
+    /**
+     * @return ProductQuery
+     */
+    public function getMaster(): ProductQuery
+    {
+        return $this->hasOne(Product::class, ['uuid' => 'master_uuid'])->viaTable('product_set', ['slave_uuid' => 'uuid']);
     }
 
     /**

@@ -62,3 +62,38 @@ $this->registerMetaTag(['name' => 'robots', 'content' => $model->meta_robots]);
 <?php endforeach;?>
 </p>
 <?php endforeach;?>
+
+<?php if ($model->_set): ?>
+<h3>Товари в комплекті</h3>
+<div class="row">
+<?php foreach ($model->set as $i => $slave): ?>
+<?php if ($i):?>
+    <div class="col-sm-1 text-center">+</div>
+<?php endif;?>
+    <div class="col-sm-3">
+        <?= $this->render('@frontend/views/category/_product-item', [
+            'model' => $slave
+        ]) ?>
+    </div>
+<?php endforeach;?>
+</div>
+<?php elseif ($model->master): ?>
+<h3>Разом дешевше!</h3>
+<div class="row">
+<?php foreach ($model->master->set as $i => $slave): ?>
+<?php if ($i):?>
+    <div class="col-sm-1 text-center">+</div>
+<?php endif;?>
+    <div class="col-sm-3">
+        <?= $this->render('@frontend/views/category/_product-item', [
+            'model' => $slave
+        ]) ?>
+    </div>
+<?php endforeach;?>
+    <div class="col-sm-1 text-center">=</div>
+    <div class="col-sm-3 text-center">
+        <?= \Yii::$app->formatter->asCurrency($model->master->price) ?>
+        <?= Html::a('Купити комплект', ['/product/' . $model->master->alias], ['class' => 'btn btn-success btn-block']) ?>
+    </div>
+</div>
+<?php endif;?>
