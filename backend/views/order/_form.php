@@ -20,85 +20,104 @@ OrderAsset::register($this);
 
     <?php $form = ActiveForm::begin(['id' => 'checkoutForm']); ?>
 
-    <?= $form->field($orderForm, 'status')->dropDownList(Order::statusList(), ['prompt' => '-- Select --']) ?>
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+            <a href="#main" aria-controls="main" role="tab" data-toggle="tab">Main</a>
+        </li>
+        <li role="presentation">
+            <a href="#products" aria-controls="products" role="tab" data-toggle="tab">Products</a>
+        </li>
+    </ul>
 
-    <?= $form->field($orderForm, 'source')->dropDownList(Order::sourceList(), ['prompt' => '-- Select --']) ?>
+    <br>
 
-    <hr>
-    
-    <h3>Info</h3>
-    
-    <?= $form->field($orderForm, 'user_name')->textInput(['maxlength' => true]) ?>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="main">
+            <?= $form->field($orderForm, 'status')->dropDownList(Order::statusList(), ['prompt' => '-- Select --']) ?>
 
-    <?= $form->field($orderForm, 'user_phone')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($orderForm, 'source')->dropDownList(Order::sourceList(), ['prompt' => '-- Select --']) ?>
 
-    <?= $form->field($orderForm, 'user_email')->textInput(['maxlength' => true]) ?>
+            <hr>
 
-    <?= $form->field($orderForm, 'comment')->textarea(['rows' => 8]) ?>
+            <h3>Info</h3>
 
-    <h3>Delivery</h3>
+            <?= $form->field($orderForm, 'user_name')->textInput(['maxlength' => true]) ?>
 
-    <hr>
+            <?= $form->field($orderForm, 'user_phone')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($orderForm, 'delivery_type')->radioButtonGroup(OrderInfo::deliveryList(), ['itemOptions' => [
-        'onchange' => new JsExpression('return Checkout.swithcDeliveryType(this.value);')
-    ]]) ?>
+            <?= $form->field($orderForm, 'user_email')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($orderForm, 'location')->widget(Select2::className(), [
-        'options' => [
-            'multiple' => false,
-            'placeholder' => '-- Select --'
-        ],
-        'pluginOptions' => [
-            'allowClear' => true,
-            'minimumInputLength' => 3,
-            'language' => [
-                'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
-            ],
-            'ajax' => [
-                'url' => Url::to('/order/search-city'),
-                'dataType' => 'json',
-                'data' => new JsExpression('function(params) { return {term:params.term}; }')
-            ],
-            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-            'templateResult' => new JsExpression('function(result) { return result.text; }'),
-            'templateSelection' => new JsExpression('function (result) { return result.text; }'),
-        ],
-        'pluginEvents' => [
-            'change.select2' => new JsExpression('function(e) {return Checkout.getWareHouses(e.target.value);}'),
-            'select2:clear' => new JsExpression('function(e) {return Checkout.clearWareHouses();}')
-        ]
-    ]) ?>
+            <?= $form->field($orderForm, 'comment')->textarea(['rows' => 8]) ?>
 
-    <?= $form->field($orderForm, 'address_1')->widget(Select2::className(), [
-        'options' => [
-            'multiple' => false,
-            'placeholder' => '-- Select --'
-        ],
-        'pluginOptions' => [
-            'allowClear' => true
-        ],
-    ]) ?>
+            <h3>Delivery</h3>
 
-    <?= $form->field($orderForm, 'address_2')->textInput(['maxlength' => true]) ?>
+            <hr>
 
-    <?= $form->field($orderForm, 'custom_recepient')->checkbox() ?>
+            <?= $form->field($orderForm, 'delivery_type')->radioButtonGroup(OrderInfo::deliveryList(), ['itemOptions' => [
+                'onchange' => new JsExpression('return Checkout.swithcDeliveryType(this.value);')
+            ]]) ?>
 
-    <?= $form->field($orderForm, 'recepient_name')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($orderForm, 'location')->widget(Select2::className(), [
+                'options' => [
+                    'multiple' => false,
+                    'placeholder' => '-- Select --'
+                ],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'minimumInputLength' => 3,
+                    'language' => [
+                        'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+                    ],
+                    'ajax' => [
+                        'url' => Url::to('/order/search-city'),
+                        'dataType' => 'json',
+                        'data' => new JsExpression('function(params) { return {term:params.term}; }')
+                    ],
+                    'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                    'templateResult' => new JsExpression('function(result) { return result.text; }'),
+                    'templateSelection' => new JsExpression('function (result) { return result.text; }'),
+                ],
+                'pluginEvents' => [
+                    'change.select2' => new JsExpression('function(e) {return Checkout.getWareHouses(e.target.value);}'),
+                    'select2:clear' => new JsExpression('function(e) {return Checkout.clearWareHouses();}')
+                ]
+            ]) ?>
 
-    <?= $form->field($orderForm, 'recepient_phone')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($orderForm, 'address_1')->widget(Select2::className(), [
+                'options' => [
+                    'multiple' => false,
+                    'placeholder' => '-- Select --'
+                ],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]) ?>
 
-    <h3>Payment</h3>
+            <?= $form->field($orderForm, 'address_2')->textInput(['maxlength' => true]) ?>
 
-    <hr>
+            <?= $form->field($orderForm, 'custom_recepient')->checkbox() ?>
 
-    <?= $form->field($orderForm, 'payment_type')->radioButtonGroup(OrderInfo::paymentList())->label(false) ?>
+            <?= $form->field($orderForm, 'recepient_name')->textInput(['maxlength' => true]) ?>
 
-    <h3>Additional</h3>
+            <?= $form->field($orderForm, 'recepient_phone')->textInput(['maxlength' => true]) ?>
 
-    <hr>
+            <h3>Payment</h3>
 
-    <?= $form->field($orderForm, 'note')->textarea(['rows' => 8]) ?>
+            <hr>
+
+            <?= $form->field($orderForm, 'payment_type')->radioButtonGroup(OrderInfo::paymentList())->label(false) ?>
+
+            <h3>Additional</h3>
+
+            <hr>
+
+            <?= $form->field($orderForm, 'note')->textarea(['rows' => 8]) ?>
+        </div>
+
+        <div role="tabpanel" class="tab-pane " id="products">
+
+        </div>
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
