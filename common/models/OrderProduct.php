@@ -22,7 +22,7 @@ use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
  * @property string|null $options
  *
  * @property Order $order
- * @property Product $productUu
+ * @property Product $product
  */
 class OrderProduct extends \yii\db\ActiveRecord
 {

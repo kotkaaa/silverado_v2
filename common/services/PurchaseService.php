@@ -54,6 +54,7 @@ class PurchaseService extends \yii\base\Component
 
                 $orderProduct->setAttributes($product->getAttributes(null, ['uuid']));
                 $orderProduct->options = $product->selectedOptions;
+                $orderProduct->quantity = $product->quantity;
 
                 $order->link('orderProducts', $orderProduct);
             }

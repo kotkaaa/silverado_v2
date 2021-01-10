@@ -1,8 +1,11 @@
 $(function () {
-
     Checkout.init();
 });
 
+/**
+ *
+ * @type {{delivery: {TYPE_POST: string, TYPE_COURIER: string}, init: Checkout.init, form: null, payment: {PAYMENT_CARD: string, PAYMENT_CASH: string}, getWareHouses: (function(*=): (boolean|undefined)), swithcDeliveryType: (function(*=): boolean), customizeRecepient: (function(*=): undefined), clearWareHouses: Checkout.clearWareHouses}}
+ */
 var Checkout = {
     form: null,
     delivery: {
@@ -119,4 +122,36 @@ var Checkout = {
         input_name.addClass('hidden');
         input_phone.addClass('hidden');
     }
+};
+
+/**
+ *
+ * @param e
+ */
+function increasePosition(e) {
+
+    var e = e || window.event,
+        input = $(e.target).closest('.input-group').children('input'),
+        max = parseInt($(e.target).prop('max')) || 100,
+        val = parseInt(input.val()) || 0;
+
+    if (val < max) val++;
+
+    input.val(val);
+};
+
+/**
+ *
+ * @param e
+ */
+function decreasePosition(e) {
+
+    var e = e || window.event,
+        input = $(e.target).closest('.input-group').children('input'),
+        min = parseInt($(e.target).prop('min')) || 1,
+        val = parseInt(input.val()) || 0;
+
+    if (val > min) val--;
+
+    input.val(val);
 };

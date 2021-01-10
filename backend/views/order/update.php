@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model \common\models\Order */
-/* @var $orderForm common\models\OrderForm */
+/* @var $orderForm \backend\models\OrderForm */
 
 $this->title = 'Update Order: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Orders', 'url' => ['index']];
@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = 'Update';
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
+        'model' => $model,
         'orderForm' => $orderForm
     ]) ?>
 

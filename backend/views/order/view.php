@@ -1,7 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ListView;
 use yii\widgets\DetailView;
 use common\models\Order;
 use common\models\OrderInfo;
@@ -75,9 +74,25 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h3>Products</h3>
 
-    <?= ListView::widget([
+    <?= \yii\grid\GridView::widget([
         'dataProvider' => new \yii\data\ArrayDataProvider([
             'allModels' => $model->orderProducts
-        ])
+        ]),
+        'columns' => [
+            'title',
+            'sku',
+            'quantity',
+            'price:currency',
+            [
+                'label' => 'Subtotal',
+                'value' => function (\common\models\OrderProduct $model) {
+                    return $model->quantity ? $model->price * $model->quantity : $model->price;
+                },
+                'format' => [
+                    'currency',
+                    'UAH'
+                ]
+            ]
+        ]
     ]) ?>
 </div>

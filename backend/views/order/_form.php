@@ -11,6 +11,7 @@ use backend\assets\OrderAsset;
 
 /* @var $this yii\web\View */
 /* @var $orderForm \backend\models\OrderForm */
+/* @var $model \common\models\Order */
 /* @var $form yii\widgets\ActiveForm */
 
 OrderAsset::register($this);
@@ -115,7 +116,54 @@ OrderAsset::register($this);
         </div>
 
         <div role="tabpanel" class="tab-pane " id="products">
-
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Sku</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+<?php foreach ($model->orderProducts as $orderProduct): ?>
+                    <tr data-key="0">
+                        <td>
+                            <?= Html::hiddenInput(Html::getInputName($orderProduct, 'title'), $orderProduct->title) ?>
+                            <?= $orderProduct->title ?>
+                        </td>
+                        <td>
+                            <?= Html::hiddenInput(Html::getInputName($orderProduct, 'sku'), $orderProduct->sku) ?>
+                            <?= $orderProduct->sku ?>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" onclick="decreasePosition();">-</button>
+                                </span>
+                                <?= Html::textInput(Html::getInputName($orderProduct, 'quantity'), $orderProduct->quantity, [
+                                    'type' => 'nubmer',
+                                    'class' => 'form-control text-center',
+                                    'min' => 1,
+                                    'max' => 100
+                                ]) ?>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" onclick="increasePosition();">+</button>
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <?= Html::hiddenInput(Html::getInputName($orderProduct, 'price'), $orderProduct->price) ?>
+                            <?= \Yii::$app->formatter->asCurrency($orderProduct->price) ?>
+                        </td>
+                        <td>
+                            <?=  \Yii::$app->formatter->asCurrency($orderProduct->price * $orderProduct->quantity ?? 1) ?>
+                        </td>
+                    </tr>
+<?php endforeach;?>
+                </tbody>
+            </table>
         </div>
     </div>
 

@@ -5,6 +5,7 @@ namespace common\models;
 use common\queries\OrderInfoQuery;
 use common\queries\OrderProductQuery;
 use common\queries\OrderQuery;
+use common\queries\ProductQuery;
 use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -51,7 +52,6 @@ class Order extends \yii\db\ActiveRecord
         return [
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['status', 'source'], 'string'],
-            [['status', 'source'], 'required'],
             [['status'], 'default', 'value' => self::STATUS_NEW],
             [['source'], 'default', 'value' => self::SOURCE_SITE],
             [['status'], 'in', 'range' => self::statusList(true)],
@@ -113,6 +113,15 @@ class Order extends \yii\db\ActiveRecord
     public function getOrderProducts()
     {
         return $this->hasMany(OrderProduct::className(), ['order_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Products]].
+     * @return \yii\db\ActiveQuery|ProductQuery
+     */
+    public function getProducts()
+    {
+        return $this->hasMany(Product::className(), ['uuid' => 'product_uuid'])->via('orderProducts');
     }
 
     /**
