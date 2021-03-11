@@ -11,8 +11,14 @@ return [
     'components' => [
         'formatter' => [
             'currencyCode' => 'UAH',
+            'thousandSeparator' => ' ',
+            'decimalSeparator' => '.',
             'numberFormatterSymbols' => [
-                NumberFormatter::CURRENCY_SYMBOL => '<span>UAH</span>',
+                \NumberFormatter::CURRENCY_SYMBOL => '<span>₴</span>',
+            ],
+            'numberFormatterOptions' => [
+                \NumberFormatter::MIN_FRACTION_DIGITS => 0,
+                \NumberFormatter::MAX_FRACTION_DIGITS => 2,
             ]
         ],
         'delivery' => [

@@ -9,7 +9,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
-use frontend\widgets\menu\MainMenuWidget;
+use frontend\widgets\menu\MainMenu;
 
 AppAsset::register($this);
 ?>
@@ -36,7 +36,7 @@ AppAsset::register($this);
             ],
     ]) ?>
 
-    <?= MainMenuWidget::widget(['options' => ['class' => 'navbar-nav navbar-right']]) ?>
+    <?= MainMenu::widget(['options' => ['class' => 'navbar-nav navbar-right']]) ?>
 
     <?php NavBar::end() ?>
 

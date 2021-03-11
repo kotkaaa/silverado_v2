@@ -5,16 +5,22 @@ namespace frontend\widgets\menu;
 
 
 use common\services\CategoryService;
-use yii\bootstrap\Nav;
+use yii\base\Widget;
 
 /**
  * Class MainMenuWidget
  * @package frontend\widgets
  */
-class MainMenuWidget extends Nav
+class MainMenu extends Widget
 {
     /** @var CategoryService */
     public $categoryService;
+
+    /** @var string */
+    public $cacheId;
+
+    /** @var int */
+    public const CACHE_LIFETIME = 3600;
 
     /**
      * MainMenuWidget constructor.
@@ -28,17 +34,23 @@ class MainMenuWidget extends Nav
     }
 
     /**
+     * @inheritDoc
+     */
+    public function init()
+    {
+        $this->cacheId = \Yii::$app->cache->buildKey(self::class);
+        parent::init();
+    }
+
+    /**
      * @return string
      */
     public function run()
     {
-        foreach ($this->categoryService->find()->ordered()->all() as $category) {
-            $this->items[] = [
-                'label' => $category->title,
-                'url' => ['/category/' . $category->alias]
-            ];
-        }
-
-        return parent::run();
+        return \Yii::$app->cache->getOrSet($this->cacheId, function () {
+            return $this->render('_main', [
+                'items' => $this->categoryService->find()->ordered()->all()
+            ]);
+        }, self::CACHE_LIFETIME);
     }
 }

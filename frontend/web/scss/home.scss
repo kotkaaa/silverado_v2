@@ -1,0 +1,30 @@
+@import "fonts";
+@import "variable";
+@import "mixin";
+@import "product-grid";
+@import "product-slider";
+
+.home__slider {
+  margin-left: -15px;
+  margin-right: -15px;
+  position: relative;
+  overflow: hidden;
+
+  @include breakpoint(768) {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15px;
+  }
+
+  .swiper-wrapper {
+    .swiper-slide {
+      img {
+        max-width: 100%;
+      }
+    }
+  }
+
+  .swiper-pagination {
+    bottom: 25px;
+  }
+}

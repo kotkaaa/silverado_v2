@@ -9,6 +9,7 @@ use common\queries\ProductQuery;
 use yii\data\ActiveDataProvider;
 use yii\data\DataProviderInterface;
 use yii\db\ActiveQueryInterface;
+use yii\db\Expression;
 
 /**
  * Class ProductService

@@ -1,0 +1,171 @@
+
+.header-container {
+  padding-top: 25px;
+  padding-bottom: 25px;
+  background-color: #f0f0f0;
+  box-shadow: 0px 3px 13px 0px rgba(2, 2, 3, 0.17);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  &.scroll-in {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  .container-fluid {
+    max-width: 1790px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &:before,
+    &:after {
+      display: none;
+    }
+  }
+
+  .separator {
+    width: 2px;
+    height: 36px;
+    background-color: #d7d8dc;
+    border-radius: 2px;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+
+    @include breakpoint(1024) {
+      flex-direction: row;
+    }
+
+    .logo-image {
+      font-size: 0;
+      height: auto;
+      margin-left: 14px;
+      width: 140px;
+
+      @include breakpoint(768) {
+        margin-left: 20px;
+      }
+
+      @include breakpoint(1024) {
+        width: 190px;
+        margin-left: 0;
+      }
+    }
+
+    .separator {
+      display: none;
+
+      @include breakpoint(1024) {
+        display: block;
+        margin-left: 48px;
+        margin-right: 42px;
+      }
+    }
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+
+    .minicart,
+    .mapbox {
+      display: block;
+      border: none;
+      background-color: transparent;
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+    }
+
+    .minicart {
+      position: relative;
+      width: 41px * 0.75;
+      height: 35px * 0.75;
+      background-image: url("/img/minicart.svg");
+      margin-left: 12px;
+
+      @include breakpoint(1024) {
+        width: 41px;
+        height: 35px;
+        margin-left: 18px;
+      }
+
+      .cnt {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 16px;
+        background-color: $red;
+        color: $white;
+        font-size: 10px;
+
+        @include breakpoint(1024) {
+          width: 20px;
+          height: 20px;
+          line-height: 20px;
+          font-size: 12px;
+        }
+      }
+    }
+
+    .mapbox {
+      background-image: url("/img/mapbox.svg");
+      width: 38px * 0.75;
+      height: 29px * 0.75;
+
+      @include breakpoint(1024) {
+        width: 38px;
+        height: 29px;
+      }
+    }
+
+    .separator {
+      margin-left: 15px;
+      margin-right: 5px;
+      width: 1px;
+
+      @include breakpoint(768) {
+        display: none;
+      }
+    }
+
+    .callback {
+      height: 28px;
+
+      .icon {
+        border: none;
+        outline: none;
+        height: 28px;
+        line-height: 1;
+        padding-right: 0;
+
+        path {
+          fill: #808080;
+        }
+
+        @include breakpoint(768) {
+          display: none;
+        }
+      }
+
+      .phone {
+        font-size: 20px;
+        line-height: 1;
+        color: #808080;
+      }
+    }
+  }
+}

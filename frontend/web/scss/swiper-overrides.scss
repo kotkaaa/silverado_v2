@@ -1,0 +1,25 @@
+
+.swiper-pagination {
+  display: flex;
+  justify-content: space-between;
+  max-width: 240px;
+  left: 50% !important;
+  transform: translateX(-50%);
+
+  > .swiper-pagination-bullet {
+    width: 100%;
+    border-radius: 0;
+    height: 6px;
+    margin-right: 0;
+    background: #232323;
+    pointer-events: all;
+
+    + .swiper-pagination-bullet {
+      margin-left: 2px;
+    }
+
+    &.swiper-pagination-bullet-active {
+      opacity: 1;
+    }
+  }
+}

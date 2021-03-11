@@ -1,0 +1,129 @@
+.product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: stretch;
+
+  .product-item {
+    width: 100%;
+    padding: 20px;
+    background-color: #FFFFFF;
+    transition: transform .5s ease-out;
+
+    @include breakpoint(480) {
+      width: 50%;
+    }
+
+    @include breakpoint(768) {
+      width: 33%;
+    }
+
+    @include breakpoint(1024) {
+      width: 25%;
+    }
+
+    &:hover {
+      box-shadow: 0px 3px 13px rgba(0, 0, 0, .17);
+      transform: translateY(-19px);
+    }
+
+    .boundary {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 370px;
+    }
+
+    .product-img {
+      text-align: center;
+      margin-bottom: 13px;
+
+      img,
+      object {
+        max-width: 100%;
+      }
+    }
+
+    .product-title {
+      font-size: 18px;
+      font-family: "Playfair Display", sans-serif;
+      font-style: italic;
+      color: #4d4d4d;
+      text-align: center;
+      padding-bottom: 13px;
+      border-bottom: 1px solid #d7d8dc;
+      margin-bottom: 16px;
+      line-height: 1.25;
+
+      a {
+        color: inherit;
+        transition: color .2s linear;
+
+        &:hover {
+          color: #f65c5c;
+          text-decoration: none;
+        }
+      }
+    }
+
+    .product-price {
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+
+      .price {
+        margin-right: 18px;
+        font-size: 25px;
+        font-weight: 300;
+        font-stretch: expanded;
+        line-height: 36px;
+        white-space: nowrap;
+      }
+
+      .add-to-cart {
+        display: flex;
+        align-items: center;
+        border-radius: 18px;
+        height: 36px;
+        padding-left: 9px;
+        padding-right: 9px;
+        background-color: #dadada;
+        text-decoration: none;
+        transition: ease-in-out .5s;
+
+        .price {
+          transform: scaleX(0);
+          transition: transform .2s ease-out;
+          transform-origin: right;
+          margin-left: 0;
+          margin-right: 0;
+          color: #0a0a0a;
+          width: 0px;
+          opacity: 0;
+        }
+
+        &:hover {
+          background-color: #e8e8e8;
+
+          .price {
+            display: block;
+            margin-right: 27px;
+            margin-left: 15px;
+            transform: scaleX(1);
+            width: auto;
+            opacity: 1;
+          }
+
+          + .price {
+            display: none;
+          }
+        }
+
+        &:after {
+          content: url("/img/add-to-cart.svg");
+          display: block;
+          width: 18px;
+        }
+      }
+    }
+  }
+}
