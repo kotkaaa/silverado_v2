@@ -3,6 +3,7 @@
 @import "mixin";
 @import "product-grid";
 @import "product-slider";
+@import "collections";
 
 .home__slider {
   margin-left: -15px;
@@ -34,6 +35,7 @@
   justify-content: space-between;
   align-items: stretch;
   flex-wrap: wrap;
+  margin-top: 5em;
 
   @include breakpoint(1024) {
     flex-wrap: nowrap;

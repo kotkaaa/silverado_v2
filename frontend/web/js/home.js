@@ -9,5 +9,19 @@ $(window).on('load', function () {
             el: '.home-swiper-pagination'
         }
     });
+
+    var $collectionSlider = new Swiper('.collection__slider', {
+        autoHeight: true,
+        observer: true,
+        paginationClickable: true,
+        pagination: {
+            clickable: true,
+            el: '.collection-swiper-pagination'
+        },
+        effect: 'fade',
+        fadeEffect: {
+            crossFade: true
+        },
+    });
 });
 
