@@ -27,65 +27,56 @@ AppAsset::register($this);
     <body>
         <?php $this->beginBody() ?>
 
-        <div class="wrap">
+        <?= $this->render('_header') ?>
 
-            <?= $this->render('_header') ?>
-
-            <div class="container-fluid main-container">
+        <div class="container-fluid main-container">
 
 <?php if (\Yii::$app->cart->getCount()): ?>
-
-        <?= \yii2mod\cart\widgets\CartGrid::widget([
-            'cartColumns' => [
-                'label',
-                'price',
-                'quantity',
-                [
-                    'label' => 'Total',
-                    'value' => function (\yii2mod\cart\models\CartItemInterface $model) {
-                        return $model->getPrice() * $model->quantity;
-                    }
-                ],
-                [
-                    'class' => 'yii\grid\ActionColumn',
-                    'template' => '{delete}',
-                    'buttons' => [
-                        'delete' => function($url, \yii2mod\cart\models\CartItemInterface $model) {
-                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', ['/cart/remove', 'id' => $model->getUniqueId()], [
-                                'title' => 'Remove',
-                            ]);
+            <?= \yii2mod\cart\widgets\CartGrid::widget([
+                'cartColumns' => [
+                    'label',
+                    'price',
+                    'quantity',
+                    [
+                        'label' => 'Total',
+                        'value' => function (\yii2mod\cart\models\CartItemInterface $model) {
+                            return $model->getPrice() * $model->quantity;
                         }
+                    ],
+                    [
+                        'class' => 'yii\grid\ActionColumn',
+                        'template' => '{delete}',
+                        'buttons' => [
+                            'delete' => function($url, \yii2mod\cart\models\CartItemInterface $model) {
+                                return Html::a('<span class="glyphicon glyphicon-trash"></span>', ['/cart/remove', 'id' => $model->getUniqueId()], [
+                                    'title' => 'Remove',
+                                ]);
+                            }
+                        ]
                     ]
                 ]
-            ]
-        ]) ?>
+            ]) ?>
 
-        <p>
-            <?= Html::a('Оформить заказ', ['/cart'], ['class' => 'btn btn-success btn-lg']) ?>
-            <?= Html::a('Очистить корзину', ['cart/clear'], ['class' => 'btn btn-default btn-lg']) ?>
-        </p>
-
+            <p>
+                <?= Html::a('Оформить заказ', ['/cart'], ['class' => 'btn btn-success btn-lg']) ?>
+                <?= Html::a('Очистить корзину', ['cart/clear'], ['class' => 'btn btn-default btn-lg']) ?>
+            </p>
 <?php endif;?>
 
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
+            <?= Breadcrumbs::widget([
+                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+            ]) ?>
 
-        <?= Alert::widget() ?>
+            <?= Alert::widget() ?>
 
-        <?= $content ?>
-    </div>
-</div>
+            <?= $content ?>
+        </div>
 
-<footer class="footer">
-    <div class="container">
-        <p class="pull-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
+        <?= $this->render('_footer') ?>
 
-        <p class="pull-right"><?= Yii::powered() ?></p>
-    </div>
-</footer>
+        <?= \frontend\widgets\modal\MainModal::widget() ?>
 
-<?php $this->endBody() ?>
-</body>
+        <?php $this->endBody() ?>
+    </body>
 </html>
 <?php $this->endPage() ?>

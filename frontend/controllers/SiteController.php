@@ -2,8 +2,10 @@
 
 namespace frontend\controllers;
 
+use common\services\RequestService;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
+use frontend\widgets\callback\actions\CallbackAction;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\web\BadRequestHttpException;
@@ -61,10 +63,10 @@ class SiteController extends Controller
             'error' => [
                 'class' => 'yii\web\ErrorAction',
             ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
+            'callback' => [
+                'class' => CallbackAction::class,
+                'view' => '@frontend/widgets/callback/views/index'
+            ]
         ];
     }
 

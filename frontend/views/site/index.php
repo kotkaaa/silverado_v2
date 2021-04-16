@@ -26,3 +26,31 @@ HomeAsset::register($this);
 </div>
 
 <?= \frontend\widgets\selections\bestsellers\BestSellers::widget() ?>
+
+<div class="banners">
+    <div class="banner-col eq-0">
+        <div class="banner-row">
+            <a href="#">
+                <img src="/img/banner-1.jpg" alt="">
+            </a>
+        </div>
+
+        <div class="banner-row">
+            <a href="#">
+                <img src="/img/banner-2.jpg" alt="">
+            </a>
+        </div>
+    </div>
+
+    <div class="banner-col eq-1">
+        <a href="#">
+            <img src="/img/banner-3.jpg" alt="">
+        </a>
+    </div>
+
+    <div class="banner-col eq-2">
+        <a href="#">
+            <img src="/img/banner-4.jpg" alt="">
+        </a>
+    </div>
+</div>

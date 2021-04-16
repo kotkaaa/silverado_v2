@@ -28,3 +28,84 @@
     bottom: 25px;
   }
 }
+
+.banners {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  flex-wrap: wrap;
+
+  @include breakpoint(1024) {
+    flex-wrap: nowrap;
+  }
+
+  .banner-col {
+    + .banner-col {
+      @include breakpoint(1024) {
+        margin-left: 0.75vw;
+      }
+    }
+
+    &.eq-0 {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+
+      @include breakpoint(768) {
+        flex-wrap: nowrap;
+      }
+
+      @include breakpoint(1024) {
+        width: auto;
+        display: block;
+      }
+
+      .banner-row {
+        width: 100%;
+
+        @include breakpoint(768) {
+          width: 47.85vw;
+        }
+
+        @include breakpoint(1024) {
+          width: auto;
+        }
+
+        + .banner-row {
+          margin-top: 2vw;
+
+          @include breakpoint(768) {
+            margin-top: 0;
+          }
+
+          @include breakpoint(1024) {
+            margin-top: 0.75vw;
+          }
+        }
+      }
+    }
+
+    &.eq-1,
+    &.eq-2 {
+      margin-top: 2vw;
+      width: 100%;
+
+      @include breakpoint(768) {
+        margin-top: 0.75vw;
+        width: 47.85vw;
+      }
+
+      @include breakpoint(1024) {
+        margin-top: 0;
+        width: auto;
+      }
+    }
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}

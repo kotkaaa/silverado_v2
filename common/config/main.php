@@ -1,7 +1,7 @@
 <?php
 return [
     'name' => 'Silverado jewelry boutique',
-    'language' => 'ru-RU',
+    'language' => 'uk-UA',
     'timeZone' => 'Europe/Kiev',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',

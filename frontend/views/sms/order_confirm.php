@@ -3,4 +3,4 @@
 /** @var \common\models\Order $order */
 ?>
 
-Заказ №<?= $order->id ?> подтвержден
+Замовлення №<?= $order->id ?> підтверджено

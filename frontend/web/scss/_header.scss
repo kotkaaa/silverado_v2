@@ -133,17 +133,17 @@
     }
 
     .separator {
-      margin-left: 15px;
-      margin-right: 5px;
-      width: 1px;
+      margin-left: 25px;
+      margin-right: 25px;
+      width: 2px;
+      display: none;
 
       @include breakpoint(768) {
-        display: none;
+        display: block;
       }
     }
 
     .callback {
-      height: 28px;
 
       .icon {
         border: none;
@@ -161,10 +161,20 @@
         }
       }
 
-      .phone {
+      .tel {
         font-size: 20px;
         line-height: 1;
         color: #808080;
+        display: none;
+        font-weight: 300;
+
+        &:hover {
+          text-decoration: none;
+        }
+
+        @include breakpoint(768) {
+          display: block;
+        }
       }
     }
   }

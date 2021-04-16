@@ -1,0 +1,78 @@
+@import "variable";
+@import "mixin";
+
+.modal-backdrop {
+  z-index: 0;
+}
+
+.modal-sm {
+  @include breakpoint(768) {
+    width: 360px;
+  }
+}
+
+.modal-content {
+  border: none;
+}
+
+.modal-header {
+  border-bottom: none;
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+
+  .close {
+    font-size: 0;
+    opacity: 1;
+
+    &:hover {
+      opacity: .75;
+    }
+
+    &:before {
+      display: block;
+      content: url("/img/modal-close.svg");
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+.btn {
+  border-radius: 0px;
+  border-width: 2px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.btn-default {
+  border-color: #2d2d2d;
+  color: #2d2d2d;
+
+  &:hover {
+    background-color: #2d2d2d;
+    border-color: #2d2d2d;
+    color: #FFFFFF;
+  }
+}
+
+.btn-lg {
+  font-size: 16px;
+}
+
+.form-control {
+  border-radius: 0;
+  border-width: 0px;
+  background-color: #f0f0f0;
+}
+
+.has-error {
+  .form-control {
+    background-color: #fccece;
+    color: #f65c5c;
+  }
+}
+
+.input-lg {
+  border-radius: 0;
+}
