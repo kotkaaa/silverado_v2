@@ -168,8 +168,14 @@
         display: none;
         font-weight: 300;
 
-        &:hover {
+        &:hover,
+        &:active,
+        &:focus {
           text-decoration: none;
+        }
+
+        &:hover {
+          opacity: .75;
         }
 
         @include breakpoint(768) {

@@ -3,6 +3,8 @@
 
 namespace frontend\widgets\callback\models;
 
+use frontend\helpers\PhoneHelper;
+
 /**
  * Class CallbackForm
  * @package frontend\widgets\callback\models
@@ -24,8 +26,17 @@ class CallbackForm extends \yii\base\Model
             [['phone', 'name'], 'safe'],
             [['phone', 'name'], 'trim'],
             [['phone', 'name'], 'required'],
-            [['phone'], 'match', 'pattern' => '/^(\+380)+(\d{9})$/'],
+            [['phone'], 'match', 'pattern' => '/^(\+38)+\s+(\d{3})+\s+(\d{3})+\s+(\d{2})+\s+(\d{2})$/'],
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function afterValidate()
+    {
+        parent::afterValidate();
+        $this->phone = PhoneHelper::format($this->phone, PhoneHelper::PHONE_FORMAT_FULL);
     }
 
     /**

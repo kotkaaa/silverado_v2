@@ -8,13 +8,16 @@ use yii\widgets\MaskedInput;
 use yii\web\JsExpression;
 use aneeshikmat\yii2\Yii2TimerCountDown\Yii2TimerCountDown;
 use yii\bootstrap\Modal;
+use frontend\helpers\PhoneHelper;
 
 /** @var \frontend\widgets\callback\models\CallbackForm $model */
 /** @var \common\classes\Request\CallbackRequest $request */
 ?>
 
 <div class="callback dropdown">
-    <a class="tel" href="#" data-toggle="modal" data-target="#callbackModal">096 05 49 542</a>
+    <a class="tel" href="#" data-toggle="modal" data-target="#callbackModal">
+        <?= PhoneHelper::format(\Yii::$app->params['supportPhone'], PhoneHelper::PHONE_FORMAT_SHORT_PRINT) ?>
+    </a>
 
     <button class="icon" data-toggle="modal" data-target="#callbackModal">
         <svg version="1.1" height="28" width="28" baseProfile="basic" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" xml:space="preserve">
@@ -47,27 +50,35 @@ use yii\bootstrap\Modal;
     <?php else: ?>
         <h3>Ми на зв'язку</h3>
 
-        <p class="">Зателефонуйте</p>
+        <p class="">Телефонуйте</p>
 
-        <p class="text-center">
-            <a href="tel:+380960549542" class="btn btn-link btn-lg" data-pjax="0">096 05 49 542</a>
-        </p>
+        <a href="tel:<?= PhoneHelper::format(\Yii::$app->params['supportPhone'], PhoneHelper::PHONE_FORMAT_FULL) ?>" class="btn btn-link btn-lg btn-tel" data-pjax="0">
+            <?= PhoneHelper::format(\Yii::$app->params['supportPhone'], PhoneHelper::PHONE_FORMAT_SHORT_PRINT) ?>
+        </a>
+
+        <hr>
 
         <p class="">або ми зателефонуємо вам</p>
 
         <?php $form = ActiveForm::begin(['action' => Url::toRoute('site/callback'), 'options' => ['data-pjax' => true]]) ?>
 
-        <?= $form->field($model, 'name')->textInput(['class' => 'form-control input-lg']) ?>
+        <?= $form->field($model, 'name')->textInput([
+            'class' => 'form-control input-lg',
+            'placeholder' => $model->getAttributeLabel('name')
+        ])->label(false) ?>
 
         <?= $form->field($model, 'phone')->widget(MaskedInput::class, [
-            'mask' => '+389999999999',
-            'clientOptions' => ['greedy' => false],
+            'mask' => '+38 999 999 99 99',
+            'clientOptions' => [
+                'greedy' => false
+            ],
             'options' => [
-                'class' => 'form-control input-lg'
+                'class' => 'form-control input-lg',
+                'placeholder' => $model->getAttributeLabel('phone')
             ]
-        ]) ?>
+        ])->label(false) ?>
 
-        <?= Html::submitButton('Замовити дзвінок', ['class' => 'btn btn-default btn-lg']) ?>
+        <?= Html::submitButton('Замовити дзвінок', ['class' => 'btn btn-default btn-lg btn-block']) ?>
         <?php ActiveForm::end() ?>
     <?php endif;?>
     <?php Pjax::end() ?>
