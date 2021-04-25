@@ -1,0 +1,153 @@
+@import "variable";
+@import "mixin";
+
+.footer-container {
+  background-color: #262726;
+  color: #808080;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  margin-top: 75px;
+
+  @include breakpoint(960) {
+    padding-top: 68px;
+    padding-bottom: 68px;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+      color: #FFFFFF;
+    }
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1470px;
+    margin-left: auto;
+    margin-right: auto;
+
+    &:before,
+    &:after {
+      content: none;
+    }
+
+    @include breakpoint(960) {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  .footer-contacts {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 20px;
+
+    @include breakpoint(960) {
+      flex-direction: row;
+    }
+
+    .divider {
+      width: 48px;
+      height: 1px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      background-color: #3e3f3e;
+      display: block;
+
+      @include breakpoint(960) {
+        width: 2px;
+        height: 20px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        margin-left: 25px;
+        margin-right: 25px;
+      }
+
+      path {
+        width: 40px;
+        height: 20px;
+
+        @include breakpoint(960) {
+          width: 2px;
+          height: 20px;
+        }
+      }
+    }
+  }
+
+  .footer-nav {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+
+    @include breakpoint(960) {
+      flex-direction: row;
+      align-items: center;
+      margin-top: 0;
+    }
+
+    .links {
+      text-decoration: none;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+
+      @include breakpoint(960) {
+        text-align: left;
+        column-count: 2;
+        column-gap: 50px;
+      }
+
+      li {
+        padding-top: 4px;
+        padding-bottom: 4px;
+
+        &::marker {
+          content: none;
+        }
+      }
+    }
+
+    .buttons {
+      display: flex;
+      margin-top: 40px;
+
+      @include breakpoint(960) {
+        margin-top: 0;
+        margin-left: 40px;
+      }
+
+      a {
+        display: flex;
+        width: 54px;
+        height: 54px;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid #2f312f;
+        border-radius: 3px;
+
+        &:hover {
+          border-color: #808080;
+
+          path {
+            fill: rgb(255, 255, 255);
+          }
+        }
+
+        + a {
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+}
