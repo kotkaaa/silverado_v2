@@ -3,22 +3,34 @@
   h2 {
     text-align: center;
     font-family: "Playfair Display", serif;
-    font-size: 3em;
+    font-size: 2em;
+
+    @include breakpoint(768) {
+      font-size: 4em;
+    }
 
     &:after {
       display: block;
       width: 80px;
-      height: 5px;
+      height: 2px;
       background-color: #edc3c3;
       margin-left: auto;
       margin-right: auto;
       margin-top: 10px;
       content: '';
+
+      @include breakpoint(768) {
+        height: 5px;
+      }
     }
   }
 
   .swiper-container {
-    padding-bottom: 100px;
+    padding-bottom: 70px;
+
+    @include breakpoint(768) {
+      padding-bottom: 100px;
+    }
 
     .swiper-wrapper {
       flex-wrap: nowrap;

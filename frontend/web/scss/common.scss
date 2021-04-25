@@ -30,4 +30,9 @@ button {
   background-position: bottom;
   background-repeat: no-repeat;
   background-size: 100% auto;
+  padding-bottom: 3em;
+
+  @include breakpoint(768) {
+    padding-bottom: 5em;
+  }
 }
