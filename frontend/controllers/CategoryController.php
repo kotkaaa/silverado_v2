@@ -6,7 +6,7 @@ use common\classes\AutoBind\BindActionParamsTrait;
 use common\models\Category;
 use common\services\FilterService;
 use common\services\ProductService;
-use common\builders\FilterQueryBuilder;
+use common\builders\CatalogSearchModel;
 
 /**
  * Class CategoryController
@@ -42,9 +42,9 @@ class CategoryController extends \yii\web\Controller
      */
     public function actionIndex(Category $category = null, $query = null, $page = 1)
     {
-        /** @var FilterQueryBuilder $searchModel */
+        /** @var CatalogSearchModel $searchModel */
         $searchModel = \Yii::createObject([
-            'class' => FilterQueryBuilder::class,
+            'class' => CatalogSearchModel::class,
             'category' => $category,
             'filters' => $this->filterService->parseQuery($query)
         ]);
@@ -54,7 +54,8 @@ class CategoryController extends \yii\web\Controller
         return $this->render('index', [
             'model' => $category ?? new Category(),
             'filters' => $categoryFilters,
-            'dataProvider' => $searchModel->search()
+            'dataProvider' => $searchModel->search(),
+            'searchModel' => $searchModel
         ]);
     }
 

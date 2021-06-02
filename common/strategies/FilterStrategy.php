@@ -3,7 +3,7 @@
 
 namespace common\strategies;
 
-use common\builders\FilterQueryBuilder;
+use common\builders\CatalogSearchModel;
 use common\builders\FilterUrlBuilder;
 use common\models\Category;
 use common\models\Filter;
@@ -24,7 +24,7 @@ class FilterStrategy extends \yii\base\BaseObject
     /** @var array */
     public $selectedFilters = [];
 
-    /** @var FilterQueryBuilder */
+    /** @var CatalogSearchModel */
     public $queryBuilder;
 
     /** @var FilterUrlBuilder */
@@ -32,6 +32,9 @@ class FilterStrategy extends \yii\base\BaseObject
 
     /** @var int */
     protected $count = 0;
+
+    /** @var int */
+    protected $countChecked = 0;
 
     /** @var FilterValue[] */
     protected $values = [];
@@ -50,5 +53,13 @@ class FilterStrategy extends \yii\base\BaseObject
     public function getCount(): int
     {
         return $this->count;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountChecked(): int
+    {
+        return $this->countChecked;
     }
 }

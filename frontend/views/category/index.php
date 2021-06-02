@@ -1,31 +1,45 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\Pjax;
 use yii\widgets\ListView;
+use yii\widgets\Breadcrumbs;
+use frontend\assets\CategoryAsset;
 
 /** @var \yii\web\View $this **/
 /** @var \common\models\Category $model */
 /** @var \yii\data\DataProviderInterface $dataProvider */
+/** @var \common\builders\CatalogSearchModel $searchModel */
 /** @var \common\models\Filter[] $filters */
 
-$this->title = $model->meta_title;
+$this->title = $model->title;
+
+$this->params['breadcrumbs'][] = [
+    'label' => $this->title
+];
+
+CategoryAsset::register($this);
 ?>
 
-<h1><?= $model->title ?></h1>
+<h1 class="heading-title"><?= $model->title ?></h1>
 
-<div class="row">
+<?= Breadcrumbs::widget([
+    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+]) ?>
 
-    <div class="col-sm-4">
+<?php Pjax::begin(['timeout' => 30000, 'options' => ['class' => 'category-row']]) ?>
+    <div class="col-left">
         <?= $this->render('_filters', [
             'filters' => $filters
         ]) ?>
     </div>
 
-    <div class="col-sm-8">
+    <div class="col-right">
+
         <?= ListView::widget([
             'dataProvider' => $dataProvider,
             'itemView' => '_product-item',
-            'summary' => '',
+            'layout' => '<div class="toolbar">' . $this->render('_sort', ['searchModel' => $searchModel]) . ' {summary}</div> <div class="product-grid">{items}</div> {pager}',
             'pager' => [
                 'pagination' => [
                     'pageSize' => 1,
@@ -34,9 +48,7 @@ $this->title = $model->meta_title;
                 ]
             ]
         ]) ?>
+
+        <div class="seo-text"><?= Html::decode($model->description) ?></div>
     </div>
-</div>
-
-<hr>
-
-<?= Html::decode($model->description) ?>
+<?php Pjax::end() ?>

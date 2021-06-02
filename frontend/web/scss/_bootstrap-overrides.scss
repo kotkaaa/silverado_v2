@@ -5,6 +5,12 @@
   z-index: 0;
 }
 
+.modal-open {
+  .modal {
+    backdrop-filter: blur(20px);
+  }
+}
+
 .modal-sm {
   @include breakpoint(768) {
     width: 360px;
@@ -76,3 +82,4 @@
 .input-lg {
   border-radius: 0;
 }
+

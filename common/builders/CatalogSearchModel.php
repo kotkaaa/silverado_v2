@@ -13,8 +13,16 @@ use yii\data\Pagination;
 /**
  * FilterQueryBuilder represents the model behind the search form of `common\models\Product`.
  */
-class FilterQueryBuilder extends Model
+class CatalogSearchModel extends Model
 {
+    /** @var string */
+    public const SORT_PRICE_ASC = 'price';
+    public const SORT_PRICE_DESC = '-price';
+    public const SORT_SKU_ASC = 'sku';
+    public const SORT_SKU_DESC = '-sku';
+    public const SORT_PURCHASED_ASC = 'purchased';
+    public const SORT_PURCHASED_DESC = '-purchased';
+
     /** @var Category */
     public $category;
 
@@ -57,9 +65,9 @@ class FilterQueryBuilder extends Model
 
     /**
      * @param $filter
-     * @return FilterQueryBuilder
+     * @return CatalogSearchModel
      */
-    public function appendFilter($filter): FilterQueryBuilder
+    public function appendFilter($filter): CatalogSearchModel
     {
         if (($key = array_search($filter, $this->filters)) !== false) {
             unset($this->filters[$key]);
@@ -71,9 +79,9 @@ class FilterQueryBuilder extends Model
 
     /**
      * @param $filter
-     * @return FilterQueryBuilder
+     * @return CatalogSearchModel
      */
-    public function removeFilter($filter): FilterQueryBuilder
+    public function removeFilter($filter): CatalogSearchModel
     {
         if (!in_array($filter, $this->filters)) {
             $this->filters[] = $filter;
@@ -85,9 +93,9 @@ class FilterQueryBuilder extends Model
 
     /**
      * @param $filter
-     * @return FilterQueryBuilder
+     * @return CatalogSearchModel
      */
-    public function appendOptionFilter($filter): FilterQueryBuilder
+    public function appendOptionFilter($filter): CatalogSearchModel
     {
         if (($key = array_search($filter, $this->optionFilters)) !== false) {
             unset($this->optionFilters[$key]);
@@ -98,9 +106,9 @@ class FilterQueryBuilder extends Model
 
     /**
      * @param $filter
-     * @return FilterQueryBuilder
+     * @return CatalogSearchModel
      */
-    public function removeOptionFilter($filter): FilterQueryBuilder
+    public function removeOptionFilter($filter): CatalogSearchModel
     {
         if (!in_array($filter, $this->optionFilters)) {
             $this->optionFilters[] = $filter;
@@ -111,9 +119,9 @@ class FilterQueryBuilder extends Model
 
     /**
      * @param $filter
-     * @return FilterQueryBuilder
+     * @return CatalogSearchModel
      */
-    public function appendAttributeFilter($filter): FilterQueryBuilder
+    public function appendAttributeFilter($filter): CatalogSearchModel
     {
         if (($key = array_search($filter, $this->attributeFilters)) !== false) {
             unset($this->attributeFilters[$key]);
@@ -124,9 +132,9 @@ class FilterQueryBuilder extends Model
 
     /**
      * @param $filter
-     * @return FilterQueryBuilder
+     * @return CatalogSearchModel
      */
-    public function removeAttributeFilter($filter): FilterQueryBuilder
+    public function removeAttributeFilter($filter): CatalogSearchModel
     {
         if (!in_array($filter, $this->attributeFilters)) {
             $this->attributeFilters[] = $filter;
@@ -152,45 +160,22 @@ class FilterQueryBuilder extends Model
             'query' => $query,
             'sort'=> [
                 'attributes' => [
-                    'created_at' => [
-                        'asc' => [
-                            'created_at' => SORT_ASC
-                        ],
-                        'desc' => [
-                            'created_at' => SORT_DESC
-                        ],
-                    ],
-                    'updated_at' => [
-                        'asc' => [
-                            'updated_at' => SORT_ASC
-                        ],
-                        'desc' => [
-                            'updated_at' => SORT_DESC
-                        ],
-                    ],
-                    'title' => [
-                        'asc' => [
-                            'title' => SORT_ASC
-                        ],
-                        'desc' => [
-                            'title' => SORT_DESC
-                        ],
-                    ],
-                    'category_title' => [
-                        'asc' => [
-                            'category.title' => SORT_ASC
-                        ],
-                        'desc' => [
-                            'category.title' => SORT_DESC
-                        ],
-                    ],
                     'sku',
                     'price',
-                    'active',
-                    'position',
+                    'purchased' => [
+                        'asc' => [
+                            'purchased' => SORT_ASC,
+                            'sku' => SORT_ASC
+                        ],
+                        'desc' => [
+                            'purchased' => SORT_DESC,
+                            'sku' => SORT_ASC
+                        ]
+                    ]
                 ],
                 'defaultOrder' => [
-                    'position' => SORT_ASC
+                    'purchased' => SORT_DESC,
+                    'sku' => SORT_ASC
                 ],
             ]
         ]);
@@ -222,5 +207,29 @@ class FilterQueryBuilder extends Model
     public function count(): int
     {
         return $this->search(true);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getSorting(): array
+    {
+        return [
+            self::SORT_PRICE_ASC => 'Ціна (за збільшенням)',
+            self::SORT_PRICE_DESC => 'Ціна (за зменшенням)',
+            self::SORT_SKU_ASC => 'Артикул',
+            self::SORT_PURCHASED_ASC => 'Популярні'
+        ];
+    }
+
+    /**
+     * @param $key
+     * @return string|null
+     */
+    public function getSortingLabel($key): ?string
+    {
+        $sorting = $this->getSorting();
+
+        return array_key_exists($key, $sorting) ? $sorting[$key] : null;
     }
 }

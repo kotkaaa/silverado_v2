@@ -44,6 +44,10 @@ class AttributeFilterStrategy extends FilterStrategy implements FilterStrategyIn
             $value->url = $value->checked ? (clone $this->urlBuilder)->removeAttribute($value->alias)->buildUrl()
                 : (clone $this->urlBuilder)->appendAttribute($value->alias)->buildUrl();
 
+            if ($value->checked) {
+                $this->countChecked++;
+            }
+
             $this->count++;
 
             $this->values[] = $value;
