@@ -23,9 +23,7 @@ CategoryAsset::register($this);
 
 <h1 class="heading-title"><?= $model->title ?></h1>
 
-<?= Breadcrumbs::widget([
-    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-]) ?>
+<?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
 
 <?php Pjax::begin(['timeout' => 30000, 'options' => ['class' => 'category-row']]) ?>
     <div class="col-left">

@@ -77,6 +77,10 @@
         font-stretch: expanded;
         line-height: 36px;
         white-space: nowrap;
+
+        span {
+          font-size: 70%;
+        }
       }
 
       .add-to-cart {

@@ -24,6 +24,7 @@ use yii\db\Expression;
  * @property int|null $position
  * @property string|null $created_at
  * @property string|null $updated_at
+ * @property string|null $plugin
  *
  * @property OptionValue[] $values
  */
@@ -50,10 +51,16 @@ class Option extends \yii\db\ActiveRecord
             [['position'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['uuid'], 'string', 'max' => 36],
-            [['title'], 'string', 'max' => 255],
+            [['title', 'plugin'], 'string', 'max' => 255],
             [['strategy'], 'string', 'max' => 32],
             [['strategy'], 'in', 'range' => self::strategyList(true)],
             [['uuid'], 'unique'],
+            [['plugin'], 'default', 'value' => null],
+            [['plugin'], function ($attribute) {
+                if ($this->{$attribute} && !class_exists($this->{$attribute})) {
+                    $this->addError('plugin', 'A plugin class doesnt exist.');
+                }
+            }]
         ];
     }
 

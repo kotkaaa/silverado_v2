@@ -63,11 +63,12 @@ class Cart extends \yii2mod\cart\Cart
      */
     public function setQuantity($id, int $quantity): ?CartItemInterface
     {
-        if (($element = $this->getItem($id)) == null) {
+        if (($element = $this->getItem($id)) === null) {
             return null;
         }
 
         $element->quantity = $quantity;
+
         return $element;
     }
 }

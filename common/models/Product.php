@@ -15,7 +15,9 @@ use common\queries\ProductAttributeQuery;
 use common\queries\ProductFilesQuery;
 use common\queries\ProductOptionQuery;
 use common\queries\ProductQuery;
+use common\queries\ProductReviewQuery;
 use common\queries\ProductSetQuery;
+use common\queries\ReviewQuery;
 use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
@@ -63,6 +65,8 @@ use yii2mod\cart\models\CartItemInterface;
  * @property ProductSet[] $productSet
  * @property Product[] $set
  * @property Product $master
+ * @property ProductReview[] $productReviews
+ * @property Review[] $reviews
  */
 class Product extends \yii\db\ActiveRecord implements PrettyUrlModelInterface, CartItemInterface
 {
@@ -95,6 +99,9 @@ class Product extends \yii\db\ActiveRecord implements PrettyUrlModelInterface, C
 
     /** @var int */
     public $quantity = 1;
+
+    /** @var float|null */
+    public $oldPrice;
 
     /**
      * {@inheritdoc}
@@ -328,6 +335,22 @@ class Product extends \yii\db\ActiveRecord implements PrettyUrlModelInterface, C
     public function getMaster(): ProductQuery
     {
         return $this->hasOne(Product::class, ['uuid' => 'master_uuid'])->viaTable('product_set', ['slave_uuid' => 'uuid']);
+    }
+
+    /**
+     * @return ProductReviewQuery
+     */
+    public function getProductReviews(): ProductReviewQuery
+    {
+        return $this->hasMany(ProductReview::class, ['product_uuid' => 'uuid']);
+    }
+
+    /**
+     * @return ReviewQuery
+     */
+    public function getReviews(): ReviewQuery
+    {
+        return ($this->hasMany(Review::class, ['uuid' => 'review_uuid'])->via('productReviews'))->ordered();
     }
 
     /**

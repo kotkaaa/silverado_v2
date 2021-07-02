@@ -36,3 +36,30 @@ button {
     padding-bottom: 5em;
   }
 }
+
+.heading-title {
+  font-family: "Playfair Display", serif;
+  font-size: 2em;
+  width: 100%;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0;
+
+  @include breakpoint(1024) {
+    font-size: 3em;
+  }
+
+  &:after {
+    display: block;
+    width: 80px;
+    height: 2px;
+    background-color: #edc3c3;
+    margin-top: 10px;
+    content: '';
+
+    @include breakpoint(768) {
+      height: 5px;
+    }
+  }
+}

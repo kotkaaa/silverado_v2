@@ -66,6 +66,14 @@ class ProductBehavior extends \yii\base\Behavior
      */
     public function afterFind(Event $event): void
     {
+        $this->owner->oldPrice = $this->owner->discount ?
+            $this->owner->price :
+            $this->owner->oldPrice;
+
+        $this->owner->price = $this->owner->discount ?
+            $this->owner->price - ($this->owner->price / 100 * $this->owner->discount) :
+            $this->owner->price;
+
         $this->owner->_attributes = \Yii::$app->cache->getOrSet(\Yii::$app->cache->buildKey($this->owner->uuid . '_attributes'), function () {
             return ArrayHelper::getColumn($this->owner->productAttributes, 'value_uuid') ?? [];
         }, 3600);

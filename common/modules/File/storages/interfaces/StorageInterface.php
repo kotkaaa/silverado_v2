@@ -2,7 +2,7 @@
 
 namespace common\modules\File\storages\interfaces;
 
-use common\modules\File\behaviours\FileBehaviour;
+use common\modules\File\behaviours\FileBehavior;
 
 /**
  * Interface StorageInterface
@@ -13,10 +13,10 @@ interface StorageInterface
 
     /**
      * AbstractStorage constructor.
-     * @param FileBehaviour $behavior
+     * @param FileBehavior $behavior
      * @param array $config
      */
-    public function __construct(FileBehaviour $behavior, $config = []);
+    public function __construct(FileBehavior $behavior, $config = []);
 
     /**
      * @param array $files

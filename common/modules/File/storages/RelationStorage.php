@@ -57,7 +57,7 @@ class RelationStorage extends AbstractStorage implements AfterSaveStorageInterfa
 
             foreach ($files as $file) {
 
-                $model = $closure($this->behavior->owner, $file);
+                $model = $closure($file);
 
                 if (!$model instanceof ActiveRecordInterface) {
                     throw new InvalidCallException($relation . ' must return ActiveRecord interface.');
@@ -67,8 +67,5 @@ class RelationStorage extends AbstractStorage implements AfterSaveStorageInterfa
                 $this->behavior->owner->link($relation, $model);
             }
         }
-
     }
-
-
 }

@@ -45,7 +45,9 @@ class ProductSearch extends Product
      */
     public function search($params)
     {
-        $query = Product::find()->distinct();
+        $query = Product::find()
+            ->joinWith('category', false)
+            ->distinct();
 
         // add conditions that should always apply here
 
@@ -130,7 +132,6 @@ class ProductSearch extends Product
             ->andFilterWhere(['ilike', 'product.meta_description', $this->meta_description])
             ->andFilterWhere(['ilike', 'product.meta_keywords', $this->meta_keywords])
             ->andFilterWhere(['ilike', 'product.meta_robots', $this->meta_robots])
-            ->joinWith('category category', false)
             ->andFilterWhere(['ilike', 'category.title', $this->category_title]);
 
         return $dataProvider;

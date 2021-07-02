@@ -1,6 +1,5 @@
 <?php
 
-
 namespace common\modules\File\behaviours;
 
 use common\modules\File\exception\InvalidFileStorageException;
@@ -9,12 +8,12 @@ use yii\db\ActiveRecord;
 use yii\web\UploadedFile;
 
 /**
- * Class AjaxFileBehaviour
+ * Class AjaxFileBehavior
  * @package common\modules\File\behaviours
  *
  * @property ActiveRecord $owner
  */
-class AjaxFileBehaviour extends FileBehaviour
+class AjaxFileBehavior extends FileBehavior
 {
     /** @var string */
     public $tmpPath;

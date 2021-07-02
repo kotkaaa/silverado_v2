@@ -2,7 +2,7 @@
 
 namespace common\modules\File\storages;
 
-use common\modules\File\behaviours\FileBehaviour;
+use common\modules\File\behaviours\FileBehavior;
 use common\modules\File\helpers\FileHelper;
 use common\modules\File\storages\interfaces\StorageInterface;
 use yii\base\BaseObject;
@@ -16,7 +16,7 @@ use yii\web\UploadedFile;
 abstract class AbstractStorage extends BaseObject implements StorageInterface
 {
 
-    /** @var FileBehaviour */
+    /** @var FileBehavior */
     protected $behavior;
 
     /** @var \Closure */
@@ -24,10 +24,10 @@ abstract class AbstractStorage extends BaseObject implements StorageInterface
 
     /**
      * AbstractStorage constructor.
-     * @param FileBehaviour $behavior
+     * @param FileBehavior $behavior
      * @param array $config
      */
-    public function __construct(FileBehaviour $behavior, $config = [])
+    public function __construct(FileBehavior $behavior, $config = [])
     {
         $this->behavior = $behavior;
 

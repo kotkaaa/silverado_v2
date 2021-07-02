@@ -17,6 +17,8 @@ use common\models\Option;
 
     <?= $form->field($model, 'strategy')->dropDownList(Option::strategyList(), ['prompt' => '-- Select --']) ?>
 
+    <?= $form->field($model, 'plugin')->textInput() ?>
+
     <?= $form->field($model, 'position')->textInput() ?>
 
     <?= $form->field($model, 'required')->checkbox() ?>

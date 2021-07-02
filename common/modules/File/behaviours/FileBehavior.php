@@ -12,10 +12,10 @@ use yii\db\ActiveRecord;
 use yii\web\UploadedFile;
 
 /**
- * Class FileBehaviour
+ * Class FileBehavior
  * @package common\modules\File\behaviours
  */
-class FileBehaviour extends Behavior
+class FileBehavior extends Behavior
 {
     /** @var string */
     public $field;
@@ -54,6 +54,7 @@ class FileBehaviour extends Behavior
             }
             $this->storages[$class] = $storage;
         }
+
         parent::init();
     }
 
@@ -62,7 +63,6 @@ class FileBehaviour extends Behavior
      */
     public function beforeValidate(Event $event): void
     {
-
         $files = $this->multiple ? UploadedFile::getInstances($this->owner, $this->field) : UploadedFile::getInstance($this->owner, $this->field);
 
         if (!$files) {
@@ -105,5 +105,4 @@ class FileBehaviour extends Behavior
             }
         }
     }
-
 }

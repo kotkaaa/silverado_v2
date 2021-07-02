@@ -7,7 +7,7 @@ use aracoool\uuid\UuidBehavior;
 use common\behaviors\CategoryBehavior;
 use common\classes\Optional\OptionalActiveRecordTrait;
 use common\models\interfaces\PrettyUrlModelInterface;
-use common\modules\File\behaviours\FileBehaviour;
+use common\modules\File\behaviours\FileBehavior;
 use common\modules\File\storages\FieldStorage;
 use common\modules\File\storages\LocalStorage;
 use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
@@ -126,7 +126,7 @@ class Category extends \yii\db\ActiveRecord implements PrettyUrlModelInterface
                 ],
             ],
             'icon' => [
-                'class' => FileBehaviour::class,
+                'class' => FileBehavior::class,
                 'field' => 'upload_icon',
                 'multiple' => false,
                 'storages' => [
@@ -139,7 +139,7 @@ class Category extends \yii\db\ActiveRecord implements PrettyUrlModelInterface
                 ]
             ],
             'image' => [
-                'class' => FileBehaviour::class,
+                'class' => FileBehavior::class,
                 'field' => 'upload_image',
                 'multiple' => false,
                 'storages' => [

@@ -45,7 +45,8 @@
         "2amigos/yii2-file-upload-widget": "~1.0",
         "lis-dev/nova-poshta-api-2": "dev-master",
         "integready/yii2-turbosms": "*",
-        "phpoffice/phpspreadsheet": "*"
+        "phpoffice/phpspreadsheet": "*",
+        "coderius/yii2-swiper-slider": "^1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

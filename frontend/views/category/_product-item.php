@@ -8,7 +8,7 @@ use yii\helpers\Html;
 <div class="product-item swiper-slide">
     <div class="boundary">
         <div class="product-img">
-            <a href="/product/<?= $model->alias ?>">
+            <a href="/product/<?= $model->alias ?>" data-pjax="0">
                 <?= Html::img('/' . $model->_preview->url . '/middle-' . $model->_preview->name) ?>
             </a>
         </div>
@@ -18,7 +18,7 @@ use yii\helpers\Html;
         </p>
 
         <p class="product-price">
-            <a href="/product/<?= $model->alias ?>" class="add-to-cart">
+            <a href="/product/<?= $model->alias ?>" class="add-to-cart" data-pjax="0">
                 <span class="price">
                     <?= \Yii::$app->formatter->asCurrency($model->price) ?>
                 </span>

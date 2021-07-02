@@ -1,9 +1,9 @@
 <?php
 
-use yii\helpers\Url;
-use yii\helpers\Html;
-use yii\helpers\ArrayHelper;
-use kartik\form\ActiveForm;
+use frontend\assets\ProductAsset;
+use yii\widgets\Breadcrumbs;
+use frontend\widgets\product\set\ProductSet;
+use frontend\widgets\product\reviews\ProductReviews;
 
 /** @var yii\web\View $this **/
 /** @var \common\models\Product $model */
@@ -12,88 +12,39 @@ $this->title = $model->title;
 $this->registerMetaTag(['name' => 'description', 'content' => $model->meta_description]);
 $this->registerMetaTag(['name' => 'keywords', 'content' => $model->meta_keywords]);
 $this->registerMetaTag(['name' => 'robots', 'content' => $model->meta_robots]);
+
+$this->params['breadcrumbs'][] = [
+    'label' => $model->category->title,
+    'url' => '/category/' . $model->category->alias
+];
+
+$this->params['breadcrumbs'][] = [
+    'label' => $model->title
+];
+
+ProductAsset::register($this);
 ?>
-<h1><?= $model->title ?></h1>
 
-<p>
-    <?php if (preg_match('/^image+/i', $model->_preview->mime)): ?>
-        <?= Html::img('/' . $model->_preview->url . '/preview-' . $model->_preview->name, ['class' => 'img-thumbnail']) ?>
-    <?php else:?>
-        <video controls crossorigin="anonymous" width="550" height="550">
-            <source src="<?= '/' . $model->_preview->url . '/' . $model->_preview->name ?>">
-        </video>
-    <?php endif;?>
-</p>
+<h1 class="heading-title"><?= $model->title ?></h1>
 
-<p>
-<?php foreach ($model->files as $i => $file): ?>
-    <?php if (preg_match('/^image+/i', $file->mime)): ?>
-        <?= Html::img('/' . $file->url . '/small-' . $file->name, ['class' => !$i ? 'img-rounded' : 'img-thumbnail']) ?>
-    <?php else:?>
-        <?= Html::img('/img/video-player.svg', ['class' => !$i ? 'img-rounded' : 'img-thumbnail', 'width' => 120, 'height' => 120]) ?>
-    <?php endif;?>
-<?php endforeach;?>
-</p>
+<?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
 
-<p>
-    <?= \Yii::$app->formatter->asCurrency($model->price) ?>
-</p>
+<div class="product-card__wrap">
+    <div class="product-card">
+        <div class="product-card__row">
+            <?= $this->render('_image', [
+                'model' => $model
+            ]) ?>
 
-<?php $form = ActiveForm::begin(['action' => Url::to(['/cart/add/' . $model->alias]), 'method' => 'POST']) ?>
+            <?= $this->render('_details', [
+                'model' => $model
+            ]) ?>
+        </div>
 
-<?php foreach ($model->options as $option): ?>
-    <?= $form->field($model, "selectedOptions[{$option->uuid}][]")->radioList(ArrayHelper::map($model->optionValues, 'uuid', 'title'), ['unselect' => null])->label($option->title) ?>
-<?php endforeach;?>
-
-<p>
-    <?= Html::submitButton('Купить', ['class' => 'btn btn-success']) ?>
-</p>
-
-<?php ActiveForm::end() ?>
-
-<p>Артикул: <strong><?= $model->sku ?></strong></p>
-
-<?php foreach ($model->attributeModels as $attribute): ?>
-<p>
-    <?= $attribute->title ?>:
-<?php foreach ($attribute->values as $i => $value): ?>
-    <?php if(!in_array($value->uuid, $model->_attributes)) continue;?>
-    <?php if($i): ?>, <?php endif;?><strong><?= $value->title ?></strong>
-<?php endforeach;?>
-</p>
-<?php endforeach;?>
-
-<?php if ($model->_set): ?>
-<h3>Товари в комплекті</h3>
-<div class="row">
-<?php foreach ($model->set as $i => $slave): ?>
-<?php if ($i):?>
-    <div class="col-sm-1 text-center">+</div>
-<?php endif;?>
-    <div class="col-sm-3">
-        <?= $this->render('@frontend/views/category/_product-item', [
-            'model' => $slave
+        <?= ProductReviews::widget([
+            'product' => $model
         ]) ?>
     </div>
-<?php endforeach;?>
 </div>
-<?php elseif ($model->master): ?>
-<h3>Разом дешевше!</h3>
-<div class="row">
-<?php foreach ($model->master->set as $i => $slave): ?>
-<?php if ($i):?>
-    <div class="col-sm-1 text-center">+</div>
-<?php endif;?>
-    <div class="col-sm-3">
-        <?= $this->render('@frontend/views/category/_product-item', [
-            'model' => $slave
-        ]) ?>
-    </div>
-<?php endforeach;?>
-    <div class="col-sm-1 text-center">=</div>
-    <div class="col-sm-3 text-center">
-        <?= \Yii::$app->formatter->asCurrency($model->master->price) ?>
-        <?= Html::a('Купити комплект', ['/product/' . $model->master->alias], ['class' => 'btn btn-success btn-block']) ?>
-    </div>
-</div>
-<?php endif;?>
+
+<?= ProductSet::widget(['product' => $model]) ?>

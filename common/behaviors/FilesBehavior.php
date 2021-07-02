@@ -1,8 +1,6 @@
 <?php
 
-
 namespace common\behaviors;
-
 
 use common\models\Files;
 use yii\base\Event;

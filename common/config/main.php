@@ -14,7 +14,7 @@ return [
             'thousandSeparator' => ' ',
             'decimalSeparator' => '.',
             'numberFormatterSymbols' => [
-                \NumberFormatter::CURRENCY_SYMBOL => '<span>₴</span>',
+                \NumberFormatter::CURRENCY_SYMBOL => '<span>UAH</span>',
             ],
             'numberFormatterOptions' => [
                 \NumberFormatter::MIN_FRACTION_DIGITS => 0,
