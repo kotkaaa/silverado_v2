@@ -31,8 +31,8 @@ class AppController extends \yii\console\Controller
      */
     public function __construct($id, $module, ImportService $importService, $config = [])
     {
-        $this->importService = $importService;
         parent::__construct($id, $module, $config);
+	    $this->importService = $importService;
     }
 
     /**
@@ -66,29 +66,40 @@ class AppController extends \yii\console\Controller
             }
 
             foreach ($row as $colname => $value) {
-
                 // Skip product model columns
                 if (in_array($colname, ['Артикул', 'Название', 'Цена Закупка', 'Цена Продажа', 'Цена Акция'])) {
                     continue;
                 }
 
                 $value = explode(',', $value);
-                array_walk($value, 'trim');
-                array_walk($value, function (&$val, $key) {
+
+                @array_walk($value, 'trim');
+                @array_walk($value, function (&$val, $key) {
                     $val = preg_replace('/\n/', '', $val);
                     $val = trim($val);
                 });
 
                 switch ($colname) {
-
                     // Options
                     case 'Размер':
+						$pos = 0;
 
-                        foreach ($value as $val)
-                        {
-                            $option = Option::findOne(['title' => $colname]);
+                        foreach ($value as $val) {
+                            $option = Option::find()
+                                ->andWhere(['title' => $colname])
+                                ->one();
 
-                            if (!$option) {
+							if (!$option && in_array($colname, ['Размер'])) {
+								$pos++;
+
+								$option = new Option([
+									'title' => $colname,
+									'required' => 1,
+									'position' => $pos
+								]);
+
+								$option->save();
+							} elseif (!$option) {
                                 continue;
                             }
 
@@ -123,12 +134,23 @@ class AppController extends \yii\console\Controller
 
                     // Attributes
                     default:
+						$pos = 0;
 
-                        foreach ($value as $val)
-                        {
-                            $attribute = Attribute::findOne(['title' => $colname]);
+                        foreach ($value as $val) {
+                            $attribute = Attribute::find()
+	                            ->andWhere(['title' => $colname])
+	                            ->one();
 
-                            if (!$attribute) {
+							if (!$attribute && in_array($colname, ['Застежка', 'Тип вставки', 'Форма камня', 'Для кого', 'Металл', 'Металл 2', 'Средний вес', 'Камень', 'Цвет'])) {
+								$pos++;
+
+								$attribute = new Attribute([
+									'title' => $colname,
+									'position' => $pos
+								]);
+
+								$attribute->save();
+							} elseif (!$attribute) {
                                 continue;
                             }
 
@@ -158,7 +180,6 @@ class AppController extends \yii\console\Controller
 
                             $productAttribute->save();
                         }
-
                         break;
                 }
             }
@@ -169,6 +190,5 @@ class AppController extends \yii\console\Controller
         }
 
         echo 'Импортировано ' . $affected . ' товаров.' . PHP_EOL;
-
     }
 }

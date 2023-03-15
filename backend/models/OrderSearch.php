@@ -91,8 +91,8 @@ class OrderSearch extends Order
             'order.updated_at' => $this->updated_at
         ]);
 
-        $query->andFilterWhere(['ilike', 'order.status', $this->status])
-            ->andFilterWhere(['ilike', 'order.source', $this->source]);
+        $query->andFilterWhere(['like', 'order.status', $this->status])
+            ->andFilterWhere(['like', 'order.source', $this->source]);
 
         if ($this->created_range) {
             $query->andFilterWhere(['>=', 'date("order".created_at)', date('Y-m-d', $this->created_from)])

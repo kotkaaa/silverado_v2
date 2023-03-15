@@ -69,9 +69,9 @@ class OptionSearch extends Option
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['ilike', 'uuid', $this->uuid])
-            ->andFilterWhere(['ilike', 'title', $this->title])
-            ->andFilterWhere(['ilike', 'strategy', $this->strategy]);
+        $query->andFilterWhere(['like', 'uuid', $this->uuid])
+            ->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'strategy', $this->strategy]);
 
         return $dataProvider;
     }

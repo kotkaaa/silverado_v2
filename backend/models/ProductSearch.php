@@ -121,18 +121,18 @@ class ProductSearch extends Product
             'product.updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['ilike', 'product.uuid', $this->uuid])
-            ->andFilterWhere(['ilike', 'product.sku', $this->sku])
-            ->andFilterWhere(['ilike', 'product.category_uuid', $this->category_uuid])
-            ->andFilterWhere(['ilike', 'product.title', $this->title])
-            ->andFilterWhere(['ilike', 'product.description', $this->description])
-            ->andFilterWhere(['ilike', 'product.short', $this->short])
-            ->andFilterWhere(['ilike', 'product.alias', $this->alias])
-            ->andFilterWhere(['ilike', 'product.meta_title', $this->meta_title])
-            ->andFilterWhere(['ilike', 'product.meta_description', $this->meta_description])
-            ->andFilterWhere(['ilike', 'product.meta_keywords', $this->meta_keywords])
-            ->andFilterWhere(['ilike', 'product.meta_robots', $this->meta_robots])
-            ->andFilterWhere(['ilike', 'category.title', $this->category_title]);
+        $query->andFilterWhere(['like', 'product.uuid', $this->uuid])
+            ->andFilterWhere(['like', 'product.sku', $this->sku])
+            ->andFilterWhere(['like', 'product.category_uuid', $this->category_uuid])
+            ->andFilterWhere(['like', 'product.title', $this->title])
+            ->andFilterWhere(['like', 'product.description', $this->description])
+            ->andFilterWhere(['like', 'product.short', $this->short])
+            ->andFilterWhere(['like', 'product.alias', $this->alias])
+            ->andFilterWhere(['like', 'product.meta_title', $this->meta_title])
+            ->andFilterWhere(['like', 'product.meta_description', $this->meta_description])
+            ->andFilterWhere(['like', 'product.meta_keywords', $this->meta_keywords])
+            ->andFilterWhere(['like', 'product.meta_robots', $this->meta_robots])
+            ->andFilterWhere(['like', 'category.title', $this->category_title]);
 
         return $dataProvider;
     }

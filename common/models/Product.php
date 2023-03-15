@@ -262,7 +262,7 @@ class Product extends \yii\db\ActiveRecord implements PrettyUrlModelInterface, C
     {
         return $this->hasMany(Files::class, ['uuid' => 'files_uuid'])
             ->via('productFiles')
-            ->orderBy(new Expression('position(uuid::text in \'' . implode(',', ArrayHelper::getColumn($this->productFiles, 'files_uuid')) . '\')'));
+            ->orderBy(new Expression('position(uuid in \'' . implode(',', ArrayHelper::getColumn($this->productFiles, 'files_uuid')) . '\')'));
     }
 
     /**

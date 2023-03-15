@@ -90,13 +90,13 @@ class OptionValueSearch extends OptionValue
             'option_value.updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['ilike', 'option_value.uuid', $this->uuid])
-            ->andFilterWhere(['ilike', 'option_value.option_uuid', $this->option_uuid])
-            ->andFilterWhere(['ilike', 'option_value.title', $this->title])
-            ->andFilterWhere(['ilike', 'option_value.alias', $this->alias])
-            ->andFilterWhere(['ilike', 'option_value.action', $this->action])
+        $query->andFilterWhere(['like', 'option_value.uuid', $this->uuid])
+            ->andFilterWhere(['like', 'option_value.option_uuid', $this->option_uuid])
+            ->andFilterWhere(['like', 'option_value.title', $this->title])
+            ->andFilterWhere(['like', 'option_value.alias', $this->alias])
+            ->andFilterWhere(['like', 'option_value.action', $this->action])
             ->joinWith('option', false)
-            ->andFilterWhere(['ilike', 'option.title', $this->option_title]);
+            ->andFilterWhere(['like', 'option.title', $this->option_title]);
 
         return $dataProvider;
     }

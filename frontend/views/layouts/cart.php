@@ -36,7 +36,7 @@ AppAsset::register($this);
             ],
     ]) ?>
 
-    <?= MainMenu::widget(['options' => ['class' => 'navbar-nav navbar-right']]) ?>
+    <?= MainMenu::widget() ?>
 
     <?php NavBar::end() ?>
 

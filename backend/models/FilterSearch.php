@@ -105,15 +105,15 @@ class FilterSearch extends Filter
             'filter.updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['ilike', 'filter.uuid', $this->uuid])
-            ->andFilterWhere(['ilike', 'filter.attribute_uuid', $this->attribute_uuid])
-            ->andFilterWhere(['ilike', 'filter.option_uuid', $this->option_uuid])
-            ->andFilterWhere(['ilike', 'filter.title', $this->title])
-            ->andFilterWhere(['ilike', 'filter.strategy_class', $this->strategy_class])
+        $query->andFilterWhere(['like', 'filter.uuid', $this->uuid])
+            ->andFilterWhere(['like', 'filter.attribute_uuid', $this->attribute_uuid])
+            ->andFilterWhere(['like', 'filter.option_uuid', $this->option_uuid])
+            ->andFilterWhere(['like', 'filter.title', $this->title])
+            ->andFilterWhere(['like', 'filter.strategy_class', $this->strategy_class])
             ->joinWith('attributeModel attribute', false)
-            ->andFilterWhere(['ilike', 'attribute.title', $this->attribute_title])
+            ->andFilterWhere(['like', 'attribute.title', $this->attribute_title])
             ->joinWith('optionModel option', false)
-            ->andFilterWhere(['ilike', 'option.title', $this->option_title]);
+            ->andFilterWhere(['like', 'option.title', $this->option_title]);
 
         return $dataProvider;
     }

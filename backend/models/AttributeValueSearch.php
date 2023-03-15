@@ -96,12 +96,12 @@ class AttributeValueSearch extends AttributeValue
             'attribute_value.updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['ilike', 'attribute_value.uuid', $this->uuid])
-            ->andFilterWhere(['ilike', 'attribute_value.attribute_uuid', $this->attribute_uuid])
-            ->andFilterWhere(['ilike', 'attribute_value.title', $this->title])
-            ->andFilterWhere(['ilike', 'attribute_value.alias', $this->alias])
+        $query->andFilterWhere(['like', 'attribute_value.uuid', $this->uuid])
+            ->andFilterWhere(['like', 'attribute_value.attribute_uuid', $this->attribute_uuid])
+            ->andFilterWhere(['like', 'attribute_value.title', $this->title])
+            ->andFilterWhere(['like', 'attribute_value.alias', $this->alias])
             ->joinWith('attributeModel attribute', false)
-            ->andFilterWhere(['ilike', 'attribute.title', $this->attribute_title]);
+            ->andFilterWhere(['like', 'attribute.title', $this->attribute_title]);
 
         return $dataProvider;
     }

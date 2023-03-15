@@ -91,7 +91,6 @@ class ProductBehavior extends \yii\base\Behavior
             $selectedOptions = [];
 
             foreach ($this->owner->options as $option) {
-
                 if (empty($option->values)) {
                     continue;
                 }
@@ -135,22 +134,19 @@ class ProductBehavior extends \yii\base\Behavior
         $this->owner->unlinkAll('productAttributes', true);
         $this->owner->unlinkAll('productSet', true);
 
-        foreach ($this->owner->_options as $uuid)
-        {
+        foreach ($this->owner->_options as $uuid) {
             if (($model = OptionValue::findOne($uuid)) !== null) {
                 $this->owner->link('optionValues', $model);
             }
         }
 
-        foreach ($this->owner->_attributes as $uuid)
-        {
+        foreach ($this->owner->_attributes as $uuid) {
             if (($model = AttributeValue::findOne($uuid)) !== null) {
                 $this->owner->link('attributeValues', $model);
             }
         }
 
-        foreach ($this->owner->_set as $uuid)
-        {
+        foreach ($this->owner->_set as $uuid) {
             $model = new ProductSet([
                 'master_uuid' => $this->owner->uuid,
                 'slave_uuid' => $uuid
@@ -172,8 +168,8 @@ class ProductBehavior extends \yii\base\Behavior
             return;
         }
 
-        foreach ($files as $file) {
-
+        foreach ($files as $file)
+		{
             $file->name = uniqid(Inflector::slug($file->baseName), true) . '.' . $file->extension;
 
             if (!$file->saveAs($this->uploadPath . DIRECTORY_SEPARATOR . $file->name)) {

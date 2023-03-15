@@ -104,19 +104,19 @@ class CategorySearch extends Category
             'category.active' => $this->active,
         ]);
 
-        $query->andFilterWhere(['ilike', 'category.uuid', $this->uuid])
-            ->andFilterWhere(['ilike', 'category.parent_uuid', $this->parent_uuid])
-            ->andFilterWhere(['ilike', 'category.title', $this->title])
-            ->andFilterWhere(['ilike', 'category.description', $this->description])
-            ->andFilterWhere(['ilike', 'category.alias', $this->alias])
-            ->andFilterWhere(['ilike', 'category.icon', $this->icon])
-            ->andFilterWhere(['ilike', 'category.image', $this->image])
-            ->andFilterWhere(['ilike', 'category.meta_title', $this->meta_title])
-            ->andFilterWhere(['ilike', 'category.meta_description', $this->meta_description])
-            ->andFilterWhere(['ilike', 'category.meta_keywords', $this->meta_keywords])
-            ->andFilterWhere(['ilike', 'category.meta_robots', $this->meta_robots])
+        $query->andFilterWhere(['like', 'category.uuid', $this->uuid])
+            ->andFilterWhere(['like', 'category.parent_uuid', $this->parent_uuid])
+            ->andFilterWhere(['like', 'category.title', $this->title])
+            ->andFilterWhere(['like', 'category.description', $this->description])
+            ->andFilterWhere(['like', 'category.alias', $this->alias])
+            ->andFilterWhere(['like', 'category.icon', $this->icon])
+            ->andFilterWhere(['like', 'category.image', $this->image])
+            ->andFilterWhere(['like', 'category.meta_title', $this->meta_title])
+            ->andFilterWhere(['like', 'category.meta_description', $this->meta_description])
+            ->andFilterWhere(['like', 'category.meta_keywords', $this->meta_keywords])
+            ->andFilterWhere(['like', 'category.meta_robots', $this->meta_robots])
             ->joinWith('parent parent', false)
-            ->andFilterWhere(['ilike', 'parent.title', $this->parent_title]);
+            ->andFilterWhere(['like', 'parent.title', $this->parent_title]);
 
         if ($this->has_children) {
             $query->innerJoinWith('children children', false)

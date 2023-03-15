@@ -81,7 +81,11 @@ class ImportService
 
                     foreach ($row->getCellIterator() as $x => $cell)
                     {
-                        $value = trim($cell->getValue());
+						if (($value = $cell->getValue()) === null) {
+							continue;
+						}
+
+                        $value = trim($value);
 
                         if (empty($value)) {
                             break;
@@ -99,7 +103,7 @@ class ImportService
                         break;
                     }
 
-                    $value = in_array($x, []) ? floatval($cell->getValue()) : trim($cell->getValue());
+                    $value = in_array($x, ['Цена Закупка', 'Цена Продажа', 'Цена Акция']) ? @floatval($cell->getValue()) : @trim($cell->getValue());
 
                     $item[$headers[$x]] = $value;
                 }
