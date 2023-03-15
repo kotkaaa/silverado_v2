@@ -48,24 +48,30 @@ jobs:
         run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '/usr/bin/php /var/www/silverado.com.ua/yii migrate/up --interactive=0'
 
       - name: Mkdirs
-      - run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'mkdir -p /var/www/silverado.com.ua/backend/runtime'
-      - run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'mkdir -p /var/www/silverado.com.ua/backend/web/assets'
-      - run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'mkdir -p /var/www/silverado.com.ua/console/runtime'
-      - run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'mkdir -p /var/www/silverado.com.ua/frontend/runtime'
-      - run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'mkdir -p /var/www/silverado.com.ua/frontend/web/assets'
-      - run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'mkdir -p /var/www/silverado.com.ua/frontend/web/uploads'
-      - run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'mkdir -p /var/www/silverado.com.ua/frontend/web/uploads/category'
-      - run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'mkdir -p /var/www/silverado.com.ua/frontend/web/uploads/product'
-      - run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'mkdir -p /var/www/silverado.com.ua/frontend/web/uploads/review'
+        run: |
+          ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}
+          mkdir -p /var/www/silverado.com.ua/backend/runtime
+          mkdir -p /var/www/silverado.com.ua/backend/web/assets
+          mkdir -p /var/www/silverado.com.ua/console/runtime
+          mkdir -p /var/www/silverado.com.ua/frontend/runtime
+          mkdir -p /var/www/silverado.com.ua/frontend/web/assets
+          mkdir -p /var/www/silverado.com.ua/frontend/web/uploads
+          mkdir -p /var/www/silverado.com.ua/frontend/web/uploads/category
+          mkdir -p /var/www/silverado.com.ua/frontend/web/uploads/product
+          mkdir -p /var/www/silverado.com.ua/frontend/web/uploads/review
 
       - name: Chmods
-      - run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'chmod -R 777 /var/www/silverado.com.ua/backend/runtime'
-      - run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'chmod -R 777 /var/www/silverado.com.ua/backend/web/assets'
-      - run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'chmod -R 777 /var/www/silverado.com.ua/console/runtime'
-      - run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'chmod -R 777 /var/www/silverado.com.ua/frontend/runtime'
-      - run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'chmod -R 777 /var/www/silverado.com.ua/frontend/web/assets'
-      - run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'chmod -R 777 /var/www/silverado.com.ua/frontend/web/uploads'
+        run: |
+          ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}
+          chmod -R 777 /var/www/silverado.com.ua/backend/runtime
+          chmod -R 777 /var/www/silverado.com.ua/backend/web/assets
+          chmod -R 777 /var/www/silverado.com.ua/console/runtime
+          chmod -R 777 /var/www/silverado.com.ua/frontend/runtime
+          chmod -R 777 /var/www/silverado.com.ua/frontend/web/assets
+          chmod -R 777 /var/www/silverado.com.ua/frontend/web/uploads
 
       - name: Cache
-      - run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '/usr/bin/php /var/www/silverado.com.ua/yii cache/flush-all --interactive=0'
-      - run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '/usr/bin/php /var/www/silverado.com.ua/yii cache/flush-schema --interactive=0'
+        run: |
+          ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}
+          /usr/bin/php /var/www/silverado.com.ua/yii cache/flush-all --interactive=0
+          /usr/bin/php /var/www/silverado.com.ua/yii cache/flush-schema --interactive=0
