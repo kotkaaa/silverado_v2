@@ -1,0 +1,74 @@
+name: CI/CD
+
+# 1
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push events but only for the master branch
+  push:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Image version'
+        required: false
+
+#3
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        uses: php-actions/composer@v6
+        with:
+          dev: no
+          php_version: "8.1"
+          args: --profile --ignore-platform-reqs
+
+      - name: Copy env
+        run: php init --env=prod
+
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_KEY }}
+          known_hosts: unnecessary
+
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy via rsync
+        run: rsync -avz ./ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/silverado.com.ua --exclude=frontend/web/uploads
+
+      - name: Run migrations
+        run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '/usr/bin/php /var/www/silverado.com.ua/yii migrate/up --interactive=0'
+
+      - name: Mkdirs
+        run:
+          - ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'mkdir -p /var/www/silverado.com.ua/backend/runtime'
+          - ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'mkdir -p /var/www/silverado.com.ua/backend/web/assets'
+          - ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'mkdir -p /var/www/silverado.com.ua/console/runtime'
+          - ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'mkdir -p /var/www/silverado.com.ua/frontend/runtime'
+          - ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'mkdir -p /var/www/silverado.com.ua/frontend/web/assets'
+          - ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'mkdir -p /var/www/silverado.com.ua/frontend/web/uploads'
+          - ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'mkdir -p /var/www/silverado.com.ua/frontend/web/uploads/category'
+          - ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'mkdir -p /var/www/silverado.com.ua/frontend/web/uploads/product'
+          - ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'mkdir -p /var/www/silverado.com.ua/frontend/web/uploads/review'
+
+      - name: Chmods
+        run:
+          - ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'chmod -R 777 /var/www/silverado.com.ua/backend/runtime'
+          - ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'chmod -R 777 /var/www/silverado.com.ua/backend/web/assets'
+          - ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'chmod -R 777 /var/www/silverado.com.ua/console/runtime'
+          - ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'chmod -R 777 /var/www/silverado.com.ua/frontend/runtime'
+          - ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'chmod -R 777 /var/www/silverado.com.ua/frontend/web/assets'
+          - ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'chmod -R 777 /var/www/silverado.com.ua/frontend/web/uploads'
+
+      - name: Cache
+        run:
+          - ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '/usr/bin/php /var/www/silverado.com.ua/yii cache/flush-all --interactive=0'
+          - ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '/usr/bin/php /var/www/silverado.com.ua/yii cache/flush-schema --interactive=0'
