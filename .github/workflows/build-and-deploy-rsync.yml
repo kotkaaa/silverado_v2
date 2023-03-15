@@ -30,7 +30,7 @@ jobs:
           args: --profile --ignore-platform-reqs
 
       - name: Copy env
-        run: php init --env=prod
+        run: php init --env=Production
 
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
